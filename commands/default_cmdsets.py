@@ -83,6 +83,16 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             import sys
             print(f"Warning: Could not add sys command set: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
+            
+        # 添加仙侠移动命令集
+        try:
+            from commands.xianyamovecmdset import XianyaMoveCmdSet
+            self.add(XianyaMoveCmdSet)
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add xianya move command set: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):

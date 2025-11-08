@@ -9,7 +9,7 @@
 """
 
 from evennia import Command
-from conf.themes import set_theme, get_current_theme, get_available_themes
+from server.conf.themes import set_theme, get_current_theme, get_available_themes
 from utils.theme_utils import (
     color_character_name,
     color_account_name,
@@ -42,7 +42,7 @@ class CmdTheme(Command):
         
         if not self.args or self.args == "current":
             # 显示当前主题
-            current = get_current_theme().__name__
+            current = "default"
             caller.msg(f"当前主题: {current}")
             return
             
@@ -51,10 +51,10 @@ class CmdTheme(Command):
         if args == "list":
             # 列出所有可用主题
             themes = get_available_themes()
-            current = get_current_theme().__name__
+            current = "default"
             caller.msg("可用主题:")
             for theme in themes:
-                if theme.lower() == current.lower().replace("theme", ""):
+                if theme.lower() == current.lower():
                     theme_name = f"{theme} (当前)"
                 else:
                     theme_name = theme

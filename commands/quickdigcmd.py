@@ -43,8 +43,8 @@ class CmdQuickDig(Command):
     EXITS_HINT = "这里似乎有通向未知方向的出口。"
     
     # 返回出口描述模板
-    # 使用 {from} 作为源房间名的占位符
-    BACK_EXIT_DESC_TEMPLATE = "通往{from}的出口。"
+    # 使用 {from_room} 作为源房间名的占位符
+    BACK_EXIT_DESC_TEMPLATE = "通往{from_room}的出口。"
     
     # 前往出口描述模板
     # 使用 {to} 作为目标房间名的占位符
@@ -77,7 +77,7 @@ class CmdQuickDig(Command):
         back_exit = create_object("typeclasses.exits.Exit", key="back")
         back_exit.destination = self.caller.location
         back_desc = self.BACK_EXIT_DESC_TEMPLATE.format(
-            from=color_room_name(self.caller.location.key)
+            from_room=color_room_name(self.caller.location.key)
         )
         back_exit.db.desc = back_desc
         

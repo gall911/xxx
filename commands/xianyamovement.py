@@ -1,16 +1,20 @@
 """
-仙侠风格移动命令修改
+仙侠风格移动命令
 
-修改 Evennia 默认的移动命令，使其使用仙侠风格的描述
+使用仙侠风格的描述进行移动
 """
 
-from evennia import default_cmds
+from evennia import Command
 from world.movement_messages import get_movement_message
 
-class CmdNorth(default_cmds.CmdNorth):
+class CmdNorth(Command):
     """
     向北移动
     """
+    
+    key = "north"
+    aliases = ["n"]
+    help_category = "移动"
     
     def func(self):
         """执行命令"""
@@ -65,8 +69,12 @@ class CmdNorth(default_cmds.CmdNorth):
         caller.execute_cmd("look")
 
 # 为其他方向创建类似的命令
-class CmdSouth(default_cmds.CmdSouth):
+class CmdSouth(Command):
     """向南移动"""
+    
+    key = "south"
+    aliases = ["s"]
+    help_category = "移动"
     
     def func(self):
         caller = self.caller
@@ -106,8 +114,12 @@ class CmdSouth(default_cmds.CmdSouth):
         caller.move_to(target_room)
         caller.execute_cmd("look")
 
-class CmdEast(default_cmds.CmdEast):
+class CmdEast(Command):
     """向东移动"""
+    
+    key = "east"
+    aliases = ["e"]
+    help_category = "移动"
     
     def func(self):
         caller = self.caller
@@ -147,8 +159,12 @@ class CmdEast(default_cmds.CmdEast):
         caller.move_to(target_room)
         caller.execute_cmd("look")
 
-class CmdWest(default_cmds.CmdWest):
+class CmdWest(Command):
     """向西移动"""
+    
+    key = "west"
+    aliases = ["w"]
+    help_category = "移动"
     
     def func(self):
         caller = self.caller

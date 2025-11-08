@@ -9,7 +9,7 @@ from .fixexitcmd import CmdFixExit
 from .testexitcmd import CmdTestExit
 from .testcolorcmd import CmdTestColor
 from .themecmd import CmdTheme
-from .createroomcmd import CmdCreateTestRooms
+from .createroomcmd import CmdDig
 from .quickdigcmd import CmdQuickDig
 from .reloadcmd import CmdReloadCmds
 
@@ -26,6 +26,6 @@ class SysCmdSet(CmdSet):
         self.add(CmdTestExit())
         self.add(CmdTestColor())
         self.add(CmdTheme())
-        self.add(CmdCreateTestRooms())
+        self.add(CmdDig())
         self.add(CmdQuickDig())
         self.add(CmdReloadCmds())
