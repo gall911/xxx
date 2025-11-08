@@ -16,7 +16,6 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 
 from evennia import default_cmds
 from evennia import Command
-from commands.ls_commands import CmdLs
 
 
 
@@ -34,12 +33,46 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         """
         Populates the cmdset
         """
+        # 先调用父类方法，加载所有默认命令（包括 look、l 等）
         super().at_cmdset_creation()
+        
+        # 验证默认命令是否存在
+        look_cmd = None
+        for cmd in self.commands:
+            if hasattr(cmd, 'key') and cmd.key == 'look':
+                look_cmd = cmd
+                break
+        
         #
         # any commands you add below will overload the default ones.
         #
-        # 添加ls命令
-        self.add(CmdLs)
+        # 动态导入并添加 ls 命令，暂时不添加 lr/le/la 以避免可能的冲突
+        # 使用 try-except 确保即使出错也不影响其他命令
+        try:
+            from commands.ls_commands import CmdLs
+            # 添加 xx 命令（key 已改为 "xx"）
+            self.add(CmdLs)
+        except Exception as e:
+            # 如果导入或添加失败，记录错误但不影响其他命令
+            import traceback
+            import sys
+            print(f"Warning: Could not add ls commands to command set: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+        
+        # 再次验证 look 命令是否还在
+        look_after = None
+        for cmd in self.commands:
+            if hasattr(cmd, 'key') and cmd.key == 'look':
+                look_after = cmd
+                break
+        
+        # 如果 look 命令消失了，尝试重新添加
+        if look_cmd and not look_after:
+            import sys
+            print("ERROR: look command was removed! Attempting to restore...", file=sys.stderr)
+            # 重新添加 look 命令
+            from evennia import default_cmds
+            self.add(default_cmds.CmdLook)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
