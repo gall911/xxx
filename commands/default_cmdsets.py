@@ -16,40 +16,9 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 
 from evennia import default_cmds
 from evennia import Command
+from commands.ls_commands import CmdLs
 
-# 添加命令别名类
-class CmdLsRoom(default_cmds.CmdLook):
-    """
-    查看房间 - 简短别名
-    
-    用法:
-      lsroom
-      lr
-    """
-    key = "lsroom"
-    aliases = ["lr"]
 
-class CmdLsExit(default_cmds.CmdExits):
-    """
-    查看出口 - 简短别名
-    
-    用法:
-      lsexit
-      le
-    """
-    key = "lsexit"
-    aliases = ["le"]
-
-class CmdLsAccount(default_cmds.CmdWho):
-    """
-    查看在线账号 - 简短别名
-    
-    用法:
-      lsaccount
-      la
-    """
-    key = "lsaccount"
-    aliases = ["la"]
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
@@ -69,10 +38,8 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
-        # 添加命令别名
-        self.add(CmdLsRoom)
-        self.add(CmdLsExit)
-        self.add(CmdLsAccount)
+        # 添加ls命令
+        self.add(CmdLs)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
