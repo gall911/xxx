@@ -24,10 +24,10 @@ class Theme:
     CHARACTER_ALIAS = "|g"  # 角色别名
     
     # 账号相关
-    ACCOUNT_NAME = "|c"  # 账号名
+    ACCOUNT_NAME = "|522"  # 账号名
     
     # 房间相关
-    ROOM_NAME = "|Y"  # 房间名（高亮黄色）
+    ROOM_NAME = "|y"  # 房间名（高亮黄色）
     ROOM_DESC = "|n"  # 房间描述
     
     # 出口相关
