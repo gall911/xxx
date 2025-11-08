@@ -73,6 +73,16 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             # 重新添加 look 命令
             from evennia import default_cmds
             self.add(default_cmds.CmdLook)
+        
+        # 添加系统命令集
+        try:
+            from commands.syscmdset import SysCmdSet
+            self.add(SysCmdSet)
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add sys command set: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):

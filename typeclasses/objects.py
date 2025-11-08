@@ -21,6 +21,86 @@ class ObjectParent:
     take precedence.
 
     """
+    
+    def announce_move_from(self, destination, **kwargs):
+        """
+        重写移动消息，使用修仙风格
+        """
+        from world.movement_messages import get_movement_message
+        
+        # 获取当前位置和目标位置
+        origin = self.location
+        dest = destination
+        
+        # 获取角色名称
+        if hasattr(self, "account") and self.account:
+            # 获取角色的中文名，从account获取first_name和last_name
+            if hasattr(self.account, "first_name") and hasattr(self.account, "last_name") and self.account.first_name and self.account.last_name:
+                char_name = f"{self.account.last_name}{self.account.first_name}"
+            else:
+                char_name = self.account.key
+        else:
+            char_name = self.get_display_name(**kwargs)
+        
+        # 获取移动消息
+        origin_name = origin.get_display_name(**kwargs) if origin else "虚空"
+        dest_name = dest.get_display_name(**kwargs) if dest else "虚空"
+        
+        # 判断起始位置是否为室内
+        is_indoor = None
+        origin_type = None
+        if origin:
+            if hasattr(origin, "is_indoor"):
+                is_indoor = origin.is_indoor
+            if hasattr(origin, "room_type"):
+                origin_type = origin.room_type
+        
+        # 获取移动消息
+        leave_msg, _ = get_movement_message(char_name, origin_name, dest_name, is_indoor, origin_type)
+        
+        # 发送消息给当前位置的其他人
+        if origin:
+            origin.msg_contents(leave_msg, exclude=self, from_obj=self)
+    
+    def announce_move_to(self, source_location, **kwargs):
+        """
+        重写移动消息，使用修仙风格
+        """
+        from world.movement_messages import get_movement_message
+        
+        # 获取当前位置和来源位置
+        dest = self.location
+        source = source_location
+        
+        # 获取角色名称
+        if hasattr(self, "account") and self.account:
+            # 获取角色的中文名，从account获取first_name和last_name
+            if hasattr(self.account, "first_name") and hasattr(self.account, "last_name") and self.account.first_name and self.account.last_name:
+                char_name = f"{self.account.last_name}{self.account.first_name}"
+            else:
+                char_name = self.account.key
+        else:
+            char_name = self.get_display_name(**kwargs)
+        
+        # 获取移动消息
+        source_name = source.get_display_name(**kwargs) if source else "虚空"
+        dest_name = dest.get_display_name(**kwargs) if dest else "虚空"
+        
+        # 判断目标位置是否为室内
+        is_indoor = None
+        dest_type = None
+        if dest:
+            if hasattr(dest, "is_indoor"):
+                is_indoor = dest.is_indoor
+            if hasattr(dest, "room_type"):
+                dest_type = dest.room_type
+        
+        # 获取移动消息
+        _, arrive_msg = get_movement_message(char_name, source_name, dest_name, is_indoor, None, dest_type)
+        
+        # 发送消息给目标位置的其他人
+        if dest:
+            dest.msg_contents(arrive_msg, exclude=self, from_obj=self)
 
 
 class Object(ObjectParent, DefaultObject):
