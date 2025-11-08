@@ -7,6 +7,11 @@
 from evennia import CmdSet
 from .fixexitcmd import CmdFixExit
 from .testexitcmd import CmdTestExit
+from .testcolorcmd import CmdTestColor
+from .themecmd import CmdTheme
+from .createroomcmd import CmdCreateTestRooms
+from .quickdigcmd import CmdQuickDig
+from .reloadcmd import CmdReloadCmds
 
 class SysCmdSet(CmdSet):
     """
@@ -19,3 +24,8 @@ class SysCmdSet(CmdSet):
         """添加命令到命令集"""
         self.add(CmdFixExit())
         self.add(CmdTestExit())
+        self.add(CmdTestColor())
+        self.add(CmdTheme())
+        self.add(CmdCreateTestRooms())
+        self.add(CmdQuickDig())
+        self.add(CmdReloadCmds())

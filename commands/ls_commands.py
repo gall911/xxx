@@ -6,6 +6,7 @@ from evennia import default_cmds
 from typeclasses.rooms import Room
 from typeclasses.exits import Exit
 from typeclasses.accounts import Account
+from utils.theme_utils import color_room_name, color_exit_name, color_account_name
 
 
 class CmdLs(default_cmds.MuxCommand):
@@ -41,11 +42,12 @@ class CmdLs(default_cmds.MuxCommand):
             room_name = room.key
             typeclass = self.get_typeclass_path(room)
             
-            # 创建黄色可点击的房间名链接（点击移动到该房间）
+            # 创建可点击的房间名链接（点击移动到该房间）
             # |lc命令|lt显示文本|le 是Evennia的链接格式
-            # |Y 是黄色，|n 是重置颜色
+            # 使用颜色系统为房间名着色
             # 使用 @teleport 命令传送到房间
-            clickable_name = f"|lc@teleport {room_id}|lt|Y{room_name}|le|n"
+            colored_room_name = color_room_name(room_name)
+            clickable_name = f"|lc@teleport {room_id}|lt{colored_room_name}|le|n"
             
             self.caller.msg(f"{room_id:8} {clickable_name} {typeclass}")
 
@@ -64,7 +66,8 @@ class CmdLs(default_cmds.MuxCommand):
             exit_name = exit_obj.key
             typeclass = self.get_typeclass_path(exit_obj)
             
-            self.caller.msg(f"{exit_id:8} {exit_name:40} {typeclass}")
+            colored_exit_name = color_exit_name(exit_name)
+            self.caller.msg(f"{exit_id:8} {colored_exit_name:40} {typeclass}")
 
         self.caller.msg(f"总共找到 {len(exits)} 个出口。")
 
@@ -81,7 +84,8 @@ class CmdLs(default_cmds.MuxCommand):
             account_name = account.key
             typeclass = self.get_typeclass_path(account)
             
-            self.caller.msg(f"{account_id:8} {account_name:40} {typeclass}")
+            colored_account_name = color_account_name(account_name)
+            self.caller.msg(f"{account_id:8} {colored_account_name:40} {typeclass}")
 
         self.caller.msg(f"总共找到 {len(accounts)} 个账号。")
 
@@ -128,7 +132,8 @@ class CmdLr(default_cmds.MuxCommand):
             room_id = f"#{room.id}"
             room_name = room.key
             typeclass = self.get_typeclass_path(room)
-            clickable_name = f"|lc@teleport {room_id}|lt|Y{room_name}|le|n"
+            colored_room_name = color_room_name(room_name)
+            clickable_name = f"|lc@teleport {room_id}|lt{colored_room_name}|le|n"
             self.caller.msg(f"{room_id:8} {clickable_name} {typeclass}")
 
         self.caller.msg(f"总共找到 {len(rooms)} 个房间。")
@@ -158,7 +163,8 @@ class CmdLe(default_cmds.MuxCommand):
             exit_id = f"#{exit_obj.id}"
             exit_name = exit_obj.key
             typeclass = self.get_typeclass_path(exit_obj)
-            self.caller.msg(f"{exit_id:8} {exit_name:40} {typeclass}")
+            colored_exit_name = color_exit_name(exit_name)
+            self.caller.msg(f"{exit_id:8} {colored_exit_name:40} {typeclass}")
 
         self.caller.msg(f"总共找到 {len(exits)} 个出口。")
 
@@ -187,6 +193,7 @@ class CmdLa(default_cmds.MuxCommand):
             account_id = f"#{account.id}"
             account_name = account.key
             typeclass = self.get_typeclass_path(account)
-            self.caller.msg(f"{account_id:8} {account_name:40} {typeclass}")
+            colored_account_name = color_account_name(account_name)
+            self.caller.msg(f"{account_id:8} {colored_account_name:40} {typeclass}")
 
         self.caller.msg(f"总共找到 {len(accounts)} 个账号。")

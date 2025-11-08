@@ -10,6 +10,7 @@ for allowing Characters to traverse the exit to its destination.
 from evennia.objects.objects import DefaultExit
 
 from .objects import ObjectParent
+from utils.theme_utils import color_exit_name
 
 
 class Exit(ObjectParent, DefaultExit):
@@ -70,3 +71,21 @@ class Exit(ObjectParent, DefaultExit):
         """
         super().set_key(new_key)
         self._setup_direction_aliases()
+        
+    def get_display_name(self, looker=None, **kwargs):
+        """
+        获取出口的显示名称，应用主题颜色
+        
+        Args:
+            looker: 查看者对象
+            **kwargs: 其他参数
+            
+        Returns:
+            str: 带颜色的出口名
+        """
+        # 如果有存储的显示名称，使用它
+        if hasattr(self.db, "display_name") and self.db.display_name:
+            return self.db.display_name
+            
+        # 否则使用主题颜色
+        return color_exit_name(self.key)
