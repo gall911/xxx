@@ -27,7 +27,7 @@ from evennia import utils
 CONNECTION_SCREEN = """
 |b==============================================================|n
  Welcome to |g{}|n, version {}!
-
+一人一码一道
  Enter |wh|nelp for more info.
 |b==============================================================|n""".format(
     settings.SERVERNAME, utils.get_evennia_version("short")
