@@ -73,12 +73,11 @@ class Room(ObjectParent, DefaultRoom):
         Returns:
             str: 带颜色的房间名
         """
-        # 如果有存储的显示名称，使用它
-        if hasattr(self.db, "display_name") and self.db.display_name:
-            return self.db.display_name
+        # 直接使用主题颜色，不使用缓存
             
-        # 否则使用主题颜色
-        return color_room_name(self.key)
+        # 使用主题颜色
+        from server.conf.theme import ROOM_NAME
+        return f"{ROOM_NAME}{self.key}|n"
     
     # 自定义外观模板，中文化，确保出口在最下面
     appearance_template = """|c{name}{extra_name_info}|n
@@ -127,14 +126,17 @@ class Room(ObjectParent, DefaultRoom):
             account = char.account
             # 获取角色的中文名，从account获取first_name和last_name
             if account and hasattr(account, "first_name") and hasattr(account, "last_name") and account.first_name and account.last_name:
-                chinese_name = f"{account.last_name}{account.first_name}"
-                character_names.append(f"{chinese_name}({account.key})")
+                from server.conf.theme import CHARACTER_NAME, ACCOUNT_NAME
+                chinese_name = f"{CHARACTER_NAME}{account.last_name}{account.first_name}|n"
+                character_names.append(f"{chinese_name}({ACCOUNT_NAME}{account.key}|n)")
             elif account:
                 # 如果没有中文名，使用账号名
-                character_names.append(f"{account.key}")
+                from server.conf.theme import ACCOUNT_NAME
+                character_names.append(f"{ACCOUNT_NAME}{account.key}|n")
             else:
                 # 如果没有账号，使用默认显示名称
-                character_names.append(f"{char.get_display_name(looker, **kwargs)}")
+                from server.conf.theme import CHARACTER_NAME
+                character_names.append(f"{CHARACTER_NAME}{char.get_display_name(looker, **kwargs)}|n")
         
         character_names = iter_to_str(character_names)
         

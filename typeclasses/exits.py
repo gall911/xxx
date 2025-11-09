@@ -83,9 +83,8 @@ class Exit(ObjectParent, DefaultExit):
         Returns:
             str: 带颜色的出口名
         """
-        # 如果有存储的显示名称，使用它
-        if hasattr(self.db, "display_name") and self.db.display_name:
-            return self.db.display_name
+        # 直接使用主题颜色，不使用缓存
             
-        # 否则使用主题颜色
-        return color_exit_name(self.key)
+        # 使用主题颜色
+        from server.conf.theme import EXIT_NAME
+        return f"{EXIT_NAME}{self.key}|n"

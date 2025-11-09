@@ -36,14 +36,11 @@ class ObjectParent:
         if hasattr(self, "account") and self.account:
             # 获取角色的中文名，从account获取first_name和last_name
             if hasattr(self.account, "first_name") and hasattr(self.account, "last_name") and self.account.first_name and self.account.last_name:
-                from server.conf.theme import CHARACTER_NAME
-                char_name = f"{CHARACTER_NAME}{self.account.last_name}{self.account.first_name}|n"
+                char_name = f"{self.account.last_name}{self.account.first_name}"
             else:
-                from server.conf.theme import ACCOUNT_NAME
-                char_name = f"{ACCOUNT_NAME}{self.account.key}|n"
+                char_name = self.account.key
         else:
-            from server.conf.theme import CHARACTER_NAME
-            char_name = f"{CHARACTER_NAME}{self.get_display_name(**kwargs)}|n"
+            char_name = self.get_display_name(**kwargs)
         
         # 获取移动消息
         origin_name = origin.get_display_name(**kwargs) if origin else "虚空"
@@ -79,14 +76,11 @@ class ObjectParent:
         if hasattr(self, "account") and self.account:
             # 获取角色的中文名，从account获取first_name和last_name
             if hasattr(self.account, "first_name") and hasattr(self.account, "last_name") and self.account.first_name and self.account.last_name:
-                from server.conf.theme import CHARACTER_NAME
-                char_name = f"{CHARACTER_NAME}{self.account.last_name}{self.account.first_name}|n"
+                char_name = f"{self.account.last_name}{self.account.first_name}"
             else:
-                from server.conf.theme import ACCOUNT_NAME
-                char_name = f"{ACCOUNT_NAME}{self.account.key}|n"
+                char_name = self.account.key
         else:
-            from server.conf.theme import CHARACTER_NAME
-            char_name = f"{CHARACTER_NAME}{self.get_display_name(**kwargs)}|n"
+            char_name = self.get_display_name(**kwargs)
         
         # 获取移动消息
         source_name = source.get_display_name(**kwargs) if source else "虚空"
