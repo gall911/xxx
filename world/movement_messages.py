@@ -163,3 +163,4 @@ def get_movement_message(object_name, origin_name, destination_name, is_indoor=N
     )
     
     return leave_msg, arrive_msg
+    

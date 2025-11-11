@@ -65,6 +65,9 @@ PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 # 禁用用户名和密码验证规则
 ACCOUNT_VALIDATORS = []
 
+# Setname命令配置
+SETNAME_MAX_USES = 88  # 每个角色可以使用setname命令的最大次数，设置为1表示只能使用一次
+
 
 ######################################################################
 # Settings given in secret_settings.py override those in this file.

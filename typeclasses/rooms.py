@@ -125,12 +125,21 @@ class Room(ObjectParent, DefaultRoom):
             # 获取角色的账号信息
             account = char.account
             # 获取角色的中文名，从account获取first_name和last_name
-            if account and hasattr(account, "first_name") and hasattr(account, "last_name") and account.first_name and account.last_name:
-                from server.conf.theme import CHARACTER_NAME, ACCOUNT_NAME
-                chinese_name = f"{CHARACTER_NAME}{account.last_name}{account.first_name}|n"
-                character_names.append(f"{chinese_name}({ACCOUNT_NAME}{account.key}|n)")
+            if account and hasattr(account, "first_name") and hasattr(account, "last_name"):
+                first_name = account.first_name if account.first_name else ""
+                last_name = account.last_name if account.last_name else ""
+                
+                if first_name and last_name:
+                    # 有完整的中文名
+                    from server.conf.theme import CHARACTER_NAME, ACCOUNT_NAME
+                    chinese_name = f"{CHARACTER_NAME}{last_name}{first_name}|n"
+                    character_names.append(f"{chinese_name}({ACCOUNT_NAME}{account.key}|n)")
+                else:
+                    # 没有完整的中文名，使用账号名
+                    from server.conf.theme import ACCOUNT_NAME
+                    character_names.append(f"{ACCOUNT_NAME}{account.key}|n")
             elif account:
-                # 如果没有中文名，使用账号名
+                # 如果没有first_name和last_name属性，使用账号名
                 from server.conf.theme import ACCOUNT_NAME
                 character_names.append(f"{ACCOUNT_NAME}{account.key}|n")
             else:
