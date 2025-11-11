@@ -60,7 +60,8 @@ class ObjectParent:
                 origin_type = origin.room_type
         
         # 获取移动消息
-        leave_msg, _ = get_movement_message(char_name, origin_name, dest_name, is_indoor, origin_type)
+        account_id = self.account.id if hasattr(self, "account") and self.account else None
+        leave_msg, _ = get_movement_message(char_name, origin_name, dest_name, is_indoor, origin_type, account_id=account_id)
         
         # 发送消息给当前位置的其他人
         if origin:
@@ -104,7 +105,8 @@ class ObjectParent:
                 dest_type = dest.room_type  # 获取房间类型
         
         # 获取移动消息
-        _, arrive_msg = get_movement_message(char_name, source_name, dest_name, is_indoor, None, dest_type)  # 获取到达消息
+        account_id = self.account.id if hasattr(self, "account") and self.account else None
+        _, arrive_msg = get_movement_message(char_name, source_name, dest_name, is_indoor, None, dest_type, account_id=account_id)  # 获取到达消息
         
         # 发送消息给目标位置的其他人
         if dest:
