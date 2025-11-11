@@ -27,7 +27,8 @@ class ObjectParent:
         重写移动消息，使用修仙风格
         """
         from world.movement_messages import get_movement_message
-        
+       
+
         # 获取当前位置和目标位置
         origin = self.location
         dest = destination
@@ -63,16 +64,17 @@ class ObjectParent:
         
         # 发送消息给当前位置的其他人
         if origin:
-            origin.msg_contents(leave_msg, exclude=self, from_obj=self)
-    
+            origin.msg_contents((leave_msg), exclude=self, from_obj=self)
+    #/
     def announce_move_to(self, source_location, **kwargs):
         """
         重写移动消息，使用修仙风格
+        该方法用于角色移动时向目标位置的其他角色发送修仙风格的移动消息
         """
         from world.movement_messages import get_movement_message
         
         # 获取当前位置和来源位置
-        dest = self.location
+        dest = self.location  # 目标位置
         source = source_location
         
         # 获取角色名称
@@ -80,33 +82,33 @@ class ObjectParent:
             # 获取角色的中文名，从account获取first_name和last_name
             if hasattr(self.account, "first_name") and hasattr(self.account, "last_name") and self.account.first_name and self.account.last_name:
                 from server.conf.theme import CHARACTER_NAME
-                char_name = f"{CHARACTER_NAME}{self.account.last_name}{self.account.first_name}|n"
+                char_name = f"{CHARACTER_NAME}{self.account.last_name}{self.account.first_name}|n"  # 修仙风格的角色名格式
             else:
                 from server.conf.theme import ACCOUNT_NAME
-                char_name = f"{ACCOUNT_NAME}{self.account.key}|n"
+                char_name = f"{ACCOUNT_NAME}{self.account.key}|n"  # 使用账号名作为角色名
         else:
             from server.conf.theme import CHARACTER_NAME
-            char_name = f"{CHARACTER_NAME}{self.get_display_name(**kwargs)}|n"
+            char_name = f"{CHARACTER_NAME}{self.get_display_name(**kwargs)}|n"  # 使用显示名作为角色名
         
         # 获取移动消息
-        source_name = source.get_display_name(**kwargs) if source else "虚空"
-        dest_name = dest.get_display_name(**kwargs) if dest else "虚空"
+        source_name = source.get_display_name(**kwargs) if source else "虚空"  # 来源位置名称，如果不存在则为"虚空"
+        dest_name = dest.get_display_name(**kwargs) if dest else "虚空"  # 目标位置名称，如果不存在则为"虚空"
         
         # 判断目标位置是否为室内
-        is_indoor = None
-        dest_type = None
+        is_indoor = None  # 室内标志
+        dest_type = None  # 目标位置类型
         if dest:
             if hasattr(dest, "is_indoor"):
-                is_indoor = dest.is_indoor
+                is_indoor = dest.is_indoor  # 获取室内标志
             if hasattr(dest, "room_type"):
-                dest_type = dest.room_type
+                dest_type = dest.room_type  # 获取房间类型
         
         # 获取移动消息
-        _, arrive_msg = get_movement_message(char_name, source_name, dest_name, is_indoor, None, dest_type)
+        _, arrive_msg = get_movement_message(char_name, source_name, dest_name, is_indoor, None, dest_type)  # 获取到达消息
         
         # 发送消息给目标位置的其他人
         if dest:
-            dest.msg_contents(arrive_msg, exclude=self, from_obj=self)
+            dest.msg_contents(arrive_msg, exclude=self, from_obj=self)  # 向目标位置的其他角色发送移动消息，排除自己
 
 
 class Object(ObjectParent, DefaultObject):

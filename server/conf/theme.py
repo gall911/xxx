@@ -24,6 +24,9 @@ ROOM_DESC = "|n"  # 房间描述颜色
 # 出口相关
 EXIT_NAME = "|535"  # 出口名颜色
 EXIT_ALIAS = "|g"  # 出口别名颜色
+# 移动相关
+MOVE_IN = "|322"    # 进入房间的消息颜色
+MOVE_OUT = "|g"   # 离开房间的消息颜色
 
 # 系统消息
 SYSTEM_MSG = "|R"  # 系统消息颜色

@@ -6,6 +6,7 @@
 
 import random
 
+from server.conf.theme import MOVE_IN, MOVE_OUT
 # 默认的移动消息
 DEFAULT_LEAVE_MSGS = [
     "{object}化作一道流光，自{origin}消逝。",
@@ -141,5 +142,24 @@ def get_movement_message(object_name, origin_name, destination_name, is_indoor=N
             arrive_msgs.extend(INDOOR_ARRIVE_MSGS)
         elif is_indoor is False:
             arrive_msgs.extend(OUTDOOR_ARRIVE_MSGS)
+     # 随机选择消息
+    leave_template = random.choice(leave_msgs)
+    arrive_template = random.choice(arrive_msgs)
+    
+    # 动态添加颜色到离开消息
+    # 在对象名称后插入颜色代码
+    leave_msg = leave_template.format(
+    object=f"{object_name}|n{MOVE_OUT}",  # 角色名+移动颜色
+    origin=f"{origin_name}|n{MOVE_OUT}",       # 起始房间+移动颜色
+    destination=f"{destination_name}|n{MOVE_OUT}"  # 
+    )
+    
+    # 动态添加颜色到到达消息
+    # 在对象名称后插入颜色代码
+    arrive_msg = arrive_template.format(
+        object=f"{object_name}{MOVE_IN}",  # 将颜色添加到对象名后面
+        origin=origin_name,
+        destination=destination_name
+    )
     
     return leave_msg, arrive_msg

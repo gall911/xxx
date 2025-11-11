@@ -52,3 +52,12 @@ def color_error_msg(msg):
     """为错误消息添加颜色"""
     from server.conf.theme import ERROR_MSG
     return f"{ERROR_MSG}{msg}|n"
+def color_move_in(msg):
+    """为进入消息添加颜色"""
+    from server.conf.theme import MOVE_IN
+    return f"{MOVE_IN}{msg}|n"
+
+def color_move_out(msg):
+    """为离开消息添加颜色"""
+    from server.conf.theme import MOVE_OUT
+    return f"{MOVE_OUT}{msg}|n"

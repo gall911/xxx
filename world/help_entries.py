@@ -55,4 +55,35 @@ HELP_ENTRY_DICTS = [
 
         """,
     },
+     {
+        "key": "theme",
+        "category": "Admin",
+        "text": """
+主题系统帮助
+
+主题系统允许自定义游戏中各种文本的显示颜色。以下是可用的颜色类型：
+
+基础颜色：
+- CHARACTER_NAME: 角色名颜色
+- ACCOUNT_NAME: 账号名颜色
+- ROOM_NAME: 房间名颜色
+- EXIT_NAME: 出口名颜色
+- SYSTEM_MSG: 系统消息颜色
+- SUCCESS_MSG: 成功消息颜色
+- ERROR_MSG: 错误消息颜色
+
+使用方法：
+1. 在代码中直接使用颜色常量：
+   from server.conf.theme import CHARACTER_NAME
+   colored_name = f"{CHARACTER_NAME}{name}|n"
+
+2. 使用工具函数：
+   from utils.theme_utils import color_character_name
+   colored_name = color_character_name(name)
+
+注意事项：
+- 所有颜色标记后需要添加|n来重置格式
+- 颜色代码使用|符号开头，后跟颜色标识符
+""",
+    },
 ]
