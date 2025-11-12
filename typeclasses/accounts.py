@@ -136,122 +136,24 @@ class Account(DefaultAccount):
      - at_post_chnnel_msg(message, channel, senders=None, **kwargs)
 
     """
+    @classmethod
+    def pre_create_account(cls, username, password, **kwargs):
+        """
+        账号创建前的验证逻辑。
+        默认 Evennia 要求用户名至少 3 字符，
+        我们改为最少 2 字符（或自行调整）。
+        """
+        username = username.strip()
+        if len(username) < 2:
+            raise ValueError("用户名至少需要 2 个字符。")
 
-    def at_account_creation(self):
-        """
-        创建账户时初始化first_name和last_name属性
-        """
-        super().at_account_creation()
-        # 初始化中文名属性
-        self.db.first_name = ""
-        self.db.last_name = ""
-        # 初始化性别属性（默认未设置）
-        self.db.gender = ""
-        # 初始化setname命令使用次数
-        self.db.setname_used_count = 0
-    
-    @property
-    def first_name(self):
-        """
-        获取名字
-        
-        Returns:
-            str: 名字
-        """
-        return self.db.first_name if hasattr(self.db, "first_name") else ""
-    
-    @property
-    def last_name(self):
-        """
-        获取姓氏
-        
-        Returns:
-            str: 姓氏
-        """
-        return self.db.last_name if hasattr(self.db, "last_name") else ""
-    
-    def set_name(self, first_name="", last_name=""):
-        """
-        设置中文名
-        
-        Args:
-            first_name (str): 名字
-            last_name (str): 姓氏
-        """
-        self.db.first_name = first_name
-        self.db.last_name = last_name
-    
-    @property
-    def gender(self):
-        """
-        获取性别
-        
-        Returns:
-            str: 性别（男/女/其他）
-        """
-        return self.db.gender if hasattr(self.db, "gender") else ""
-    
-    def set_gender(self, gender=""):
-        """
-        设置性别
-        
-        Args:
-            gender (str): 性别（男/女/其他）
-        """
-        valid_genders = ["男", "女", "其他"]
-        if gender in valid_genders:
-            self.db.gender = gender
-        else:
-            raise ValueError(f"无效的性别：{gender}，请使用：{', '.join(valid_genders)}")
-    
-    def get_chinese_name(self):
-        """
-        获取完整的中文名
-        
-        Returns:
-            str: 完整的中文名（姓氏+名字）
-        """
-        if self.first_name and self.last_name:
-            return f"{self.last_name}{self.first_name}"
-        return ""
-    
-    def can_set_name(self):
-        """
-        检查是否可以使用setname命令
-        
-        Returns:
-            bool: 如果可以使用返回True，否则返回False
-        """
-        max_uses = getattr(settings, "SETNAME_MAX_USES", 1)
-        current_count = self.db.setname_used_count if hasattr(self.db, "setname_used_count") else 0
-        # 确保current_count是整数，避免NoneType错误
-        if current_count is None:
-            current_count = 0
-        return current_count < max_uses
-    
-    def mark_setname_used(self):
-        """
-        标记setname命令已被使用一次
-        """
-        current_count = self.db.setname_used_count if hasattr(self.db, "setname_used_count") else 0
-        # 确保current_count是整数，避免NoneType错误
-        if current_count is None:
-            current_count = 0
-        self.db.setname_used_count = current_count + 1
-    
-    def get_setname_remaining_uses(self):
-        """
-        获取setname命令剩余使用次数
-        
-        Returns:
-            int: 剩余使用次数
-        """
-        max_uses = getattr(settings, "SETNAME_MAX_USES", 1)
-        current_count = self.db.setname_used_count if hasattr(self.db, "setname_used_count") else 0
-        # 确保current_count是整数，避免NoneType错误
-        if current_count is None:
-            current_count = 0
-        return max(0, max_uses - current_count)
+        # 如果还想放宽密码长度，也可一起修改：
+        if len(password) < 2:
+            raise ValueError("密码至少需要 2 个字符。")
+
+        # 调用父类默认检查（邮箱、重复名、黑名单等）
+        return super().pre_create_account(username, password, **kwargs)
+
 
 
 class Guest(DefaultGuest):

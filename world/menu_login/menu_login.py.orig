@@ -19,6 +19,7 @@ This uses Evennia's menu system EvMenu and is triggered by a command that is
 called automatically when a new user connects.
 
 """
+
 from django.conf import settings
 
 from evennia import CmdSet, Command, syscmdkeys

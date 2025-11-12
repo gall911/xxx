@@ -13,7 +13,7 @@ to add/remove commands from the default lineup. You can create your
 own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 
 """
-from commands.character_cmd import CmdCharacter
+# from commands.character_cmd import CmdCharacter  # 已删除
 from evennia import default_cmds
 from evennia import Command
 
@@ -113,8 +113,8 @@ class AccountCmdSet(default_cmds.AccountCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
-        # 添加角色设定命令
-        self.add(CmdCharacter())
+        # 添加角色设定命令 - 已删除
+        # self.add(CmdCharacter())
 
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):

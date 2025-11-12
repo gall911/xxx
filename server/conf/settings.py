@@ -44,29 +44,6 @@ SERVERNAME = "xxx"
 CMDSET_UNLOGGEDIN = "world.menu_login.UnloggedinCmdSet"
 CONNECTION_SCREEN_MODULE = "world.menu_login.connection_screens"
 
-# 设置账号密码最小长度为2
-MIN_USERNAME_LENGTH = 2
-MIN_PASSWORD_LENGTH = 2
-
-# 自定义用户名验证器
-USERNAME_VALIDATORS = [
-    {"NAME": "django.contrib.auth.validators.ASCIIUsernameValidator"},
-    {"NAME": "django.core.validators.MinLengthValidator", "OPTIONS": {"limit_value": 2}},
-    {"NAME": "django.core.validators.MaxLengthValidator", "OPTIONS": {"limit_value": 30}},
-    {"NAME": "evennia.server.validators.EvenniaUsernameAvailabilityValidator"},
-]
-
-# 自定义密码验证器
-ACCOUNT_PASSWORD_VALIDATORS = [
-    {"NAME": "django.core.validators.MinLengthValidator", "OPTIONS": {"limit_value": 2}},
-]
-# 禁用密码强度检查
-PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
-# 禁用用户名和密码验证规则
-ACCOUNT_VALIDATORS = []
-
-# Setname命令配置
-SETNAME_MAX_USES = 88  # 每个角色可以使用setname命令的最大次数，设置为1表示只能使用一次
 
 
 ######################################################################
@@ -76,3 +53,19 @@ try:
     from server.conf.secret_settings import *
 except ImportError:
     print("secret_settings.py file not found or failed to import.")
+
+# 2. 用于设置【密码】最小长度为 2 (同时保留其他验证)
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 2  # 允许最小长度为 2
+        }
+    },
+    # 删除了 UserAttributeSimilarityValidator
+    # 删除了 CommonPasswordValidator
+    # 删除了 NumericPasswordValidator
+]
+AUTH_USERNAME_VALIDATORS = []
+ACCOUNT_USERNAME_MIN_LENGTH = 2
+ACCOUNT_USERNAME_MAX_LENGTH = 30

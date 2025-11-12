@@ -19,6 +19,7 @@ This uses Evennia's menu system EvMenu and is triggered by a command that is
 called automatically when a new user connects.
 
 """
+
 from django.conf import settings
 
 from evennia import CmdSet, Command, syscmdkeys
@@ -143,15 +144,61 @@ def node_enter_password(caller, raw_string, **kwargs):
         session = caller
         address = session.address
         if new_user:
-            # create a new account
-            account, errors = _ACCOUNT.create(
-                username=username, password=password, ip=address, session=session
-            )
+            # create a new account - bypass password validation
+            from django.contrib.auth.hashers import make_password
+            try:
+                if len(password) < 2:
+                    raise ValueError("密码长度必须至少为2个字符")
+                account = _ACCOUNT(username=username)
+                # 直接设置密码哈希，绕过所有验证
+                account.password = make_password(password)
+                account.save()
+                
+                # 创建默认角色
+                from evennia import create_object
+                from evennia.utils import search
+                from django.conf import settings
+                
+                # 获取默认角色类型类
+                character_typeclass = settings.BASE_CHARACTER_TYPECLASS
+                
+                # 创建角色
+                character = create_object(character_typeclass, key=username)
+                
+                # 将角色与账号关联
+                account.db._playable_characters = [character]
+                account.db._last_puppet = character
+                character.locks.add("puppet:id(%i) or pid(%i) or perm(Builder) or pperm(Builder)" % (account.id, account.id))
+                
+                errors = []
+            except Exception as e:
+                account = None
+                errors = [str(e)]
         else:
-            # check password against existing account
-            account, errors = _ACCOUNT.authenticate(
-                username=username, password=password, ip=address, session=session
-            )
+            # check password against existing account - special handling for superuser
+            from django.contrib.auth import authenticate
+            try:
+                # 首先尝试使用Django的authenticate方法，这对超级用户更可靠
+                account = authenticate(username=username, password=password)
+                if account:
+                    # 确保获取的是Evennia账号对象
+                    account = _ACCOUNT.objects.get(username__iexact=username)
+                    errors = []
+                else:
+                    # 如果Django authenticate失败，尝试直接验证
+                    from django.contrib.auth.hashers import check_password
+                    account = _ACCOUNT.objects.get(username__iexact=username)
+                    if check_password(password, account.password):
+                        errors = []
+                    else:
+                        account = None
+                        errors = ["密码不正确"]
+            except _ACCOUNT.DoesNotExist:
+                account = None
+                errors = ["账号不存在"]
+            except Exception as e:
+                account = None
+                errors = [str(e)]
 
         if account:
             if new_user:
