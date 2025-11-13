@@ -136,23 +136,19 @@ class Account(DefaultAccount):
      - at_post_chnnel_msg(message, channel, senders=None, **kwargs)
 
     """
+    
     @classmethod
-    def pre_create_account(cls, username, password, **kwargs):
-        """
-        账号创建前的验证逻辑。
-        默认 Evennia 要求用户名至少 3 字符，
-        我们改为最少 2 字符（或自行调整）。
-        """
-        username = username.strip()
+    def validate_username(cls, username):
+        # 不检查最小3字符，允许最小2字符
         if len(username) < 2:
-            raise ValueError("用户名至少需要 2 个字符。")
+            return False, ["用户名至少需要 2 个字符"]
+        return True, []  # 合法
 
-        # 如果还想放宽密码长度，也可一起修改：
+    @classmethod
+    def validate_password(cls, password, account=None):
         if len(password) < 2:
-            raise ValueError("密码至少需要 2 个字符。")
-
-        # 调用父类默认检查（邮箱、重复名、黑名单等）
-        return super().pre_create_account(username, password, **kwargs)
+            return False, ["密码至少需要 2 个字符"]
+        return True, []  # 合法
 
 
 

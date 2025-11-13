@@ -93,6 +93,37 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             import sys
             print(f"Warning: Could not add xianya move command set: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
+            
+                # 添加修仙风格的状态命令
+        try:
+            from commands.score_cmd import CmdScore
+            self.add(CmdScore)
+            print("已添加修仙风格状态命令")
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add score command: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+
+# 添加魔法命令
+        try:
+            from commands.magic.spell_cmd import CmdCast, CmdSpells, CmdSpellInfo
+            from commands.magic.init_magic_cmd import CmdInitMagic
+            from commands.magic.magic_admin_cmd import CmdMigrateMagic, CmdReloadMagic, CmdAddSpell, CmdRemoveSpell
+            self.add(CmdCast)
+            self.add(CmdSpells)
+            self.add(CmdSpellInfo)
+            self.add(CmdInitMagic)
+            self.add(CmdMigrateMagic)
+            self.add(CmdReloadMagic)
+            self.add(CmdAddSpell)
+            self.add(CmdRemoveSpell)
+            print("魔法命令已成功添加")
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add magic commands: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
@@ -155,3 +186,5 @@ class SessionCmdSet(default_cmds.SessionCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
+
+
