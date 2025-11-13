@@ -57,7 +57,9 @@ class ConfigVersionManager:
 
     def _get_version_file_path(self, config_name: str, version_id: str) -> str:
         """获取版本文件路径"""
-        return os.path.join(self.versions_dir, f"{config_name}_{version_id}.json")
+        # 将配置名中的斜杠替换为下划线，避免创建子目录
+        safe_config_name = config_name.replace("/", "_")
+        return os.path.join(self.versions_dir, f"{safe_config_name}_{version_id}.json")
 
     def _generate_version_id(self) -> str:
         """生成版本ID"""
@@ -94,10 +96,20 @@ class ConfigVersionManager:
         except (json.JSONDecodeError, KeyError):
             return None
 
+    def delete_version(self, config_name: str, version_id: str) -> bool:
+        """删除配置版本"""
+        version_file = self._get_version_file_path(config_name, version_id)
+        if os.path.exists(version_file):
+            os.remove(version_file)
+            return True
+        return False
+
     def list_versions(self, config_name: str) -> List[ConfigVersion]:
         """列出配置的所有版本"""
         versions = []
-        prefix = f"{config_name}_"
+        # 将配置名中的斜杠替换为下划线，与保存时的处理方式一致
+        safe_config_name = config_name.replace("/", "_")
+        prefix = f"{safe_config_name}_"
 
         for file in os.listdir(self.versions_dir):
             if file.startswith(prefix) and file.endswith(".json"):
@@ -109,14 +121,6 @@ class ConfigVersionManager:
         # 按时间戳降序排序
         versions.sort(key=lambda v: v.timestamp, reverse=True)
         return versions
-
-    def delete_version(self, config_name: str, version_id: str) -> bool:
-        """删除配置版本"""
-        version_file = self._get_version_file_path(config_name, version_id)
-        if os.path.exists(version_file):
-            os.remove(version_file)
-            return True
-        return False
 
     def restore_version(self, config_name: str, version_id: str) -> Optional[Dict[str, Any]]:
         """恢复到指定版本的配置"""

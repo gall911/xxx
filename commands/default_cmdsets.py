@@ -105,6 +105,39 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             print(f"Warning: Could not add score command: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
 
+        # 添加hp命令
+        try:
+            from commands.hp_cmd import CmdHp
+            self.add(CmdHp)
+            print("已添加hp命令")
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add hp command: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+
+        # 添加add命令
+        try:
+            from commands.add_cmd import CmdAdd
+            self.add(CmdAdd)
+            print("已添加add命令")
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add add command: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+
+        # 添加木人桩命令
+        try:
+            from commands.muren_cmd import CmdMuren
+            self.add(CmdMuren)
+            print("已添加木人桩命令")
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add muren command: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+
 # 添加魔法命令
         try:
             from commands.magic.spell_cmd import CmdCast, CmdSpells, CmdSpellInfo

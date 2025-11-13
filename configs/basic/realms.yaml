@@ -8,7 +8,7 @@ experience_per_level: 100  # 每级所需经验
 # 境界定义
 realms:
   凡人:
-    name: "凡人"
+    name: "一般人"
     description: "尚未踏入修行之路的凡人"
     level_requirement: 1
     spirit_power_bonus: 0

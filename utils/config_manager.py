@@ -28,7 +28,7 @@ class GameConfigManager:
             cls._instance = super().__new__(cls)
             cls._config_loader = get_config_loader(
                 enable_validation=True,
-                enable_version_control=True
+                enable_version_control=False
             )
         return cls._instance
 

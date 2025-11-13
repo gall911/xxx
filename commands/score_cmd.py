@@ -1,4 +1,5 @@
 from evennia import Command
+from utils.config_manager import game_config
 
 class CmdScore(Command):
     """
@@ -21,33 +22,56 @@ class CmdScore(Command):
         caller = self.caller
 
         # 获取角色属性
-        level = caller.db.level if hasattr(caller.db, 'level') else 1
-        exp = caller.db.exp if hasattr(caller.db, 'exp') else 0
-        exp_needed = caller.db.exp_needed if hasattr(caller.db, 'exp_needed') else 100
+        level = getattr(caller.db, 'level', 1)
+        exp = getattr(caller.db, 'exp', 0)
+        exp_needed = getattr(caller.db, 'exp_needed', 100)
 
         # 生命值
-        hp = caller.db.hp if hasattr(caller.db, 'hp') else 100
-        max_hp = caller.db.max_hp if hasattr(caller.db, 'max_hp') else 100
+        hp = getattr(caller.db, 'hp', 100)
+        max_hp = getattr(caller.db, 'max_hp', 100)
 
         # 法力值
-        mana = caller.db.mana if hasattr(caller.db, 'mana') else 100
-        max_mana = caller.db.max_mana if hasattr(caller.db, 'max_mana') else 100
-        magic_power = caller.db.magic_power if hasattr(caller.db, 'magic_power') else 5
+        mana = getattr(caller.db, 'mana', 100)
+        max_mana = getattr(caller.db, 'max_mana', 100)
+        magic_power = getattr(caller.db, 'magic_power', 5)
 
         # 修仙相关属性
-        cultivation = caller.db.cultivation if hasattr(caller.db, 'cultivation') else "凡人"
-        cultivation_level = caller.db.cultivation_level if hasattr(caller.db, 'cultivation_level') else 0
-        spirit_power = caller.db.spirit_power if hasattr(caller.db, 'spirit_power') else 10
+        cultivation_key = getattr(caller.db, 'cultivation', "凡人")
+        cultivation_level = getattr(caller.db, 'cultivation_level', 0)
+        spirit_power = getattr(caller.db, 'spirit_power', 10)
 
-        # 基础属性
-        strength = caller.db.strength if hasattr(caller.db, 'strength') else 10
-        agility = caller.db.agility if hasattr(caller.db, 'agility') else 10
-        intelligence = caller.db.intelligence if hasattr(caller.db, 'intelligence') else 10
-        constitution = caller.db.constitution if hasattr(caller.db, 'constitution') else 10
+        # 从配置中获取境界名称
+        realms_config = game_config.get_config("basic/realms")
+        if realms_config and "realms" in realms_config and cultivation_key in realms_config["realms"]:
+            cultivation = realms_config["realms"][cultivation_key].get("name", cultivation_key)
+        else:
+            cultivation = cultivation_key
+
+        # 从配置中获取属性名称
+        attributes_config = game_config.get_config("basic/attributes")
+        def get_attr_name(attr_key):
+            """从配置中获取属性名称"""
+            if attributes_config and "attributes" in attributes_config and attr_key in attributes_config["attributes"]:
+                return attributes_config["attributes"][attr_key].get("name", attr_key)
+            return attr_key
+
+        # 基础属性 - 使用配置中的名称
+        strength = getattr(caller.db, 'strength', 10)
+        dexterity = getattr(caller.db, 'dexterity', 10)
+        intelligence = getattr(caller.db, 'intelligence', 10)
+        constitution = getattr(caller.db, 'constitution', 10)
+        wisdom = getattr(caller.db, 'wisdom', 10)
+        charisma = getattr(caller.db, 'charisma', 10)
 
         # 金钱
-        gold = caller.db.gold if hasattr(caller.db, 'gold') else 0
-        silver = caller.db.silver if hasattr(caller.db, 'silver') else 0
+        gold = getattr(caller.db, 'gold', 0)
+        silver = getattr(caller.db, 'silver', 0)
+
+        # 获取属性名称
+        constitution_name = get_attr_name("constitution")
+        strength_name = get_attr_name("strength")
+        dexterity_name = get_attr_name("dexterity")
+        intelligence_name = get_attr_name("intelligence")
 
         # 显示属性信息
         text = f"""
@@ -58,17 +82,17 @@ class CmdScore(Command):
 |w真元:|n |b{mana}|n/|b{max_mana}|n |w法力:|n {magic_power}
 |w灵力:|n {spirit_power}
 
-|w根骨:|n {constitution} |w力量:|n {strength}
-|w身法:|n {agility} |w悟性:|n {intelligence}
+|w{constitution_name}:|n {constitution} |w{strength_name}:|n {strength}
+|w{dexterity_name}:|n {dexterity} |w{intelligence_name}:|n {intelligence}
 
-|w金钱:|n {gold}金 {silver}银
-"""
+|w金钱:|n {gold}金 {silver}银"""
 
         # 如果有已知法术，显示法术信息
-        if hasattr(caller.db, 'known_spells') and caller.db.known_spells:
-            spells_text = ", ".join(caller.db.known_spells[:3])  # 只显示前3个
-            if len(caller.db.known_spells) > 3:
-                spells_text += f" 等{len(caller.db.known_spells)}个法术"
-            text += f"|w已知法术:|n {spells_text}\n"
+        known_spells = getattr(caller.db, 'known_spells', [])
+        if known_spells:
+            spells_text = ", ".join(known_spells[:3])  # 只显示前3个
+            if len(known_spells) > 3:
+                spells_text += f" 等{len(known_spells)}个法术"
+            text += f"\n|w已知法术:|n {spells_text}"
 
         self.msg(text)

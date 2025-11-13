@@ -9,7 +9,8 @@ creation commands.
 
 from evennia.objects.objects import DefaultCharacter
 from evennia import TICKER_HANDLER
-
+from evennia import CmdSet
+from commands.hp_cmd import CmdHp
 from .objects import ObjectParent
 from utils.config_manager import game_config
 
@@ -67,15 +68,18 @@ class Character(ObjectParent, DefaultCharacter):
         """
         自动恢复HP和mana的方法，由ticker定期调用
         """
+        # 获取属性配置
+        attributes_config = game_config.get_config("basic/attributes")
+        
         # 确保属性存在
         if not hasattr(self.db, 'hp') or self.db.hp is None:
-            self.db.hp = 100
+            self.db.hp = attributes_config["formulas"]["health"]["base"]
         if not hasattr(self.db, 'max_hp') or self.db.max_hp is None:
-            self.db.max_hp = 100
+            self.db.max_hp = attributes_config["formulas"]["health"]["base"]
         if not hasattr(self.db, 'mana') or self.db.mana is None:
-            self.db.mana = 100
+            self.db.mana = attributes_config["formulas"]["mana"]["base"]
         if not hasattr(self.db, 'max_mana') or self.db.max_mana is None:
-            self.db.max_mana = 100
+            self.db.max_mana = attributes_config["formulas"]["mana"]["base"]
 
         # 只有在HP和mana低于最大值时才恢复
         hp_regen = False
@@ -84,7 +88,8 @@ class Character(ObjectParent, DefaultCharacter):
         # 恢复HP（每分钟恢复最大值的5%）
         if self.db.hp < self.db.max_hp:
             old_hp = self.db.hp
-            self.db.hp = min(self.db.max_hp, self.db.hp + int(self.db.max_hp * 0.05))
+            hp_recovery_rate = attributes_config.get("recovery_rates", {}).get("hp_recovery_rate", 0.05)
+            self.db.hp = min(self.db.max_hp, self.db.hp + int(self.db.max_hp * hp_recovery_rate))
             if self.db.hp > old_hp:
                 hp_regen = True
                 self.msg(f"|g你的气血恢复了 {self.db.hp - old_hp} 点。|n")
@@ -92,7 +97,8 @@ class Character(ObjectParent, DefaultCharacter):
         # 恢复mana（每分钟恢复最大值的10%）
         if self.db.mana < self.db.max_mana:
             old_mana = self.db.mana
-            self.db.mana = min(self.db.max_mana, self.db.mana + int(self.db.max_mana * 0.1))
+            mana_recovery_rate = attributes_config.get("recovery_rates", {}).get("mana_recovery_rate", 0.1)
+            self.db.mana = min(self.db.max_mana, self.db.mana + int(self.db.max_mana * mana_recovery_rate))
             if self.db.mana > old_mana:
                 mana_regen = True
                 self.msg(f"|b你的真元恢复了 {self.db.mana - old_mana} 点。|n")
@@ -391,35 +397,4 @@ class Character(ObjectParent, DefaultCharacter):
         mana_bar = "█" * mana_percent + "░" * (10 - mana_percent)
         exp_bar = "█" * exp_percent + "░" * (10 - exp_percent)
 
-        # 构建状态信息文本
-        text = f"""
-|c┌────────────────────────────────────────┐|n
-|c│              |w{self.key}的状态|c              │|n
-|c├────────────────────────────────────────┤|n
-|c│ |w境界:|n {cultivation} ({cultivation_level})                    │|n
-|c│ |w等级:|n {level}                                      │|n
-|c│ |w经验:|n |y{exp}|n/|Y{exp_needed}|n {exp_bar}                 │|n
-|c├────────────────────────────────────────┤|n
-|c│ |w气血:|n |r{hp}|n/|R{max_hp}|n {hp_bar}                 │|n
-|c│ |w真元:|n |b{mana}|n/|B{max_mana}|n {mana_bar}                 │|n
-|c│ |w法力:|n {magic_power}                              │|n
-|c│ |w灵力:|n {spirit_power}                              │|n
-|c├────────────────────────────────────────┤|n
-|c│ |w根骨:|n {constitution} |w力量:|n {strength}                │|n
-|c│ |w身法:|n {agility} |w悟性:|n {intelligence}                │|n
-|c│ |w武器熟练:|n {weapon_proficiency}                              │|n
-|c├────────────────────────────────────────┤|n
-|c│ |w金钱:|n |Y{gold}|n金 |y{silver}|n银                      │|n
-|c└────────────────────────────────────────┘|n"""
-
-        # 如果有已知法术，显示法术信息
-        known_spells = self.db.get('known_spells', [])
-        if known_spells:
-            spells_text = ", ".join(self.db.known_spells[:3])  # 只显示前3个
-            if len(self.db.known_spells) > 3:
-                spells_text += f" 等{len(self.db.known_spells)}个法术"
-            text += f"\n|c┌────────────────────────────────────────┐|n"
-            text += f"|c│ |w已知法术:|n {spells_text}{' ' * (30 - len(spells_text))}│|n"
-            text += f"|c└────────────────────────────────────────┘|n"
-
-        return text
+       

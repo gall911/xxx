@@ -70,6 +70,11 @@ AUTH_USERNAME_VALIDATORS = []
 ACCOUNT_USERNAME_MIN_LENGTH = 2
 ACCOUNT_USERNAME_MAX_LENGTH = 30
 
-# 3. 魔法系统初始化
+# 3. 时区设置
+# 设置为香港时区 (UTC+8)
+TIME_ZONE = 'Asia/Hong_Kong'
+USE_TZ = True
+
+# 4. 魔法系统初始化
 # 在服务器启动时初始化魔法系统
 AT_STARTUP_MODULES = ["world.magic"]

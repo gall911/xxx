@@ -40,6 +40,18 @@ WHISPER = "|c"  # 悄悄话颜色
 # 命令相关
 COMMAND = "|y"  # 命令提示颜色
 
+# HP命令相关
+HP_BAR = "|r"  # 气血颜色
+MP_BAR = "|b"  # 真元颜色
+HP_SEPARATOR = "|y"  # 分隔线颜色
+HP_LABEL = "|w"  # 标签颜色
+HP_VALUE = "|n"  # 值颜色
+HP_GOLD = "|Y"  # 金币颜色
+HP_SILVER = "|y"  # 银币颜色
+HP_PERCENT_LOW = "|r"  # 低百分比颜色 (<30%)
+HP_PERCENT_MID = "|y"  # 中百分比颜色 (30-70%)
+HP_PERCENT_HIGH = "|g"  # 高百分比颜色 (>70%)
+
 def format_text(text, color_type):
     """格式化文本颜色
     

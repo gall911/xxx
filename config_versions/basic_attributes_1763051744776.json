@@ -1,12 +1,12 @@
 {
   "config_name": "basic/attributes",
-  "version_id": "1763022671442",
-  "timestamp": 1763022671.4425552,
-  "description": "初始加载于 2025-11-13 08:31:11",
+  "version_id": "1763051744776",
+  "timestamp": 1763051744.776885,
+  "description": "11111哈哈",
   "data": {
     "attributes": {
       "strength": {
-        "name": "力量",
+        "name": "力量哈哈",
         "description": "影响物理攻击力和负重能力",
         "min_value": 1,
         "max_value": 100,
@@ -52,6 +52,14 @@
         "max_value": 100,
         "default_value": 10,
         "growth_rate": 1.1
+      },
+      "weapon_proficiency": {
+        "name": "武器熟练度",
+        "description": "影响使用各种武器的效果和伤害",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.2
       }
     },
     "formulas": {
@@ -95,6 +103,10 @@
         "base": 1.5,
         "formula": "base + (strength * 0.01) + (level * 0.005)"
       }
+    },
+    "recovery_rates": {
+      "hp_recovery_rate": 0.05,
+      "mana_recovery_rate": 0.1
     },
     "attribute_points": {
       "initial_points": 20,

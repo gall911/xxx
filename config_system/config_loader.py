@@ -166,15 +166,55 @@ class ConfigLoader:
                                     print(f"  - {error}")
                                 continue  # 跳过验证失败的配置
                         
-                        # 保存版本
+                        # 保存版本（仅在内容发生变化时）
                         if self.enable_version_control and self.version_manager:
-                            self.version_manager.save_version(
-                                config_name, config_data, 
-                                f"初始加载于 {time.strftime('%Y-%m-%d %H:%M:%S')}"
-                            )
+                            # 检查是否已经有相同内容的版本
+                            if not self._has_identical_version(config_name, config_data):
+                                self.version_manager.save_version(
+                                    config_name, config_data, 
+                                    f"初始加载于 {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                                )
                         
                         configs[config_name] = config_data
         return configs
+
+    def _has_identical_version(self, config_name: str, new_data: Any) -> bool:
+        """检查是否已经有相同内容的版本"""
+        if not self.enable_version_control or not self.version_manager:
+            return False
+            
+        # 获取最近的版本
+        versions = self.version_manager.list_versions(config_name)
+        if not versions:
+            return False
+            
+        # 检查最新的版本是否与当前内容相同
+        latest_version = versions[0]
+        return self._compare_data(latest_version.data, new_data)
+
+    def _compare_data(self, data1: Any, data2: Any) -> bool:
+        """比较两个数据结构是否相同"""
+        if type(data1) != type(data2):
+            return False
+            
+        if isinstance(data1, dict):
+            if set(data1.keys()) != set(data2.keys()):
+                return False
+            for key in data1:
+                if not self._compare_data(data1[key], data2[key]):
+                    return False
+            return True
+            
+        elif isinstance(data1, list):
+            if len(data1) != len(data2):
+                return False
+            for i in range(len(data1)):
+                if not self._compare_data(data1[i], data2[i]):
+                    return False
+            return True
+            
+        else:
+            return data1 == data2
 
     def get_config(self, config_name: str) -> Optional[Any]:
         """获取指定配置"""
@@ -235,12 +275,14 @@ class ConfigLoader:
                         print(f"  - {error}")
                     return False  # 验证失败，不应用新配置
             
-            # 保存版本
+            # 保存版本（仅在内容发生变化时）
             if self.enable_version_control and self.version_manager:
-                self.version_manager.save_version(
-                    config_name, config_content, 
-                    f"重新加载于 {time.strftime('%Y-%m-%d %H:%M:%S')}"
-                )
+                # 检查是否已经有相同内容的版本
+                if not self._has_identical_version(config_name, config_content):
+                    self.version_manager.save_version(
+                        config_name, config_content, 
+                        f"重新加载于 {time.strftime('%Y-%m-%d %H:%M:%S')}"
+                    )
             
             # 通知所有注册的回调函数
             with self._lock:
