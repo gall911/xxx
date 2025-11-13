@@ -9,6 +9,7 @@ from .fixexitcmd import CmdFixExit
 from .createroomcmd import CmdDig
 from .quickdigcmd import CmdQuickDig
 from .reloadcmd import CmdReloadCmds
+from .gm.config_cmd import CmdConfig
 
 
 class SysCmdSet(CmdSet):
@@ -24,5 +25,6 @@ class SysCmdSet(CmdSet):
         self.add(CmdDig())
         self.add(CmdQuickDig())
         self.add(CmdReloadCmds())
+        self.add(CmdConfig())
         
         

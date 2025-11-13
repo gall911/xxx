@@ -11,6 +11,7 @@ from evennia.objects.objects import DefaultCharacter
 from evennia import TICKER_HANDLER
 
 from .objects import ObjectParent
+from utils.config_manager import game_config
 
 
 class Character(ObjectParent, DefaultCharacter):
@@ -27,38 +28,27 @@ class Character(ObjectParent, DefaultCharacter):
         """
         super().at_object_creation()
 
-        # 基础属性
+        # 获取角色属性配置
+        attributes_config = game_config.get_config("basic/attributes")
+        realms_config = game_config.get_config("basic/realms")
+        
+        # 初始化基础属性
         self.db.level = 1  # 等级
         self.db.exp = 0  # 当前经验
-        self.db.exp_needed = 100  # 升级所需经验
+        self.db.exp_needed = realms_config["experience_per_level"]  # 升级所需经验
 
-        # 生命值
-        self.db.hp = 100  # 当前生命值
-        self.db.max_hp = 100  # 最大生命值
-
-        # 魔法系统相关属性
-        self.db.mana = 100  # 当前法力值
-        self.db.max_mana = 100  # 最大法力值
-        self.db.magic_power = 5  # 魔法强度
-        self.db.fire_resistance = 0  # 火系抗性
-        self.db.water_resistance = 0  # 水系抗性
-        self.db.earth_resistance = 0  # 土系抗性
-        self.db.air_resistance = 0  # 风系抗性
-        self.db.lightning_resistance = 0  # 雷系抗性
-        self.db.ice_resistance = 0  # 冰系抗性
-        self.db.light_resistance = 0  # 光系抗性
-        self.db.dark_resistance = 0  # 暗系抗性
+        # 初始化角色基础属性
+        for attr_name, attr_data in attributes_config["attributes"].items():
+            # 使用配置中的默认值
+            setattr(self.db, attr_name, attr_data["default_value"])
+        
+        # 计算衍生属性
+        self._calculate_derived_attributes()
 
         # 修仙相关属性
-        self.db.cultivation = "凡人"  # 境界
+        self.db.cultivation = realms_config["starting_realm"]  # 境界
         self.db.cultivation_level = 0  # 境界等级
-        self.db.spirit_power = 10  # 灵力
-
-        # 基础属性
-        self.db.strength = 10  # 力量
-        self.db.agility = 10  # 身法
-        self.db.intelligence = 10  # 悟性
-        self.db.constitution = 10  # 根骨
+        self.db.spirit_power = realms_config["starting_spirit_power"]  # 灵力
 
         # 金钱
         self.db.gold = 10  # 金币
@@ -109,6 +99,170 @@ class Character(ObjectParent, DefaultCharacter):
 
         return hp_regen or mana_regen
 
+    def _calculate_derived_attributes(self):
+        """
+        计算衍生属性
+        """
+        import math
+        
+        # 获取属性配置
+        attributes_config = game_config.get_config("basic/attributes")
+        
+        # 准备计算环境
+        env = {
+            "level": self.db.level,
+            "min": min,
+            "max": max,
+            "int": int,
+            "float": float,
+            "round": round,
+            "math": math,
+        }
+        
+        # 添加所有基础属性到环境
+        for attr_name in attributes_config["attributes"]:
+            if hasattr(self.db, attr_name):
+                env[attr_name] = getattr(self.db, attr_name)
+        
+        # 计算衍生属性
+        for attr_name, formula_data in attributes_config["formulas"].items():
+            # 获取基础值
+            base_value = formula_data["base"]
+            env["base"] = base_value
+            
+            # 计算属性值
+            try:
+                value = eval(formula_data["formula"], {"__builtins__": {}}, env)
+                setattr(self.db, attr_name, value)
+                
+                # 设置最大值
+                if attr_name == "health":
+                    self.db.hp = self.db.max_hp = int(value)
+                elif attr_name == "mana":
+                    self.db.mana = self.db.max_mana = int(value)
+            except Exception as e:
+                print(f"计算属性 {attr_name} 失败: {e}")
+                setattr(self.db, attr_name, base_value)
+    
+    def level_up(self):
+        """
+        角色升级
+        """
+        # 获取属性配置
+        attributes_config = game_config.get_config("basic/attributes")
+        realms_config = game_config.get_config("basic/realms")
+        
+        # 增加等级
+        self.db.level += 1
+        
+        # 重置经验
+        self.db.exp = 0
+        self.db.exp_needed = realms_config["experience_per_level"] * self.db.level
+        
+        # 获取主属性和副属性（如果有职业系统）
+        # 这里暂时使用默认的成长率
+        for attr_name, attr_data in attributes_config["attributes"].items():
+            growth_rate = attr_data["growth_rate"]
+            
+            # 增加属性值
+            increase = int(growth_rate)
+            if (growth_rate % 1) >= 0.5:
+                increase += 1
+            
+            current_value = getattr(self.db, attr_name)
+            new_value = min(
+                attr_data["max_value"], 
+                current_value + increase
+            )
+            setattr(self.db, attr_name, new_value)
+        
+        # 重新计算衍生属性
+        self._calculate_derived_attributes()
+        
+        # 检查是否可以突破境界
+        realm_data = realms_config["realms"].get(self.db.cultivation, {})
+        if realm_data and self.db.level >= realm_data.get("level_requirement", float("inf")):
+            self.msg(f"你的等级已经达到了突破到下一境界的条件！")
+    
+    def breakthrough_realm(self):
+        """
+        突破境界
+        """
+        # 获取境界配置
+        realms_config = game_config.get_config("basic/realms")
+        
+        # 获取当前境界信息
+        current_realm = realms_config["realms"].get(self.db.cultivation, {})
+        if not current_realm:
+            self.msg("无法获取当前境界信息！")
+            return False
+        
+        # 获取下一境界名称
+        next_realm_name = current_realm.get("next_realm")
+        if not next_realm_name:
+            self.msg("你已经达到了最高境界！")
+            return False
+        
+        # 获取下一境界信息
+        next_realm = realms_config["realms"].get(next_realm_name)
+        if not next_realm:
+            self.msg("无法获取下一境界信息！")
+            return False
+        
+        # 检查等级是否满足要求
+        if self.db.level < next_realm.get("level_requirement", float("inf")):
+            self.msg(f"突破到{next_realm['name']}需要等级达到{next_realm['level_requirement']}级！")
+            return False
+        
+        # 检查突破条件
+        breakthrough_conditions = realms_config["realm_breakthrough"].get(next_realm_name, {})
+        
+        # 检查金币
+        gold_cost = breakthrough_conditions.get("gold_cost", 0)
+        if self.db.gold < gold_cost:
+            self.msg(f"突破到{next_realm['name']}需要{gold_cost}金币！")
+            return False
+        
+        # 检查物品（这里简化处理，实际应该检查背包）
+        required_items = breakthrough_conditions.get("items", [])
+        # TODO: 实现物品检查
+        
+        # 扣除金币
+        self.db.gold -= gold_cost
+        
+        # 提升境界
+        old_realm = self.db.cultivation
+        self.db.cultivation = next_realm_name
+        self.db.cultivation_level += 1
+        
+        # 应用境界加成
+        # 增加灵力
+        spirit_bonus = next_realm.get("spirit_power_bonus", 0)
+        self.db.spirit_power += spirit_bonus
+        
+        # 增加属性
+        attributes_bonus = next_realm.get("attributes_bonus", {})
+        for attr_name, bonus in attributes_bonus.items():
+            current_value = getattr(self.db, attr_name, 0)
+            setattr(self.db, attr_name, current_value + bonus)
+        
+        # 重新计算衍生属性
+        self._calculate_derived_attributes()
+        
+        # 发送成功消息
+        self.msg(f"|g恭喜你成功突破到{next_realm['name']}！|n")
+        self.msg(f"|y你的灵力增加了{spirit_bonus}点！|n")
+        
+        # 显示属性加成
+        if attributes_bonus:
+            bonus_text = ", ".join([f"{attr}+{value}" for attr, value in attributes_bonus.items()])
+            self.msg(f"|y你的属性加成：{bonus_text}|n")
+        
+        # 通知周围玩家
+        self.location.msg_contents(f"|c{self.key}突破到了{next_realm['name']}！|n", exclude=[self])
+        
+        return True
+    
     def at_object_delete(self):
         """
         当角色对象被删除时调用
@@ -194,6 +348,9 @@ class Character(ObjectParent, DefaultCharacter):
 
     def get_xianya_status(self):
         """获取修仙风格的状态信息"""
+        # 获取属性配置
+        attributes_config = game_config.get_config("basic/attributes")
+        
         # 获取角色属性，使用get方法避免None值
         level = self.db.get('level', 1)
         exp = self.db.get('exp', 0)
@@ -213,11 +370,12 @@ class Character(ObjectParent, DefaultCharacter):
         cultivation_level = self.db.get('cultivation_level', 0)
         spirit_power = self.db.get('spirit_power', 10)
 
-        # 基础属性
+        # 基础属性 - 使用配置中的名称
         strength = self.db.get('strength', 10)
-        agility = self.db.get('agility', 10)
+        agility = self.db.get('dexterity', 10)  # 使用配置中的名称
         intelligence = self.db.get('intelligence', 10)
         constitution = self.db.get('constitution', 10)
+        weapon_proficiency = self.db.get('weapon_proficiency', 10)
 
         # 金钱
         gold = self.db.get('gold', 0)
@@ -249,6 +407,7 @@ class Character(ObjectParent, DefaultCharacter):
 |c├────────────────────────────────────────┤|n
 |c│ |w根骨:|n {constitution} |w力量:|n {strength}                │|n
 |c│ |w身法:|n {agility} |w悟性:|n {intelligence}                │|n
+|c│ |w武器熟练:|n {weapon_proficiency}                              │|n
 |c├────────────────────────────────────────┤|n
 |c│ |w金钱:|n |Y{gold}|n金 |y{silver}|n银                      │|n
 |c└────────────────────────────────────────┘|n"""

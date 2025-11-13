@@ -1,0 +1,239 @@
+{
+  "config_name": "basic/realms",
+  "version_id": "1763022354948",
+  "timestamp": 1763022354.9482205,
+  "description": "初始加载于 2025-11-13 08:25:54",
+  "data": {
+    "starting_realm": "凡人",
+    "starting_spirit_power": 10,
+    "experience_per_level": 100,
+    "realms": {
+      "凡人": {
+        "name": "凡人",
+        "description": "尚未踏入修行之路的凡人",
+        "level_requirement": 1,
+        "spirit_power_bonus": 0,
+        "hp_bonus": 0,
+        "mana_bonus": 0,
+        "attributes_bonus": {},
+        "next_realm": "炼气"
+      },
+      "炼气": {
+        "name": "炼气期",
+        "description": "踏入修行之路的第一步",
+        "level_requirement": 10,
+        "spirit_power_bonus": 50,
+        "hp_bonus": 100,
+        "mana_bonus": 100,
+        "attributes_bonus": {
+          "constitution": 5,
+          "intelligence": 5
+        },
+        "next_realm": "筑基"
+      },
+      "筑基": {
+        "name": "筑基期",
+        "description": "打下修行根基",
+        "level_requirement": 20,
+        "spirit_power_bonus": 150,
+        "hp_bonus": 300,
+        "mana_bonus": 300,
+        "attributes_bonus": {
+          "constitution": 10,
+          "intelligence": 10,
+          "strength": 5
+        },
+        "next_realm": "金丹"
+      },
+      "金丹": {
+        "name": "金丹期",
+        "description": "结成金丹，实力大增",
+        "level_requirement": 40,
+        "spirit_power_bonus": 300,
+        "hp_bonus": 600,
+        "mana_bonus": 600,
+        "attributes_bonus": {
+          "constitution": 20,
+          "intelligence": 20,
+          "strength": 10,
+          "dexterity": 10
+        },
+        "next_realm": "元婴"
+      },
+      "元婴": {
+        "name": "元婴期",
+        "description": "凝结元婴，寿元大增",
+        "level_requirement": 60,
+        "spirit_power_bonus": 500,
+        "hp_bonus": 1000,
+        "mana_bonus": 1000,
+        "attributes_bonus": {
+          "constitution": 30,
+          "intelligence": 30,
+          "strength": 15,
+          "dexterity": 15,
+          "wisdom": 10
+        },
+        "next_realm": "化神"
+      },
+      "化神": {
+        "name": "化神期",
+        "description": "元神化形，神通初显",
+        "level_requirement": 80,
+        "spirit_power_bonus": 800,
+        "hp_bonus": 1500,
+        "mana_bonus": 1500,
+        "attributes_bonus": {
+          "constitution": 40,
+          "intelligence": 40,
+          "strength": 20,
+          "dexterity": 20,
+          "wisdom": 20,
+          "charisma": 10
+        },
+        "next_realm": "返虚"
+      },
+      "返虚": {
+        "name": "返虚期",
+        "description": "返璞归真，虚实相生",
+        "level_requirement": 100,
+        "spirit_power_bonus": 1200,
+        "hp_bonus": 2000,
+        "mana_bonus": 2000,
+        "attributes_bonus": {
+          "constitution": 50,
+          "intelligence": 50,
+          "strength": 30,
+          "dexterity": 30,
+          "wisdom": 30,
+          "charisma": 20
+        },
+        "next_realm": "合道"
+      },
+      "合道": {
+        "name": "合道期",
+        "description": "与道合一，天地同寿",
+        "level_requirement": 150,
+        "spirit_power_bonus": 2000,
+        "hp_bonus": 3000,
+        "mana_bonus": 3000,
+        "attributes_bonus": {
+          "constitution": 70,
+          "intelligence": 70,
+          "strength": 50,
+          "dexterity": 50,
+          "wisdom": 50,
+          "charisma": 40
+        },
+        "next_realm": "大乘"
+      },
+      "大乘": {
+        "name": "大乘期",
+        "description": "大乘金仙，法力无边",
+        "level_requirement": 200,
+        "spirit_power_bonus": 3000,
+        "hp_bonus": 5000,
+        "mana_bonus": 5000,
+        "attributes_bonus": {
+          "constitution": 100,
+          "intelligence": 100,
+          "strength": 80,
+          "dexterity": 80,
+          "wisdom": 80,
+          "charisma": 60
+        },
+        "next_realm": "飞升"
+      },
+      "飞升": {
+        "name": "飞升期",
+        "description": "破碎虚空，飞升仙界",
+        "level_requirement": 300,
+        "spirit_power_bonus": 5000,
+        "hp_bonus": 8000,
+        "mana_bonus": 8000,
+        "attributes_bonus": {
+          "constitution": 150,
+          "intelligence": 150,
+          "strength": 120,
+          "dexterity": 120,
+          "wisdom": 120,
+          "charisma": 100
+        },
+        "next_realm": null
+      }
+    },
+    "realm_breakthrough": {
+      "炼气": {
+        "items": [
+          "聚气丹"
+        ],
+        "gold_cost": 100,
+        "description": "需要一颗聚气丹和100金币"
+      },
+      "筑基": {
+        "items": [
+          "筑基丹",
+          "护心镜"
+        ],
+        "gold_cost": 500,
+        "description": "需要一颗筑基丹、一面护心镜和500金币"
+      },
+      "金丹": {
+        "items": [
+          "结丹丹",
+          "金丹炉"
+        ],
+        "gold_cost": 1000,
+        "description": "需要一颗结丹丹、一个金丹炉和1000金币"
+      },
+      "元婴": {
+        "items": [
+          "养魂丹",
+          "元婴鼎"
+        ],
+        "gold_cost": 2000,
+        "description": "需要一颗养魂丹、一个元婴鼎和2000金币"
+      },
+      "化神": {
+        "items": [
+          "化神草",
+          "炼神炉"
+        ],
+        "gold_cost": 5000,
+        "description": "需要一株化神草、一个炼神炉和5000金币"
+      },
+      "返虚": {
+        "items": [
+          "返虚果",
+          "虚空镜"
+        ],
+        "gold_cost": 10000,
+        "description": "需要一颗返虚果、一面虚空镜和10000金币"
+      },
+      "合道": {
+        "items": [
+          "合道丹",
+          "天机盘"
+        ],
+        "gold_cost": 20000,
+        "description": "需要一颗合道丹、一个天机盘和20000金币"
+      },
+      "大乘": {
+        "items": [
+          "大乘果",
+          "渡劫舟"
+        ],
+        "gold_cost": 50000,
+        "description": "需要一颗大乘果、一艘渡劫舟和50000金币"
+      },
+      "飞升": {
+        "items": [
+          "飞升符",
+          "登仙梯"
+        ],
+        "gold_cost": 100000,
+        "description": "需要一张飞升符、一架登仙梯和100000金币"
+      }
+    }
+  }
+}

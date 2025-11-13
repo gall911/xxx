@@ -1,0 +1,234 @@
+{
+  "config_name": "basic/attributes",
+  "version_id": "1763020148887",
+  "timestamp": 1763020148.887434,
+  "description": "初始加载于 2025-11-13 15:49:08",
+  "data": {
+    "attributes": {
+      "strength": {
+        "name": "力量",
+        "description": "影响物理攻击力和负重能力",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.5
+      },
+      "dexterity": {
+        "name": "敏捷",
+        "description": "影响攻击速度、闪避率和命中率",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.3
+      },
+      "constitution": {
+        "name": "体质",
+        "description": "影响生命值和物理防御",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.4
+      },
+      "intelligence": {
+        "name": "智力",
+        "description": "影响法术攻击力和法力值",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.5
+      },
+      "wisdom": {
+        "name": "智慧",
+        "description": "影响法术防御和法力恢复速度",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.2
+      },
+      "charisma": {
+        "name": "魅力",
+        "description": "影响社交互动和NPC反应",
+        "min_value": 1,
+        "max_value": 100,
+        "default_value": 10,
+        "growth_rate": 1.1
+      }
+    },
+    "formulas": {
+      "health": {
+        "base": 100,
+        "formula": "base + (constitution * 10) + (level * 5)"
+      },
+      "mana": {
+        "base": 50,
+        "formula": "base + (intelligence * 8) + (level * 3)"
+      },
+      "physical_attack": {
+        "base": 5,
+        "formula": "base + (strength * 2) + (level * 1)"
+      },
+      "magical_attack": {
+        "base": 5,
+        "formula": "base + (intelligence * 2) + (level * 1)"
+      },
+      "physical_defense": {
+        "base": 5,
+        "formula": "base + (constitution * 1.5) + (level * 0.8)"
+      },
+      "magical_defense": {
+        "base": 5,
+        "formula": "base + (wisdom * 1.5) + (level * 0.8)"
+      },
+      "hit_rate": {
+        "base": 0.85,
+        "formula": "min(0.95, base + (dexterity * 0.002) + (level * 0.001))"
+      },
+      "dodge_rate": {
+        "base": 0.05,
+        "formula": "min(0.5, base + (dexterity * 0.003) + (level * 0.002))"
+      },
+      "critical_rate": {
+        "base": 0.05,
+        "formula": "min(0.8, base + (dexterity * 0.001) + (level * 0.001))"
+      },
+      "critical_damage": {
+        "base": 1.5,
+        "formula": "base + (strength * 0.01) + (level * 0.005)"
+      }
+    },
+    "attribute_points": {
+      "initial_points": 20,
+      "points_per_level": 3,
+      "cost_per_point": {
+        "1-10": 1,
+        "11-20": 2,
+        "21-30": 3,
+        "31-40": 4,
+        "41-50": 5,
+        "51-60": 6,
+        "61-70": 8,
+        "71-80": 10,
+        "81-90": 13,
+        "91-100": 16
+      }
+    },
+    "race_modifiers": {
+      "human": {
+        "name": "人类",
+        "description": "均衡发展的种族，无特殊属性修正",
+        "modifiers": {}
+      },
+      "elf": {
+        "name": "精灵",
+        "description": "敏捷和智力出众，但体质较弱",
+        "modifiers": {
+          "dexterity": 1.2,
+          "intelligence": 1.2,
+          "constitution": 0.9
+        }
+      },
+      "dwarf": {
+        "name": "矮人",
+        "description": "强壮耐打，但敏捷不足",
+        "modifiers": {
+          "strength": 1.2,
+          "constitution": 1.2,
+          "dexterity": 0.9
+        }
+      },
+      "orc": {
+        "name": "兽人",
+        "description": "力量强大，但智慧不足",
+        "modifiers": {
+          "strength": 1.3,
+          "wisdom": 0.8
+        }
+      },
+      "halfling": {
+        "name": "半身人",
+        "description": "敏捷灵活，但力量较弱",
+        "modifiers": {
+          "dexterity": 1.3,
+          "strength": 0.8
+        }
+      },
+      "gnome": {
+        "name": "侏儒",
+        "description": "智慧聪颖，但体质一般",
+        "modifiers": {
+          "intelligence": 1.2,
+          "wisdom": 1.1,
+          "constitution": 0.9
+        }
+      }
+    },
+    "class_modifiers": {
+      "warrior": {
+        "name": "战士",
+        "description": "专精于近战物理攻击",
+        "primary_attribute": "strength",
+        "secondary_attribute": "constitution",
+        "modifiers": {
+          "strength": 1.2,
+          "constitution": 1.1,
+          "intelligence": 0.8
+        }
+      },
+      "mage": {
+        "name": "法师",
+        "description": "专精于远程魔法攻击",
+        "primary_attribute": "intelligence",
+        "secondary_attribute": "wisdom",
+        "modifiers": {
+          "intelligence": 1.2,
+          "wisdom": 1.1,
+          "strength": 0.8
+        }
+      },
+      "ranger": {
+        "name": "游侠",
+        "description": "擅长远程物理攻击和敏捷",
+        "primary_attribute": "dexterity",
+        "secondary_attribute": "strength",
+        "modifiers": {
+          "dexterity": 1.2,
+          "strength": 1.1,
+          "intelligence": 0.9
+        }
+      },
+      "cleric": {
+        "name": "牧师",
+        "description": "擅长治疗和辅助魔法",
+        "primary_attribute": "wisdom",
+        "secondary_attribute": "constitution",
+        "modifiers": {
+          "wisdom": 1.2,
+          "constitution": 1.1,
+          "dexterity": 0.9
+        }
+      },
+      "rogue": {
+        "name": "盗贼",
+        "description": "擅长潜行和暴击",
+        "primary_attribute": "dexterity",
+        "secondary_attribute": "charisma",
+        "modifiers": {
+          "dexterity": 1.2,
+          "charisma": 1.1,
+          "strength": 0.8
+        }
+      },
+      "paladin": {
+        "name": "圣骑士",
+        "description": "结合了战士和牧师的特点",
+        "primary_attribute": "strength",
+        "secondary_attribute": "wisdom",
+        "modifiers": {
+          "strength": 1.1,
+          "wisdom": 1.1,
+          "constitution": 1.0
+        }
+      }
+    }
+  }
+}

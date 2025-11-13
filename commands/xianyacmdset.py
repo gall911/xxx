@@ -10,6 +10,7 @@ from .xianyamovecmd import (
     CmdNortheast, CmdNorthwest, CmdSoutheast, CmdSouthwest,
     CmdUp, CmdDown, CmdIn, CmdOut
 )
+from .xianya.breakthrough_cmd import CmdBreakthrough
 
 class XianyaCmdSet(CmdSet):
     """
@@ -32,3 +33,4 @@ class XianyaCmdSet(CmdSet):
         self.add(CmdDown())
         self.add(CmdIn())
         self.add(CmdOut())
+        self.add(CmdBreakthrough())
