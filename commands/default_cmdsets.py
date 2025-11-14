@@ -93,6 +93,26 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             import sys
             print(f"Warning: Could not add xianya move command set: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
+            
+        # 添加技能系统命令集
+        try:
+            from commands.skill_cmdset import SkillCmdSet
+            self.add(SkillCmdSet)
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add skill command set: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+            
+        # 添加NPC创建命令
+        try:
+            from commands.create_npc import CmdCreateNPC
+            self.add(CmdCreateNPC)
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add NPC creation command: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):

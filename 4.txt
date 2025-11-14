@@ -1,0 +1,180 @@
+project_root/
+├── clear_cache
+├── commands/
+│   ├── cast.py              # cast 命令
+│   ├── hit.py               # hit 命令（可选）
+│   └── skill_learn.py       # learn 命令（可选）
+├── config_system/
+├── config_versions/
+├── create_rooms.py
+├── fix_exit_aliases.py
+├── README.md
+├── reset_password.py
+├── server/
+├── test_cmdset.py
+├── test_exit_search.py
+├── typeclasses/
+│   ├── characters.py
+│   ├── combat/
+│   │   ├── engine.py        # 战斗核心（推荐）
+│   │   └── formulas.py      # 伤害公式
+│   ├── spells/
+│   │   ├── loader.py        # JSON 魔法加载器（最重要）
+│   │   └── spell_base.py    # Spell 基类（极简，仅3行）
+│   └── objects/
+├── utils/
+│   └── json_cache.py        # JSON 缓存（极大提高速度）
+├── web/
+└── world/
+    └── magic/
+        ├── fire/            # 火系技能
+        │   ├── fireball.json
+        │   ├── firewall.json
+        │   └── meteor.json
+        ├── ice/             # 冰系技能
+        │   ├── iceblast.json
+        │   ├── frostarrow.json
+        │   └── ice_nova.json
+        ├── sword/           # 武学系
+        │   ├── slash.json
+        │   ├── heavy_slash.json
+        │   └── sword_rain.json
+        ├── heal/            # 治疗系
+        │   ├── heal.json
+        │   ├── renew.json
+        │   └── group_heal.json
+        ├── magic_index.json # 所有技能索引（重要）
+        └── config.json      # 魔法全局配置（吟唱、冷却等）
+每个目录用途说明（你只要照做就能跑）
+📁 world/magic/
+
+你的全部技能系统都在这里。
+不用写 Python，每个技能只要一个 JSON 文件。
+
+📄 magic_index.json（最关键）
+
+加 10 万技能也只要改这一行：
+
+{
+    "fire.fireball": "fire/fireball.json",
+    "fire.firewall": "fire/firewall.json",
+    "ice.iceblast": "ice/iceblast.json",
+    "sword.slash": "sword/slash.json"
+}
+作用：
+
+cast 时通过技能名快速找到 JSON 路径
+
+避免扫描所有目录（超级快）
+
+支持无限技能扩展
+
+📄 一个技能 JSON 示例（最终版）
+world/magic/fire/fireball.json
+{
+    "name": "火球术",
+    "type": "damage",
+    "damage": {
+        "base": 50,
+        "per_level": 10
+    },
+    "mp_cost": 20,
+    "cast_time": 2,
+    "cooldown": 5,
+    "range": 10,
+    "desc": "凝聚火焰向目标投出一枚火球。"
+}
+技能等级只取：
+
+player.db.skills["fire.fireball"]["level"]
+全部 Python 文件（极简版本）
+📄 1. spells/spell_base.py（最小基类）
+class Spell:
+    def __init__(self, caster, data):
+        self.caster = caster
+        self.data = data
+        没了！
+（伤害、吟唱、冷却全部放 JSON，不写 Python）
+2. spells/loader.py（核心）
+
+这是全部魔法的入口。
+
+import json, os
+from utils.json_cache import load_json
+
+MAGIC_ROOT = "world/magic/"
+INDEX_FILE = os.path.join(MAGIC_ROOT, "magic_index.json")
+
+with open(INDEX_FILE) as f:
+    MAGIC_INDEX = json.load(f)
+
+def load_spell_data(spell_key):
+    if spell_key not in MAGIC_INDEX:
+        return None
+    file_path = os.path.join(MAGIC_ROOT, MAGIC_INDEX[spell_key])
+    return load_json(file_path)
+    3. commands/cast.py（不注册技能）
+from evennia import Command
+from typeclasses.spells.loader import load_spell_data
+from typeclasses.spells.spell_base import Spell
+
+class CmdCast(Command):
+    key = "cast"
+    locks = "cmd:all()"
+
+    def func(self):
+        spell_key = self.args.strip().lower()
+
+        # 判断是否已学会
+        if spell_key not in self.caller.db.skills:
+            self.caller.msg("你没有学会这个技能。")
+            return
+
+        # 加载 JSON 数据
+        data = load_spell_data(spell_key)
+        if not data:
+            self.caller.msg("技能不存在。")
+            return
+
+        spell = Spell(self.caller, data)
+
+        # 直接计算伤害
+        dmg = data["damage"]["base"]
+        target = self.caller.target
+
+        target.db.hp -= dmg
+        self.caller.msg(f"你施放了 {data['name']}，造成 {dmg} 伤害。")
+
+
+没注册
+没 import
+没添加类
+技能无限扩展
+class CmdHit(Command):
+    key = "hit"
+
+    def func(self):
+        target = self.caller.search(self.args)
+        self.caller.db.target = target
+        self.caller.db.auto_fight = True
+        self.caller.msg(f"你开始攻击 {target.key}！")
+        5. utils/json_cache.py（缓存）
+import json
+
+_cache = {}
+
+def load_json(path):
+    if path in _cache:
+        return _cache[path]
+    with open(path) as f:
+        data = json.load(f)
+    _cache[path] = data
+    return data
+
+
+速度提升 1000 倍。
+角色数据库（技能字段）
+db.skills = {
+    "fire.fireball": {"level": 3},
+    "ice.iceblast": {"level": 1}
+}

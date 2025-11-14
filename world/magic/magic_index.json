@@ -1,0 +1,7 @@
+{
+    "fire.fireball": "fire/fireball.json",
+    "fire.firewall": "fire/firewall.json",
+    "ice.iceball": "ice/iceball.json",
+    "ice.iceblast": "ice/iceblast.json",
+    "sword.slash": "sword/slash.json"
+}
