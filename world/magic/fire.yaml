@@ -1,0 +1,4 @@
+_base:
+  type: attack
+  cost: 10
+  cooldown: 5

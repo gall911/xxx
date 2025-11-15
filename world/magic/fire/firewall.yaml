@@ -1,0 +1,14 @@
+name: 火墙术
+desc: 在目标位置创造一道火焰之墙。
+damage:
+  base: 30
+  per_level: 8
+cast_time: 3
+range: 5
+stages:
+  - msg: "{caster} 开始聚集火焰能量..."
+    delay: 1.0
+  - msg: "{caster} 双手合十，火焰在指尖跳跃..."
+    delay: 1.0
+  - msg: "{caster} 向{target}释放了一道炽热的火墙！"
+    delay: 1.0

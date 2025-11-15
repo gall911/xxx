@@ -1,6 +1,0 @@
-{
-    "global_cooldown": 1,
-    "cast_interrupt_chance": 0.3,
-    "mana_regen_rate": 5,
-    "max_skill_level": 10
-}

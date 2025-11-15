@@ -1,7 +1,8 @@
 {
-    "fire.fireball": "fire/fireball.json",
-    "fire.firewall": "fire/firewall.json",
-    "ice.iceball": "ice/iceball.json",
-    "ice.iceblast": "ice/iceblast.json",
-    "sword.slash": "sword/slash.json"
+    "fire.fireball": "fire/fireball.yaml",
+    "fire.fb": "fire/firewall.yaml",
+    "fire.firewall": "fire/firewall.yaml",
+    "ice.iceball": "ice/iceball.yaml",
+    "ice.ib": "ice/iceblast.yaml",
+    "ice.iceblast": "ice/iceblast.yaml"
 }

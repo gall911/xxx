@@ -23,18 +23,23 @@ def is_in_range(caster, target, range_distance):
     return caster.location == target.location
 
 def check_cooldown(caster, spell_key):
-    """检查技能冷却"""
-    if not hasattr(caster.db, 'cooldowns'):
+    """检查技能是否在冷却中"""
+    # 确保冷却字典已初始化
+    if not hasattr(caster.db, 'cooldowns') or caster.db.cooldowns is None:
         caster.db.cooldowns = {}
         
     if spell_key in caster.db.cooldowns:
-        return False  # 技能在冷却中
-        
-    return True  # 技能可用
+        # 检查冷却是否已经结束
+        import time
+        if time.time() < caster.db.cooldowns[spell_key]:
+            return True
+    return False
 
 def set_cooldown(caster, spell_key, cooldown_time):
-    """设置技能冷却"""
-    if not hasattr(caster.db, 'cooldowns'):
+    """设置技能冷却时间"""
+    # 确保冷却字典已初始化
+    if not hasattr(caster.db, 'cooldowns') or caster.db.cooldowns is None:
         caster.db.cooldowns = {}
         
-    caster.db.cooldowns[spell_key] = cooldown_time
+    import time
+    caster.db.cooldowns[spell_key] = time.time() + cooldown_time

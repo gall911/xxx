@@ -1,38 +1,69 @@
 from evennia import Command
-from typeclasses.spells.loader import load_spell_data, get_spell_key_by_name
+from typeclasses.spells.loader import load_spell_data, MAGIC_INDEX
 
 class CmdSkillLearn(Command):
     """
     学习技能命令
     """
     key = "learn"
+    locks = "cmd:all()"
     
     def func(self):
         """执行命令"""
-        skill_input = self.args.strip()
-        if not skill_input:
+        if not self.args:
             self.caller.msg("学习什么技能？")
             return
             
-        # 尝试通过输入获取技能键名
-        # 首先假设输入是技能键名
-        spell_key = skill_input
-        spell_data = load_spell_data(spell_key)
+        spell_name_or_key = self.args.strip()
         
-        # 如果没找到，则尝试通过技能名称查找键名
-        if not spell_data:
-            spell_key = get_spell_key_by_name(skill_input)
-            if spell_key:
-                spell_data = load_spell_data(spell_key)
+        # 查找技能键名
+        spell_key = None
         
-        if not spell_data:
-            self.caller.msg(f"找不到技能：{skill_input}")
+        # 首先尝试直接匹配技能键名
+        if spell_name_or_key in MAGIC_INDEX:
+            spell_key = spell_name_or_key
+        else:
+            # 尝试匹配技能键名的一部分（例如，对于"fire.fb"，允许用户输入"fb"）
+            for key in MAGIC_INDEX.keys():
+                if key.endswith('.' + spell_name_or_key) or key == spell_name_or_key:
+                    spell_key = key
+                    break
+                        
+        if not spell_key:
+            self.caller.msg("找不到这个技能。")
+            return
+            
+        # 检查是否已经学会了这个技能
+        if hasattr(self.caller.db, 'skills') and self.caller.db.skills is not None and spell_key in self.caller.db.skills:
+            self.caller.msg("你已经学会了这个技能。")
             return
             
         # 初始化技能字典（如果不存在）
-        if not self.caller.db.skills:
+        if not hasattr(self.caller.db, 'skills') or self.caller.db.skills is None:
             self.caller.db.skills = {}
             
-        # 添加技能，默认1级
-        self.caller.db.skills[spell_key] = {"level": 1}
-        self.caller.msg(f"你学会了技能：{spell_data['name']}")
+        # 获取技能数据以显示技能名称
+        spell_data = load_spell_data(spell_key)
+        
+        # 添加技能到法术书
+        self.caller.db.skills[spell_key] = {
+            "level": 1,
+            "proficiency": 0
+        }
+        
+        if spell_data:
+            self.caller.msg(f"你学会了{spell_data['name']}！")
+        else:
+            self.caller.msg(f"你学会了{spell_key}！")
+        
+        # 同时添加到spellbook中以兼容新的施法系统
+        if not hasattr(self.caller.db, 'spellbook') or self.caller.db.spellbook is None:
+            self.caller.db.spellbook = []
+            
+        # 将技能键转换为新的格式（group>id）
+        if '.' in spell_key:
+            parts = spell_key.split('.')
+            new_format = f"{parts[0]}>{parts[1]}"
+            if new_format not in self.caller.db.spellbook:
+                self.caller.db.spellbook.append(new_format)
+                self.caller.msg(f"技能已添加到你的法术书中（{new_format}）。")

@@ -1,0 +1,15 @@
+name: 火球术
+desc: 凝聚火焰向目标投出一枚火球。
+damage:
+  base: 50
+  per_level: 10
+cast_time: 2
+cost: 20
+range: 10
+stages:
+  - msg: "{caster} 开始凝聚火焰..."
+    delay: 1.0
+  - msg: "{caster} 手中出现了一个燃烧的火球！"
+    delay: 1.0
+  - msg: "{caster} 向{target}投掷了火球！"
+    delay: 0.0
