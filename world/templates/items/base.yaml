@@ -1,0 +1,10 @@
+
+# 基础物品模板
+name: "未知物品"
+desc: "这是一个神秘的物品。"
+value: 0               # 价值
+weight: 0.0            # 重量
+type: "base"           # 物品类型
+stackable: false       # 可叠加
+maxStack: 1            # 最大叠加数量
+quality: "normal"      # 品质

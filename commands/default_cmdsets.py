@@ -46,17 +46,14 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
-        # 动态导入并添加 ls 命令，暂时不添加 lr/le/la 以避免可能的冲突
-        # 使用 try-except 确保即使出错也不影响其他命令
+        # 添加xx命令
         try:
-            from commands.ls_commands import CmdLs
-            # 添加 xx 命令（key 已改为 "xx"）
-            self.add(CmdLs)
+            from commands.xx import CmdXX
+            self.add(CmdXX)
         except Exception as e:
-            # 如果导入或添加失败，记录错误但不影响其他命令
             import traceback
             import sys
-            print(f"Warning: Could not add ls commands to command set: {e}", file=sys.stderr)
+            print(f"Warning: Could not add xx command to command set: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
         
         # 再次验证 look 命令是否还在
@@ -104,15 +101,7 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             print(f"Warning: Could not add skill command set: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
             
-        # 添加NPC创建命令
-        try:
-            from commands.create_npc import CmdCreateNPC
-            self.add(CmdCreateNPC)
-        except Exception as e:
-            import traceback
-            import sys
-            print(f"Warning: Could not add NPC creation command: {e}", file=sys.stderr)
-            traceback.print_exc(file=sys.stderr)
+        
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):

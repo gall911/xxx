@@ -1,0 +1,13 @@
+
+# 基础丹药模板
+name: "基础丹药"
+desc: "一颗普通的丹药。"
+value: 50              # 价值
+weight: 0.1            # 重量
+type: "pill"           # 物品类型
+stackable: true        # 可叠加
+maxStack: 10           # 最大叠加数量
+quality: "normal"      # 品质
+effect: "heal"         # 效果类型
+power: 10              # 效果强度
+cooldown: 60           # 冷却时间(秒)

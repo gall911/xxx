@@ -1,0 +1,14 @@
+
+# 基础武器模板
+name: "基础武器"
+desc: "一把普通的武器。"
+value: 100             # 价值
+weight: 2.0            # 重量
+type: "weapon"         # 物品类型
+stackable: false       # 可叠加
+maxStack: 1            # 最大叠加数量
+quality: "normal"      # 品质
+weaponType: "sword"    # 武器类型
+damage: 10             # 伤害
+durability: 100        # 耐久度
+maxDurability: 100     # 最大耐久度
