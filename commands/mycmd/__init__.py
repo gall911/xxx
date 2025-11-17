@@ -1,0 +1,1 @@
+# This file makes the mycmd directory a Python package

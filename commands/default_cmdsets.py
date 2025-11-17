@@ -48,7 +48,7 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # 添加xx命令
         try:
-            from commands.xx import CmdXX
+            from commands.mycmd.xx.xx import CmdXX
             self.add(CmdXX)
         except Exception as e:
             import traceback
@@ -99,6 +99,16 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
             import traceback
             import sys
             print(f"Warning: Could not add skill command set: {e}", file=sys.stderr)
+            traceback.print_exc(file=sys.stderr)
+            
+        # 添加自定义add命令
+        try:
+            from commands.mycmd.add_cmd_new import CmdAdd
+            self.add(CmdAdd)
+        except Exception as e:
+            import traceback
+            import sys
+            print(f"Warning: Could not add add command: {e}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
             
         

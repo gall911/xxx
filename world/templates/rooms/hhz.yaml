@@ -1,0 +1,277 @@
+rooms:
+  mountain_foot:
+    key: "山脚下"
+    desc: |
+      你站在一座奇特的山脚下，山上传来若有若无的靡靡之音。
+      路牌上歪歪扭扭写着：「合欢宗·极乐峰 - 修仙界的快乐老家」
+      一条铺着粉色花瓣的小径蜿蜒向上，空气中弥漫着暧昧的香气。
+    tags: ["outdoor", "entrance", "funny"]
+    attributes:
+      difficulty: 1
+      light_level: 3
+      is_indoor: false
+    exits:
+      up: "love_path"
+
+  love_path:
+    key: "情缘小径"
+    desc: |
+      你走在一条充满粉红泡泡的小径上，两旁树上挂着心形灯笼。
+      地上用花瓣铺成爱心图案，每走一步都有轻柔的音乐响起。
+      路边立着牌子：「单身修士慎入，道心不稳者请绕道」
+    tags: ["outdoor", "path", "funny"]
+    attributes:
+      difficulty: 2
+      light_level: 4
+      is_indoor: false
+    exits:
+      down: "mountain_foot"
+      up: "main_gate"
+
+  main_gate:
+    key: "极乐大门"
+    desc: |
+      一座金光闪闪的大门，门上雕刻着各种不可描述的图案。
+      门楣上龙飞凤舞写着：「修仙苦短，及时行乐」
+      守门弟子懒洋洋地靠在门边，见到你就挤眉弄眼：
+      「道友，里面请～包您满意！」
+    tags: ["outdoor", "gate", "funny"]
+    attributes:
+      difficulty: 3
+      light_level: 5
+      is_indoor: false
+    exits:
+      down: "love_path"
+      enter: "main_hall"
+
+  main_hall:
+    key: "极乐大厅"
+    desc: |
+      大厅中央有个巨大的心形舞池，顶上吊着水晶灯但形状都很暧昧。
+      墙上挂满历代宗主的画像，个个面带神秘的微笑。
+      角落里有个老修士在弹古筝，弹的是《月亮代表我的心》。
+      横幅写着：「修炼千年不如快乐一天」
+    tags: ["indoor", "main_hall", "funny"]
+    attributes:
+      difficulty: 4
+      light_level: 6
+      is_indoor: true
+    exits:
+      out: "main_gate"
+      east: "bar_area"
+      west: "massage_room"
+      north: "dance_floor"
+      up: "vip_room"
+
+  bar_area:
+    key: "醉仙吧台"
+    desc: |
+      吧台摆满了各种颜色的灵酒，酒保正在调一杯会发光的「彩虹合欢酒」。
+      价格牌上写着：「忘情水 - 100灵石」、「一夜春 - 500灵石」
+      有个醉醺醺的修士在念叨：「再来一杯，我还能喝...」
+    tags: ["indoor", "bar", "funny"]
+    attributes:
+      difficulty: 4
+      light_level: 5
+      is_indoor: true
+    exits:
+      west: "main_hall"
+      north: "karaoke_room"
+
+  karaoke_room:
+    key: "魔音灌耳房"
+    desc: |
+      房间里几个修士正对着水晶球疯狂嘶吼，唱的是跑调的《修仙版青花瓷》。
+      歌词被改得面目全非：「天青色等烟雨，而我在等你，灵石都花光，还要续费...」
+      墙上贴着：「禁止使用音波功，违者罚款」
+    tags: ["indoor", "entertainment", "funny"]
+    attributes:
+      difficulty: 5
+      light_level: 4
+      is_indoor: true
+    exits:
+      south: "bar_area"
+
+  massage_room:
+    key: "舒筋活络阁"
+    desc: |
+      几个修士趴在玉床上，正在接受「专业按摩」。
+      按摩师边按边念：「这里堵了，道友最近火气很大啊～」
+      价格表：「通经活络 - 50灵石」、「舒爽到底 - 200灵石」
+      角落里堆着各种精油瓶子，标签都很可疑。
+    tags: ["indoor", "service", "funny"]
+    attributes:
+      difficulty: 4
+      light_level: 3
+      is_indoor: true
+    exits:
+      east: "main_hall"
+      north: "sauna_room"
+
+  sauna_room:
+    key: "云雾蒸房"
+    desc: |
+      房间里热气腾腾，几个光膀子的修士在蒸桑拿。
+      有人在大声讨论：「你说这蒸汽能不能帮助排出心魔？」
+      另一个回答：「我只知道能排出汗...」
+      墙上温馨提示：「蒸前卸下法器，以免爆炸」
+    tags: ["indoor", "bath", "funny"]
+    attributes:
+      difficulty: 4
+      light_level: 2
+      is_indoor: true
+    exits:
+      south: "massage_room"
+
+  dance_floor:
+    key: "群魔乱舞台"
+    desc: |
+      舞池里修士们正在跳着诡异的舞蹈，有人在使用轻功飘来飘去。
+      音乐是remix版的《最炫民族风》加上道教吟唱。
+      DJ在高台上大喊：「举起你们的飞剑！让我看到你们的热情！」
+    tags: ["indoor", "dance", "funny"]
+    attributes:
+      difficulty: 5
+      light_level: 7
+      is_indoor: true
+    exits:
+      south: "main_hall"
+      east: "snack_bar"
+      west: "game_room"
+
+  snack_bar:
+    key: "灵食小铺"
+    desc: |
+      卖各种奇怪小吃的地方，菜单上有：
+      「情意绵绵面」、「一见钟情糕」、「日久生情串」
+      老板在吆喝：「吃了我的面，道侣天天见！」
+      有个客人在抱怨：「这面条怎么咬不断啊？」
+    tags: ["indoor", "food", "funny"]
+    attributes:
+      difficulty: 3
+      light_level: 4
+      is_indoor: true
+    exits:
+      west: "dance_floor"
+
+  game_room:
+    key: "博弈雅间"
+    desc: |
+      修士们在这里玩着改良版的麻将和扑克。
+      牌面上画着各种法宝和灵兽，规则复杂得让人头晕。
+      有人在喊：「胡了！清一色灵剑带一对仙鹤！」
+      另一个哭诉：「我的灵石啊...又要去接宗门任务了」
+    tags: ["indoor", "game", "funny"]
+    attributes:
+      difficulty: 6
+      light_level: 5
+      is_indoor: true
+    exits:
+      east: "dance_floor"
+
+  vip_room:
+    key: "贵宾密室"
+    desc: |
+      装修奢华的房间，地上铺着灵兽皮毛，墙上挂着会动的春宫图。
+      服务生端着琼浆玉液来回穿梭。
+      有个胖修士在炫耀：「我包年会员，打八折！」
+      墙上写着：「禁止在此双修，违者加收场地费」
+    tags: ["indoor", "vip", "funny"]
+    attributes:
+      difficulty: 7
+      light_level: 4
+      is_indoor: true
+    exits:
+      down: "main_hall"
+      up: "secret_garden"
+
+  secret_garden:
+    key: "隐秘后花园"
+    desc: |
+      一个充满奇花异草的花园，但所有植物形状都很暧昧。
+      有会发光的蘑菇，会唱歌的花，还有会跳舞的草。
+      角落里几对修士在「探讨功法」，见到有人来就假装看风景。
+    tags: ["outdoor", "garden", "funny"]
+    attributes:
+      difficulty: 5
+      light_level: 3
+      is_indoor: false
+    exits:
+      down: "vip_room"
+      east: "moon_viewing_tower"
+
+  moon_viewing_tower:
+    key: "赏月高台"
+    desc: |
+      宗门最高的建筑，本应用来观星测象，现在成了情侣约会圣地。
+      望远镜上贴满纸条：「已预约」、「勿动」、「双修中」
+      有对道侣在争论：「你说月亮像不像一个大灵石？」
+    tags: ["outdoor", "viewing", "funny"]
+    attributes:
+      difficulty: 4
+      light_level: 2
+      is_indoor: false
+    exits:
+      west: "secret_garden"
+
+  disciple_cave:
+    key: "弟子洞府入口"
+    desc: |
+      一个不起眼的小门，上面写着：「员工通道，闲人免进」
+      门缝里飘出泡面的香味，还能听到有人在打游戏：
+      「快点推塔！我还要去值班呢！」
+      这是宗门弟子休息的地方，朴素得让人心疼。
+    tags: ["indoor", "entrance", "funny"]
+    attributes:
+      difficulty: 3
+      light_level: 2
+      is_indoor: true
+    exits:
+      out: "main_hall"
+      enter: "small_cave"
+
+  small_cave:
+    key: "简陋单间"
+    desc: |
+      弟子们的个人洞府，小得只能放下一张石床。
+      墙上贴着廉价灵石灯，地上堆着没洗的道袍。
+      床头放着《合欢宗服务手册》和《如何让客人多消费》。
+      有人在床上数着微薄的薪水叹气。
+    tags: ["indoor", "living", "funny"]
+    attributes:
+      difficulty: 2
+      light_level: 1
+      is_indoor: true
+    exits:
+      out: "disciple_cave"
+
+  storage_room:
+    key: "杂物仓库"
+    desc: |
+      堆满各种奇怪道具的房间，有会震动的飞剑、会发光的蒲团。
+      角落里放着「双修加速器」、「道心稳定仪」等可疑设备。
+      标签上写着：「宗门财产，严禁私用」
+      但明显有人偷偷用过。
+    tags: ["indoor", "storage", "funny"]
+    attributes:
+      difficulty: 3
+      light_level: 1
+      is_indoor: true
+    exits:
+      south: "main_hall"
+
+  escape_tunnel:
+    key: "紧急通道"
+    desc: |
+      一个隐秘的隧道，墙上写着：
+      「道侣查岗专用通道」、「原配来袭请走此路」
+      地上散落着匆忙中掉落的发簪和腰带。
+      有面镜子上贴字：「整理仪容，勿露破绽」
+    tags: ["indoor", "secret", "funny"]
+    attributes:
+      difficulty: 6
+      light_level: 1
+      is_indoor: true
+    exits:
+      enter: "vip_room"
+      out: "mountain_back"

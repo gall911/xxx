@@ -3,15 +3,16 @@ from .cast import CmdCast
 from .hit import CmdHit
 from .skill_learn import CmdSkillLearn
 from .skills import CmdSkills
+from .spellbook import CmdSpellbook
 
 class SkillCmdSet(CmdSet):
     """技能系统命令集"""
-    key = "skill_cmdset"
+    key = "SkillCmdSet"
 
     def at_cmdset_creation(self):
-        # 添加基本技能命令
-        self.add(CmdCast)
-        self.add(CmdHit)
-        self.add(CmdSkillLearn)
-        self.add(CmdSkills)
-        # 不添加CmdMagicCast，因为与CmdCast冲突
+        """初始化命令集"""
+        self.add(CmdSkillLearn())
+        self.add(CmdSkills())
+        self.add(CmdSpellbook())
+        self.add(CmdCast())
+        self.add(CmdHit())

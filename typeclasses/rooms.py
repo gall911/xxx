@@ -109,9 +109,9 @@ class Room(ObjectParent, DefaultRoom):
         if not exit_names:
             return ""
         elif len(exits) == 1:
-            return f"这里唯一的出口是 {exit_names}。"
+            return f"这里唯一的出口是: {exit_names}。"
         else:
-            return f"这里明显的方向有 {exit_names}。"
+            return f"这里明显的方向有: {exit_names}。"
     
     def get_display_characters(self, looker, **kwargs):
         """

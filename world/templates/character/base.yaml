@@ -44,7 +44,7 @@ inBattle: false        # 是否在战斗中
 effects: []            # 状态效果列表
 
 # === 技能系统 ===
-skills: []             # 已学技能列表
+skills: {}             # 已学技能列表
 skillSlots: [null, null, null, null]  # 技能栏
 
 # === 资源物品 ===

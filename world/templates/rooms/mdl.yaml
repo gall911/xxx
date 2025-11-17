@@ -1,0 +1,81 @@
+rooms:
+  entrance:
+    key: "青石山门"
+    desc: |
+      |g你站在青石山门前，两旁古松参天，山门由巨大的青石砌成，
+      上面刻着古老的符文。门楣上写着三个金字：「玄天宗」。
+      这里是你修仙之路的起点。|n
+    tags: ["outdoor", "entrance", "sect"]
+    attributes:
+      difficulty: 1
+      light_level: 5
+      is_indoor: False
+      room_type: "mountain"
+    exits:
+      north: "courtyard"
+      
+  courtyard:
+    key: "玄天广场"
+    desc: |
+      |c宽阔的玄天广场铺着整齐的青石板，中央矗立着一座高大的石碑，
+      上面记录着玄天宗的门规。四周有几座殿堂，东边是练功房，
+      西边是藏经阁，北面通向内门。|n
+    tags: ["outdoor", "courtyard", "sect"]
+    attributes:
+      difficulty: 1
+      light_level: 5
+      is_indoor: False
+      room_type: "normal"
+    exits:
+      south: "entrance"
+      east: "training_hall"
+      west: "scripture_pavilion"
+      north: "inner_gate"
+      
+  training_hall:
+    key: "练功房"
+    desc: |
+      |y这是一间宽敞的练功房，地面铺着蒲团，墙上挂着各种兵器图谱。
+      空气中弥漫着淡淡的檀香味，这里是弟子们修炼基础功法的地方。
+      北墙有一个书架，摆放着基础心法秘籍。|n
+    tags: ["indoor", "training", "sect"]
+    attributes:
+      difficulty: 1
+      light_level: 3
+      mana_regen_bonus: 2
+      is_indoor: True
+      room_type: "indoor"
+    exits:
+      west: "courtyard"
+      
+  scripture_pavilion:
+    key: "藏经阁"
+    desc: |
+      |m藏经阁内书架林立，摆满了各种典籍。从基础的心法口诀到高深的道法秘术，
+      应有尽有。缕缕书香混合着墨香，让人沉醉其中。
+      一位老者正在整理书籍。|n
+    tags: ["indoor", "library", "sect"]
+    attributes:
+      difficulty: 1
+      light_level: 3
+      knowledge_bonus: 5
+      is_indoor: True
+      room_type: "indoor"
+    exits:
+      east: "courtyard"
+      
+  inner_gate:
+    key: "内门"
+    desc: |
+      |r内门处云雾缭绕，一道红色的光幕阻挡去路。
+      这里只有通过考核的内门弟子才能进入。
+      门外standing两名身穿白衣的守门弟子，他们目光如电，审视着每一个过往之人。|n
+    tags: ["outdoor", "gate", "restricted", "sect"]
+    attributes:
+      difficulty: 3
+      light_level: 4
+      restricted_access: True
+      is_indoor: False
+      room_type: "gate"
+    exits:
+      south: "courtyard"

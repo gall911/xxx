@@ -33,7 +33,7 @@ speed: 120             # 速度
 fireResist: 0.1        # 火抗
 iceResist: 0.1         # 冰抗
 thunderResist: 0.1     # 雷抗
-poisonResist: 0.05      # 毒抗
+poisonResist: 0.05     # 毒抗
 
 # === 恢复速率 ===
 HPRegen: 0.8           # 生命恢复/秒
@@ -45,7 +45,9 @@ inBattle: false        # 是否在战斗中
 effects: []            # 状态效果列表
 
 # === 技能系统 ===
-skills: ["basicAttack", "meditation"]  # 已学技能列表
+skills: 
+  basicAttack: {"level": 1}
+  meditation: {"level": 1}
 skillSlots: ["basicAttack", "meditation", null, null]  # 技能栏
 
 # === 资源物品 ===

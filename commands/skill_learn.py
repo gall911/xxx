@@ -38,8 +38,8 @@ class CmdSkillLearn(Command):
             self.caller.msg("你已经学会了这个技能。")
             return
             
-        # 初始化技能字典（如果不存在）
-        if not hasattr(self.caller.db, 'skills') or self.caller.db.skills is None:
+        # 初始化技能字典（如果不存在或类型不正确）
+        if not hasattr(self.caller.db, 'skills') or self.caller.db.skills is None or not isinstance(self.caller.db.skills, dict):
             self.caller.db.skills = {}
             
         # 获取技能数据以显示技能名称
