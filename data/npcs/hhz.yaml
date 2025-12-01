@@ -1,0 +1,139 @@
+# 这是一个符合 Evennia 默认 spawner 标准的列表格式
+- prototype_key: mirage_witch
+  key: mirage_witch           # 这是英文ID，用于命令交互
+  name: "|513西域魅魔|n"        # 这是显示出来的中文名
+  desc: |
+    她身着几乎透明的|515赤金舞衣|n，健康的古铜色皮肤上涂满了香油。
+    手中握着一条布满倒刺的皮鞭，不时在空中甩出一声脆响。
+    那双勾魂的眸子正盯着你的下三路，似乎在评估你的|r“耐力”|n。
+  # 下面这些是自定义数据，Evennia 默认把它们作为 Attribute 存储
+  attrs: 
+    - name: is_npc
+      value: true
+      location: "hhz_002"
+    - name: stats
+      value:
+        level: 15
+        max_hp: 800
+        max_qi: 400
+        strength: 30
+        agility: 50
+    - name: skills
+      value:
+        - "普通攻击"
+        - "皮鞭鞭打" 
+    - name: drops
+      value:
+        - item: "金铃脚链"
+          chance: 0.3
+
+- prototype_key: grape_dancer
+  key: grape_dancer
+  name: "|055葡萄舞姬|n"
+  desc: |
+    一名眼神迷离的异域舞姬，全身一丝不挂，只在手腕和脚踝戴着银饰。
+    她嘴里含着一颗紫葡萄，汁液顺着嘴角流过白皙的脖颈，滴落在|505双峰|n之间。
+    她似乎已经神志不清，只是本能地扭动着水蛇般的腰肢，寻找着可以依附的身体。
+  attrs:
+    - name: is_npc
+      value: true
+      location: "hhz_003"
+    - name: stats
+      value:
+        level: 10
+        max_hp: 500
+        max_qi: 200
+        strength: 20
+        agility: 20
+    - name: skills
+      value:
+        - "普通攻击"
+        - "致命拥抱"
+    - name: drops
+      value:
+        - item: "西域葡萄酒"
+          chance: 0.5
+        - item: "透明纱衣"
+          chance: 0.1
+
+- prototype_key: bath_saintess
+  key: bath_saintess
+  name: "|045浴池圣女|n"
+  desc: |
+    拥有一头耀眼金发的圣女，正慵懒地靠在池边。
+    湿透的白纱紧紧裹着她那|525爆炸般的身材|n，随着呼吸，两点嫣红若隐若现。
+    她看着你走近，非但没有遮掩，反而故意挺了挺胸，嘴角露出一丝挑逗的笑意。
+  attrs:
+    - name: is_npc
+      value: true
+      location: "hhz_004"
+    - name: stats
+      value:
+        level: 25
+        max_hp: 2000
+        max_qi: 1000
+        strength: 40
+        agility: 40
+        intelligence: 60
+    - name: skills
+      value:
+        - "普通攻击"
+        - "玉水冲击"
+        - "魅惑之吻"
+
+- prototype_key: flesh_disciple
+  key: flesh_disciple
+  name: "|125合欢宗门徒|n"
+  desc: |
+    这是一个精壮的男子，双目赤红，显然是服用了过量的催情丹药。
+    他下身赤裸，那话儿|r昂首挺立|n，青筋暴起。
+    他正四处寻找发泄的对象，看到你进来，发出一声野兽般的低吼冲了过来。
+  attrs:
+    - name: is_npc
+      value: true
+      location: "hhz_005"
+    - name: stats
+      value:
+        level: 20
+        max_hp: 1500
+        max_qi: 300
+        strength: 60
+        agility: 30
+    - name: skills
+      value:
+        - "普通攻击"
+        - "野蛮冲撞"
+
+- prototype_key: sect_master
+  key: sect_master
+  name: "|500极乐魔主·花无缺|n"
+  tags:
+    - unique_boss  # 用 tag 来标记唯一怪通常更好检索
+  desc: |
+    合欢宗现任宗主，男生女相，俊美得近乎妖异。
+    他慵懒地躺在巨大的龙凤床上，身边围绕着七八名绝色鼎炉。
+    看到你闯入，他微微抬起眼皮，那目光仿佛能穿透你的衣物，直视你的元阳。
+    |r“既然来了，就把精血留下做本座的养料吧。”|n
+  attrs:
+    - name: is_npc
+      value: true
+      location: "hhz_006"
+    - name: stats
+      value:
+        level: 50
+        max_hp: 10000
+        max_qi: 5000
+        strength: 80
+        agility: 80
+        intelligence: 100
+    - name: skills
+      value:
+        - "普通攻击"
+        - "阴阳双修大悲赋"
+        - "采补术"
+    - name: drops
+      value:
+        - item: "合欢宗秘籍"
+          chance: 1.0
+        - item: "宗主令牌"
+          chance: 1.0

@@ -1,0 +1,130 @@
+npcs:
+  mirage_guardian:
+    prototype_key: "mirage_guardian"
+    key: "mirage_guardian" # 英文ID
+    name: "|513罗刹·金铃艳尸|n" # 显示名称
+    unique: false
+    location: "gate_001" # 对应：罗刹·金刚媚骨门
+    desc: |
+      她并非活人，而是一具被秘法炼制的|330更衣人偶|n。
+      浑身皮肤呈现出一种死寂的青灰色，却涂满了香油，显得格外滑腻。
+      身上仅缠绕着几圈|515赤金锁链|n，关键部位挂着吸魂摄魄的铃铛。
+      她手中握着一条布满倒刺的蝎尾鞭，那空洞的眼眶里燃烧着|g幽火|n，
+      死死盯着你的下身，似乎想要榨干每一滴阳气来温暖她冰冷的躯体。
+    stats:
+      level: 18
+      max_hp: 900
+      max_qi: 0
+      strength: 35
+      agility: 55
+    skills:
+      - "幽冥鬼爪"
+      - "蝎尾倒勾"
+    drops:
+      - item: "金铃脚链"
+        chance: 0.3
+
+  wine_slave:
+    prototype_key: "wine_slave"
+    key: "wine_slave"
+    name: "|055波斯·赤裸酒奴|n"
+    unique: false
+    location: "corridor_001" # 对应：千窟·梵音淫魔道 (也适合葡萄长廊)
+    desc: |
+      一名神志不清的波斯少女，被长期喂食特制的|m“醉生梦死酒”|n。
+      她全身呈现出一种醉酒后的酡红，浑身上下散发着浓郁的酒香与奶香。
+      她像蛇一样在地摊上扭动，嘴里含着一枚即将被咬破的|505夜光葡萄|n。
+      紫红色的汁液顺着她的嘴角流淌，经过锁骨，汇聚在那对|525饱满|n之间。
+      只要闻到男人的气息，她便会本能地扑上来，用身体乞求更多的“甘露”。
+    stats:
+      level: 12
+      max_hp: 600
+      max_qi: 100
+      strength: 15
+      agility: 25
+    skills:
+      - "致命拥抱"
+      - "醉步缠身"
+    drops:
+      - item: "西域葡萄酒"
+        chance: 0.6
+      - item: "透明纱衣"
+        chance: 0.2
+
+  pool_nymph:
+    prototype_key: "pool_nymph"
+    key: "pool_nymph"
+    name: "|045天池·濯垢欲女|n"
+    unique: false
+    location: "bath_001" # 对应：酒池·玉露流香天池
+    desc: |
+      她是专门在灵泉中伺候高阶修士的双修鼎炉。
+      一头耀眼的金色长发湿漉漉地贴在背上，水珠顺着发梢滴落。
+      那几近透明的白纱在水中漂浮，不仅没遮住什么，反而勾勒出|525爆炸般的曲线|n。
+      两点嫣红在白纱下若隐若现，随着呼吸上下起伏。
+      她眼神迷离，嘴角挂着挑逗的笑意，手中拿着一块海绵，
+      似乎正在寻找一个可以让她擦拭并|r侍奉|n的主人。
+    stats:
+      level: 25
+      max_hp: 2200
+      max_qi: 1200
+      strength: 30
+      agility: 60
+      intelligence: 70
+    skills:
+      - "玉水冲击"
+      - "深渊吞噬" # 暗示性技能
+      - "魅惑之吻"
+
+  tantric_monk:
+    prototype_key: "tantric_monk"
+    key: "tantric_monk"
+    name: "|125极乐·苦行欢喜僧|n"
+    unique: false
+    location: "hall_001" # 对应：极乐·娑婆万象大殿
+    desc: |
+      一名赤裸上身的精壮苦行僧，皮肤上纹满了密密麻麻的|r欢喜佛经|n。
+      他双目赤红，青筋暴起，显然刚服用了过量的“金刚不倒丹”。
+      他下身赤裸，那话儿|r昂首挺立|n，宛如铁杵，令人望而生畏。
+      他口中念诵着歪曲的经文，在这酒池肉林中寻找着可以发泄的对象，
+      不管是女人还是误入此地的男人，只要是个洞，他都要填满。
+    stats:
+      level: 30
+      max_hp: 3500
+      max_qi: 500
+      strength: 80
+      agility: 40
+    skills:
+      - "金刚杵击"
+      - "野蛮冲撞"
+      - "欢喜禅唱" # 音波攻击
+
+  sect_master:
+    prototype_key: "sect_master"
+    key: "sect_master"
+    name: "|500明尊·大黑天魔主|n"
+    unique: true
+    location: "throne_001" # 对应：天阙·摩诃曼艳云顶
+    desc: |
+      他并非凡人，而是已经堕入魔道的在世明尊。
+      男生女相，俊美得近乎妖异，眉心一道|r赤色莲花印|n闪烁着邪光。
+      他未着寸缕，只披着一件猩红的大麾，慵懒地悬浮在半空之中。
+      身下是由九九八十一名处子鲜血凝聚而成的莲台。
+      那目光仿佛能穿透你的衣物，直视你的元阳与灵魂。
+      |r“既见本座，为何不献上你的肉身？来，与我融为一体……”|n
+    stats:
+      level: 60
+      max_hp: 15000
+      max_qi: 8000
+      strength: 100
+      agility: 120
+      intelligence: 150
+    skills:
+      - "阴阳双修大悲赋"
+      - "天魔解体大法"
+      - "采补术·鲸吞"
+    drops:
+      - item: "欢喜禅秘籍"
+        chance: 1.0
+      - item: "明尊法印"
+        chance: 1.0

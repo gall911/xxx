@@ -1,0 +1,235 @@
+# typeclasses/characters.py
+"""
+角色类型类
+"""
+from commands.dev import DevCmdSet
+
+from evennia import DefaultCharacter
+from world.loaders.game_data import get_data, get_config
+
+class Character(DefaultCharacter):
+    """
+    修仙角色类
+    
+    继承自Evennia的DefaultCharacter
+    扩展修仙相关功能
+    """
+    
+    def at_object_creation(self):
+        """
+        角色首次创建时调用
+        
+        初始化角色的基础属性
+        """
+        super().at_object_creation()
+        
+        # 初始化NDB属性（临时数据）
+        self._init_ndb_attributes()
+        
+        # 从配置获取初始属性
+        starting_realm = get_config('player.starting_realm', '练气期')
+        starting_stats = get_config('player.starting_stats', {})
+        
+        # 设置境界
+        self.ndb.realm = starting_realm
+        self.ndb.level = 1
+        self.ndb.exp = 0
+        
+        # 设置属性
+        self.ndb.hp = starting_stats.get('hp', 100)
+        self.ndb.max_hp = starting_stats.get('max_hp', 100)
+        self.ndb.qi = starting_stats.get('qi', 50)
+        self.ndb.max_qi = starting_stats.get('max_qi', 50)
+        self.ndb.strength = starting_stats.get('strength', 10)
+        self.ndb.agility = starting_stats.get('agility', 10)
+        self.ndb.intelligence = starting_stats.get('intelligence', 10)
+        
+        # 初始技能
+        self.ndb.skills = ['普通攻击']
+        
+        # 初始背包
+        self.ndb.inventory = {
+            '聚气丹': 5,
+            '回春丹': 3
+        }
+        
+        # 战斗状态
+        self.ndb.in_combat = False
+        self.ndb.combat_target = None
+        
+        # 应用境界加成
+        self._apply_realm_bonuses()
+    
+    def at_init(self):
+        """
+        对象从数据库加载时调用
+        
+        恢复NDB数据
+        """
+        super().at_init()
+        
+        # 重新初始化NDB
+        self._init_ndb_attributes()
+        
+        # 从DB加载保存的数据
+        self._load_from_db()
+    
+    def _init_ndb_attributes(self):
+        """初始化所有NDB属性（防止AttributeError）"""
+        # 基础属性
+        if not hasattr(self.ndb, 'hp'):
+            self.ndb.hp = 100
+        if not hasattr(self.ndb, 'max_hp'):
+            self.ndb.max_hp = 100
+        if not hasattr(self.ndb, 'qi'):
+            self.ndb.qi = 50
+        if not hasattr(self.ndb, 'max_qi'):
+            self.ndb.max_qi = 50
+        
+        # 战斗属性
+        if not hasattr(self.ndb, 'strength'):
+            self.ndb.strength = 10
+        if not hasattr(self.ndb, 'agility'):
+            self.ndb.agility = 10
+        if not hasattr(self.ndb, 'intelligence'):
+            self.ndb.intelligence = 10
+        
+        # 修仙属性
+        if not hasattr(self.ndb, 'level'):
+            self.ndb.level = 1
+        if not hasattr(self.ndb, 'exp'):
+            self.ndb.exp = 0
+        if not hasattr(self.ndb, 'realm'):
+            self.ndb.realm = '练气期'
+        
+        # 技能和物品
+        if not hasattr(self.ndb, 'skills'):
+            self.ndb.skills = []
+        if not hasattr(self.ndb, 'inventory'):
+            self.ndb.inventory = {}
+        
+        # 战斗状态
+        if not hasattr(self.ndb, 'in_combat'):
+            self.ndb.in_combat = False
+        if not hasattr(self.ndb, 'combat_target'):
+            self.ndb.combat_target = None
+        
+        # Buff/Debuff
+        if not hasattr(self.ndb, 'buffs'):
+            self.ndb.buffs = []
+        if not hasattr(self.ndb, 'debuffs'):
+            self.ndb.debuffs = []
+        if not hasattr(self.ndb, 'dots'):
+            self.ndb.dots = []
+    
+    def _load_from_db(self):
+        """从数据库加载保存的数据"""
+        saved_data = self.db.character_data
+        
+        if not saved_data:
+            return
+        
+        # 恢复属性
+        self.ndb.hp = saved_data.get('hp', self.ndb.hp)
+        self.ndb.max_hp = saved_data.get('max_hp', self.ndb.max_hp)
+        self.ndb.qi = saved_data.get('qi', self.ndb.qi)
+        self.ndb.max_qi = saved_data.get('max_qi', self.ndb.max_qi)
+        self.ndb.level = saved_data.get('level', self.ndb.level)
+        self.ndb.exp = saved_data.get('exp', self.ndb.exp)
+        self.ndb.realm = saved_data.get('realm', self.ndb.realm)
+        self.ndb.strength = saved_data.get('strength', self.ndb.strength)
+        self.ndb.agility = saved_data.get('agility', self.ndb.agility)
+        self.ndb.intelligence = saved_data.get('intelligence', self.ndb.intelligence)
+        self.ndb.skills = saved_data.get('skills', self.ndb.skills)
+        self.ndb.inventory = saved_data.get('inventory', self.ndb.inventory)
+    
+    def _apply_realm_bonuses(self):
+        """应用境界属性加成"""
+        realm_data = get_data('realms', self.ndb.realm)
+        
+        if not realm_data:
+            return
+        
+        # 应用属性加成
+        bonuses = realm_data.get('attribute_bonus', {})
+        for attr, value in bonuses.items():
+            if hasattr(self.ndb, attr):
+                current = getattr(self.ndb, attr)
+                setattr(self.ndb, attr, current + value)
+        
+        # 更新最大灵力
+        max_qi = realm_data.get('max_qi')
+        if max_qi:
+            self.ndb.max_qi = max_qi
+    
+    def at_before_move(self, destination, **kwargs):
+        """
+        移动前检查
+        
+        Returns:
+            bool: 是否允许移动
+        """
+        # 战斗中不能移动
+        if self.ndb.in_combat:
+            self.msg("战斗中无法移动！")
+            return False
+        
+        # 修炼中不能移动
+        if getattr(self.ndb, 'is_cultivating', False):
+            self.msg("请先停止修炼。")
+            return False
+        
+        return True
+    
+    def at_object_receive(self, moved_obj, source_location, **kwargs):
+        """
+        当物品进入角色时（捡起物品等）
+        """
+        # TODO: 物品系统实现后处理
+        pass
+    
+    def return_appearance(self, looker, **kwargs):
+        """
+        自定义外观描述
+        
+        当有人看向这个角色时显示
+        """
+        text = super().return_appearance(looker, **kwargs)
+        
+        # 添加境界信息
+        realm = getattr(self.ndb, 'realm', '未知')
+        level = getattr(self.ndb, 'level', 1)
+        
+        text += f"\n境界: |c{realm}|n  等级: |y{level}|n"
+        
+        # 如果在战斗中
+        if self.ndb.in_combat:
+            text += f"\n|r【战斗中】|n"
+        
+        return text
+    
+    def at_post_puppet(self, **kwargs):
+        """
+        玩家连接到角色后
+        """
+        super().at_post_puppet(**kwargs)
+        
+        # 添加命令集
+        from commands.combat import CombatCmdSet
+        from commands.cultivation import CultivationCmdSet
+        from commands.inventory import InventoryCmdSet
+        
+        self.cmdset.add(CombatCmdSet, persistent=True)
+        self.cmdset.add(CultivationCmdSet, persistent=True)
+        self.cmdset.add(InventoryCmdSet, persistent=True)
+        
+        # 欢迎消息
+        self.msg("|c" + "=" * 60)
+        self.msg(f"欢迎回来，{self.key}！")
+        self.msg(f"境界: |y{self.ndb.realm}|n  等级: |y{self.ndb.level}|n")
+        self.msg(f"生命: |g{self.ndb.hp}/{self.ndb.max_hp}|n  灵力: |c{self.ndb.qi}/{self.ndb.max_qi}|n")
+        self.msg("|c" + "=" * 60)
+        self.msg("\n输入 |w帮助|n 查看可用命令")
+        self.msg("输入 |w状态|n 查看详细属性\n")
+        # typeclasses/characters.py 的 at_post_puppet 中添加
+        self.cmdset.add(DevCmdSet, persistent=True)

@@ -1,0 +1,14 @@
+game:
+  name: "修仙MUD"
+  version: "0.1.0"
+
+player:
+  starting_realm: "练气期"
+  starting_stats:
+    hp: 100
+    max_hp: 100
+    qi: 50
+    max_qi: 50
+    strength: 10
+    agility: 10
+    intelligence: 10

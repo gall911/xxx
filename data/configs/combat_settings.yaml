@@ -1,0 +1,25 @@
+# data/configs/combat_settings.yaml
+combat:
+  # 战斗循环
+  turn_interval: 2.0        # 回合间隔（秒）
+  auto_combat: true         # 是否自动战斗
+  max_combat_rounds: 100    # 最大回合数（防止无限战斗）
+  
+  # 伤害计算
+  damage_variance: 0.1      # 伤害浮动范围 ±10%
+  critical_chance: 0.05     # 基础暴击率 5%
+  critical_multiplier: 2.0  # 暴击伤害倍率
+  
+  # 属性影响系数
+  strength_to_damage: 1.0   # 力量 -> 物理攻击
+  intelligence_to_damage: 1.0  # 智力 -> 法术攻击
+  agility_to_dodge: 0.5     # 敏捷 -> 闪避率
+  agility_to_speed: 0.3     # 敏捷 -> 攻击速度
+  
+  # 战斗奖励
+  exp_per_enemy_level: 10   # 每级敌人基础经验
+  gold_per_enemy_level: 5   # 每级敌人基础金币
+  
+  # 死亡惩罚
+  death_exp_loss: 0.1       # 死亡损失10%经验
+  death_respawn_location: "新手村"

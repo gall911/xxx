@@ -1,0 +1,56 @@
+quests:
+  每日修炼:
+    id: "daily_cultivation"
+    name: "每日修炼"
+    type: "cultivate"
+    
+    description: |
+      修炼是修仙者的日常功课。
+      今日修炼30分钟，可获得额外奖励。
+    
+    objectives:
+      - type: "cultivate"
+        duration: 1800
+        current: 0
+    
+    requirements:
+      level_min: 1
+    
+    rewards:
+      exp: 50
+      gold: 20
+    
+    quest_giver: null
+    quest_finisher: null
+    repeatable: true
+    daily: true
+    level: 1
+    difficulty: "简单"
+  
+  每日猎杀:
+    id: "daily_hunting"
+    name: "每日猎杀"
+    type: "kill"
+    
+    description: |
+      击杀10只野外妖兽，维护村庄安全。
+    
+    objectives:
+      - type: "kill"
+        target: "野猪"
+        count: 10
+        current: 0
+    
+    requirements:
+      level_min: 1
+    
+    rewards:
+      exp: 100
+      gold: 50
+    
+    quest_giver: null
+    quest_finisher: null
+    repeatable: true
+    daily: true
+    level: 1
+    difficulty: "简单"

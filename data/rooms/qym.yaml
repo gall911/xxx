@@ -1,0 +1,107 @@
+# data/rooms/青云门.yaml
+rooms:
+  青云门_山门:
+    key: "青云门山门"
+    name: "qingyun_gate"
+    
+    desc: |
+      巍峨的山门耸立在云雾之中，门匾上'青云门'三个大字金光闪闪。
+      两侧石狮威武，守门弟子来回巡逻。
+    
+    exits:
+      - direction: "north"
+        to: "qingyun_square"
+        desc: "通往青云门广场"
+    
+    tags:
+      - "safe_zone"
+      - "青云门"
+    
+    properties:
+      allow_combat: false
+      allow_teleport: true
+  
+  青云门_广场:
+    key: "青云门广场"
+    name: "qingyun_square"
+    
+    desc: |
+      宽阔的石板广场，数十名弟子在此演武修炼。
+      广场中央立着一块巨大的试剑石。
+    
+    exits:
+      - direction: "south"
+        to: "qingyun_gate"
+        desc: "回到山门"
+      - direction: "north"
+        to: "qingyun_hall"
+        desc: "通往大殿"
+      - direction: "east"
+        to: "qingyun_library"
+        desc: "通往藏经阁"
+      - direction: "west"
+        to: "qingyun_alchemy"
+        desc: "通往丹房"
+    
+    npcs:
+      - "守门长老"
+      - "内门弟子_1"
+      - "内门弟子_2"
+    
+    tags:
+      - "safe_zone"
+      - "青云门"
+    
+    properties:
+      allow_combat: false
+      allow_teleport: true
+  
+  青云门_大殿:
+    key: "青云门大殿"
+    name: "qingyun_hall"
+    
+    desc: |
+      雄伟的大殿内香烟缭绕，掌门高坐上方。
+      两侧长老分列而坐，威严肃穆。
+    
+    exits:
+      - direction: "south"
+        to: "qingyun_square"
+        desc: "离开大殿"
+    
+    npcs:
+      - "青云掌门"
+      - "大长老"
+    
+    tags:
+      - "safe_zone"
+      - "青云门"
+      - "important"
+    
+    properties:
+      allow_combat: false
+      allow_teleport: false
+  
+  青云门_藏经阁:
+    key: "藏经阁"
+    name: "qingyun_library"
+    
+    desc: |
+      三层高楼，藏书无数。
+      墙壁上挂满了各种功法秘籍和修炼心得。
+    
+    exits:
+      - direction: "west"
+        to: "qingyun_square"
+        desc: "回到广场"
+    
+    npcs:
+      - "藏经阁长老"
+    
+    tags:
+      - "safe_zone"
+      - "青云门"
+      - "library"
+    
+    properties:
+      allow_combat: false

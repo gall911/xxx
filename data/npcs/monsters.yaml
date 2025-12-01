@@ -1,0 +1,71 @@
+# data/npcs/monsters.yaml
+npcs:
+  野猪:
+    id: "wild_boar"
+    name: "野猪"
+    type: "monster"
+    level: 1
+    realm: "练气期"
+    
+    stats:
+      hp: 50
+      max_hp: 50
+      qi: 20
+      max_qi: 20
+      strength: 8
+      agility: 5
+      intelligence: 2
+    
+    skills:
+      - "普通攻击"
+      - "冲撞"
+    
+    ai: "aggressive"         # 主动攻击
+    
+    loot:
+      gold:
+        min: 5
+        max: 15
+      items:
+        - item: "猪肉"
+          chance: 0.8
+        - item: "野猪皮"
+          chance: 0.3
+    
+    exp_reward: 10
+    desc: "野外常见的凶猛野猪"
+  
+  森林狼:
+    id: "forest_wolf"
+    name: "森林狼"
+    type: "monster"
+    level: 3
+    realm: "练气期"
+    
+    stats:
+      hp: 80
+      max_hp: 80
+      qi: 30
+      max_qi: 30
+      strength: 12
+      agility: 15
+      intelligence: 5
+    
+    skills:
+      - "普通攻击"
+      - "撕咬"
+    
+    ai: "pack_hunter"        # 群体狩猎AI
+    
+    loot:
+      gold:
+        min: 10
+        max: 30
+      items:
+        - item: "狼皮"
+          chance: 0.7
+        - item: "狼牙"
+          chance: 0.3
+    
+    exp_reward: 30
+    desc: "敏捷的森林狼，常成群出没"

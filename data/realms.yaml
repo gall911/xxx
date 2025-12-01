@@ -1,0 +1,65 @@
+# data/realms.yaml
+realms:
+  练气期:
+    level: 1
+    name: "练气期"
+    max_qi: 100
+    qi_regen: 1        # 每回合恢复灵力
+    
+    # 属性加成
+    attribute_bonus:
+      strength: 5
+      agility: 5
+      intelligence: 5
+    
+    # 突破到下一境界的要求
+    breakthrough:
+      next_realm: "筑基期"
+      required_level: 10
+      required_exp: 1000
+      required_items:
+        - "筑基丹"
+    
+    desc: "踏入修仙之路的第一步，开始感应天地灵气"
+  
+  筑基期:
+    level: 2
+    name: "筑基期"
+    max_qi: 500
+    qi_regen: 5
+    
+    attribute_bonus:
+      strength: 20
+      agility: 15
+      intelligence: 20
+    
+    # 解锁的技能
+    unlock_skills:
+      - "御剑术"
+      - "灵盾"
+    
+    breakthrough:
+      next_realm: "金丹期"
+      required_level: 20
+      required_exp: 5000
+      required_items:
+        - "金丹"
+    
+    desc: "筑基成功，脱胎换骨，灵力大增"
+  
+  金丹期:
+    level: 3
+    name: "金丹期"
+    max_qi: 2000
+    qi_regen: 20
+    
+    attribute_bonus:
+      strength: 50
+      agility: 40
+      intelligence: 60
+    
+    unlock_skills:
+      - "金丹爆裂"
+      - "灵气护体"
+    
+    desc: "凝结金丹，寿元大增，已是人间强者"

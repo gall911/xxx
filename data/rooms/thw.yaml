@@ -1,0 +1,180 @@
+# data/rooms/taohuawu.yaml
+rooms:
+  桃花坞:
+    key: "桃花坞"
+    name: "peach_blossom_cove"
+    desc: >-
+      三面环山，一面临水。千株桃树云蒸霞蔚，溪水载着落花潺潺流过。
+      竹篱茅舍错落其间，檐下悬着青铜风铃，随风清响。
+    exits:
+      - direction: "west"
+        to: "桃源村"
+        desc: "通往桃源村"
+      - direction: "north"
+        to: "漱玉泉"
+        desc: "通往漱玉泉"
+      - direction: "east"
+        to: "听雪楼"
+        desc: "沿石阶而上"
+
+  听雪楼:
+    key: "听雪楼" 
+    name: "snow_listening_tower"
+    desc: >-
+      三层小楼隐在古松之间，飞檐翘角挂满冰凌。
+      推窗可见远山含雪，室内暖炉煮茶，茶香与墨香交织。
+    exits:
+      - direction: "west"
+        to: "桃花坞"
+        desc: "步下石阶"
+      - direction: "up"
+        to: "藏书阁"
+        desc: "登楼观书"
+
+  藏书阁:
+    key: "藏书阁"
+    name: "library_pavilion"
+    desc: >-
+      满架典籍泛着檀香，竹帘半卷，透进斑驳光影。
+      案上宣纸未干，小楷工整如列阵，砚中残墨犹带松烟香。
+    exits:
+      - direction: "down"
+        to: "听雪楼"
+        desc: "下楼品茶"
+
+  漱玉泉:
+    key: "漱玉泉"
+    name: "jade_rinsing_spring"
+    desc: >-
+      一泓清泉自石隙涌出，水色澄碧如玉。
+      泉边青石光滑如镜，几片竹叶浮在水面，随涟漪轻旋。
+    exits:
+      - direction: "north"
+        to: "桃花坞"
+        desc: "穿花而过"
+      - direction: "south"
+        to: "翡翠池"
+        desc: "循声前往"
+
+  翡翠池:
+    key: "翡翠池"
+    name: "jadeite_pool"
+    desc: >-
+      池水翠绿通透，可见锦鲤悠游。
+      池心小亭四面垂纱，亭中古琴蒙着薄尘，弦上停着粉蝶。
+    exits:
+      - direction: "north"
+        to: "漱玉泉"
+        desc: "溯流而上"
+      - direction: "east"
+        to: "琅嬛福地"
+        desc: "入洞探幽"
+
+  琅嬛福地:
+    key: "琅嬛福地"
+    name: "lang_huan_paradise"
+    desc: >-
+      钟乳石洞缀满萤石，幽光如星。
+      石壁上刻满上古符文，灵泉从石龟口中吐出，注入玉盆。
+    exits:
+      - direction: "west"
+        to: "翡翠池"
+        desc: "出洞观鱼"
+      - direction: "down"
+        to: "云深不知处"
+        desc: "踏云而下"
+
+  云深不知处:
+    key: "云深不知处"
+    name: "cloud_depth_unknown"
+    desc: >-
+      云海翻涌，偶露青峰如黛。
+      石径隐现云中，两旁古松虬枝探出云层，鹤唳清越。
+    exits:
+      - direction: "up"
+        to: "琅嬛福地"
+        desc: "拾级而上"
+      - direction: "east"
+        to: "摘星台"
+        desc: "凌虚步云"
+
+  摘星台:
+    key: "摘星台"
+    name: "star_gathering_platform"
+    desc: >-
+      汉白玉台高悬云海，夜幕低垂时仿佛伸手可摘星辰。
+      台边铜铸星盘缓缓转动，刻着二十八宿的方位。
+    exits:
+      - direction: "west"
+        to: "云深不知处"
+        desc: "踏云归去"
+      - direction: "down"
+        to: "琉璃殿"
+        desc: "循光而下"
+
+  琉璃殿:
+    key: "琉璃殿"
+    name: "glazed_palace"
+    desc: >-
+      通体琉璃造就，日光透过殿顶，映出七彩光晕。
+      殿中无烛自明，地面光滑如镜，倒映着穹顶星图。
+    exits:
+      - direction: "up"
+        to: "摘星台"
+        desc: "登台观星"
+      - direction: "south"
+        to: "忘机轩"
+        desc: "穿廊而过"
+
+  忘机轩:
+    key: "忘机轩"
+    name: "carefree_pavilion"
+    desc: >-
+      竹屋临水而建，窗外荷塘月色，室内素屏竹榻。
+      棋枰上残局未了，黑白双子相持，茶灶余温尚存。
+    exits:
+      - direction: "north"
+        to: "琉璃殿"
+        desc: "过琉璃廊"
+      - direction: "east"
+        to: "烟雨廊"
+        desc: "沿廊徐行"
+
+  烟雨廊:
+    key: "烟雨廊"
+    name: "misty_rain_corridor"
+    desc: >-
+      九曲回廊穿荷塘而过，细雨蒙蒙时，荷叶滴翠，莲花含露。
+      廊柱上题着前人诗句，墨迹在水汽中若隐若现。
+    exits:
+      - direction: "west"
+        to: "忘机轩"
+        desc: "返回竹轩"
+      - direction: "east"
+        to: "沉香阁"
+        desc: "循香而去"
+
+  沉香阁:
+    key: "沉香阁"
+    name: "aloeswood_pavilion"
+    desc: >-
+      阁中沉香袅袅，博古架上陈列着各色香具。
+      紫铜香炉刻着如意云纹，青烟升起时，满室清芬。
+    exits:
+      - direction: "west"
+        to: "烟雨廊"
+        desc: "出阁观雨"
+      - direction: "up"
+        to: "邀月亭"
+        desc: "登亭待月"
+
+  邀月亭:
+    key: "邀月亭"
+    name: "moon_inviting_pavilion"
+    desc: >-
+      六角小亭立于危崖，玉栏雕着桂树玉兔。
+      石桌摆着酒具，夜风过时，檐角银铃与松涛相和。
+    exits:
+      - direction: "down"
+        to: "沉香阁"
+        desc: "下楼闻香"

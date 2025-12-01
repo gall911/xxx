@@ -1,0 +1,42 @@
+# data/items/affixes.yaml
+affixes:
+  锋利:
+    id: "sharp"
+    type: "prefix"           # 前缀词条
+    tier: 1
+    
+    stats:
+      attack: 5
+    
+    desc: "锋利的"
+  
+  吸血:
+    id: "lifesteal"
+    type: "suffix"           # 后缀词条
+    tier: 2
+    
+    effects:
+      - type: "lifesteal"
+        ratio: 0.1           # 10%吸血
+    
+    desc: "之吸血"
+  
+  破甲:
+    id: "armor_break"
+    type: "prefix"
+    tier: 3
+    
+    stats:
+      armor_penetration: 20
+    
+    desc: "破甲的"
+  
+  迅捷:
+    id: "swift"
+    type: "prefix"
+    tier: 2
+    
+    stats:
+      agility: 10
+    
+    desc: "迅捷的"

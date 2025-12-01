@@ -1,0 +1,37 @@
+skills:
+  重击:
+    name: "重击"
+    type: "active"
+    cast_time: 3
+    cooldown: 2
+    cost_qi: 20
+    accuracy: 0.85
+    
+    effects:
+      - type: "damage"
+        value: 30
+        scale_with: "strength"
+        scale_ratio: 1.5
+    
+    battle_text:
+      cast:
+        - text: "{caster}蓄力，全身灵力汇聚！"
+          delay_percent: 0
+      
+      hit:
+        - text: "轰！{caster}重重一击砸向{target}！造成伤害{damage}！"
+          delay_percent: 100
+      
+      dodge:
+        - text: "{target}险险避开重击！"
+          delay_percent: 100
+      
+      countered:
+        - text: "{caster}重击命中{target}！造成伤害{damage}！"
+          delay_percent: 60
+        - text: "{target}反身一击！"
+          delay_percent: 100
+      
+      critical:
+        - text: "暴击！{target}被砸飞出去！造成伤害{damage}！"
+          delay_percent: 100

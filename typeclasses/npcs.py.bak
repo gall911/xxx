@@ -1,0 +1,58 @@
+# typeclasses/npcs.py
+"""
+NPC类型类
+"""
+from typeclasses.characters import Character
+
+class NPC(Character):
+    """
+    NPC角色
+    
+    继承自Character，添加AI行为
+    """
+    
+    def at_object_creation(self):
+        """NPC创建时初始化"""
+        super().at_object_creation()
+        
+        # 标记为NPC
+        self.is_npc = True
+        
+        # AI类型
+        self.db.ai_type = "passive"  # passive, aggressive, neutral
+        
+        # 刷新相关
+        self.db.respawn_time = 300  # 5分钟重生
+        self.db.spawn_location = None
+    
+    def at_death(self):
+        """
+        NPC死亡时
+        """
+        # 掉落物品
+        # TODO: 实现掉落系统
+        
+        # 设置重生
+        from evennia import TICKER_HANDLER
+        
+        TICKER_HANDLER.add(
+            interval=self.db.respawn_time,
+            callback=self.respawn,
+            idstring=f"respawn_{self.id}",
+            persistent=False
+        )
+        
+        # 移除NPC
+        self.location.msg_contents(f"{self.key} 死亡了。")
+        self.location = None
+    
+    def respawn(self, *args, **kwargs):
+        """重生NPC"""
+        if self.db.spawn_location:
+            self.location = self.db.spawn_location
+            
+            # 恢复状态
+            self.ndb.hp = self.ndb.max_hp
+            self.ndb.qi = self.ndb.max_qi
+            
+            self.location.msg_contents(f"{self.key} 出现了。")

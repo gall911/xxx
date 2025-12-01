@@ -1,0 +1,100 @@
+quests:
+  新手试炼_1:
+    id: "newbie_trial_1"
+    name: "初入江湖"
+    type: "kill"
+    
+    description: |
+      村长：年轻人，既然你想踏入修仙之路，
+      就先去村外荒野击杀5只野猪，证明你的实力吧！
+    
+    objectives:
+      - type: "kill"
+        target: "野猪"
+        count: 5
+        current: 0
+    
+    requirements:
+      level_min: 1
+      level_max: null
+      realm: null
+      completed_quests: []
+      not_completed_quests: []
+    
+    rewards:
+      exp: 100
+      gold: 50
+      items:
+        - name: "聚气丹"
+          count: 3
+        - name: "回春丹"
+          count: 2
+    
+    quest_giver: "村长"
+    quest_finisher: "村长"
+    repeatable: false
+    daily: false
+    chain_next: "新手试炼_2"
+    level: 1
+    difficulty: "简单"
+  
+  新手试炼_2:
+    id: "newbie_trial_2"
+    name: "收集灵草"
+    type: "collect"
+    
+    description: |
+      村长：做得不错！现在去森林里采集10株灵草，
+      这是炼制丹药的基础材料。
+    
+    objectives:
+      - type: "collect"
+        target: "灵草"
+        count: 10
+        current: 0
+    
+    requirements:
+      level_min: 1
+      completed_quests: ["新手试炼_1"]
+    
+    rewards:
+      exp: 150
+      gold: 80
+      items:
+        - name: "回春丹"
+          count: 5
+    
+    quest_giver: "村长"
+    quest_finisher: "村长"
+    repeatable: false
+    chain_next: "新手试炼_3"
+    level: 2
+    difficulty: "简单"
+  
+  新手试炼_3:
+    id: "newbie_trial_3"
+    name: "拜访长老"
+    type: "talk"
+    
+    description: |
+      村长：你已经证明了自己的实力，
+      去找修炼场的长老，他会指导你修炼之道。
+    
+    objectives:
+      - type: "talk"
+        target: "修炼长老"
+        talked: false
+    
+    requirements:
+      completed_quests: ["新手试炼_2"]
+    
+    rewards:
+      exp: 200
+      unlock_skills: ["重击"]
+    
+    quest_giver: "村长"
+    quest_finisher: "修炼长老"
+    repeatable: false
+    chain_next: null
+    level: 3
+    difficulty: "简单"
