@@ -1,0 +1,262 @@
+# ========================================
+# data/skills/base/spirit_magic.yaml
+# 精神系法术基础模板
+# ========================================
+spirit_magic:
+  # === 基础分类 ===
+  type: "active"                           # active(主动), passive(被动)
+  category: "magic"                        # magic(魔法), combat(战技), support(辅助)
+  element: "spirit"                        # spirit(精神), fire(火), ice(冰), blood(血)
+  
+  # === 战斗参数 ===
+  range: "ranged"                          # melee(近战), ranged(远程)
+  hit_type: "magical"                      # physical(物理), magical(魔法)
+  target_type: "single"                    # single(单体), aoe(群体), self(自身)
+  
+  # === 等级成长公式 ===
+  level_formula:
+    max_level: 200                         # 最高等级
+    
+    # 伤害计算：base * (1 + grow)^level
+    damage:
+      base: 30                             # 基础伤害
+      grow: 0.03                           # 每级成长3%
+    
+    # 命中率：base + (level * 0.001)，上限0.95
+    accuracy:
+      base: 0.75
+      per_level: 0.001
+      max: 0.95
+    
+    # 施法时间：base - (level * 0.02)，下限1秒
+    cast_time:
+      base: 5.0
+      per_level: -0.02
+      min: 1.0
+    
+    # 冷却时间：base - (level * 0.02)，下限1回合
+    cooldown:
+      base: 5
+      per_level: -0.02
+      min: 1
+    
+    # 灵力消耗：base + (level * 0.5)，上限200
+    cost_qi:
+      base: 20
+      per_level: 0.5
+      max: 200
+    
+    # 反击触发率：base + (level * 0.0005)
+    counter_chance:
+      base: 0.03
+      per_level: 0.0005
+  
+  # === 反击参数 ===
+  counter_weight: 3                        # 作为反击技能的权重
+  
+  # === 属性加成 ===
+  stat_scaling:
+    intelligence: 1.0                      # 智力 * 1.0 加成伤害
+    agility: 0.5                           # 敏捷 * 0.5 加成命中
+  
+  # === 默认战斗文本 ===
+  battle_text:
+    cast:
+      - text: "{caster}凝聚精神力..."
+        delay_percent: 0
+      - text: "空气中弥漫着魔法的波动！"
+        delay_percent: 50
+    
+    hit:
+      - text: "精神冲击命中{target}！"
+        delay_percent: 70
+      - text: "造成伤害{damage}！"
+        delay_percent: 100
+    
+    dodge:
+      - text: "{target}察觉到危险，闪开了攻击！"
+        delay_percent: 100
+    
+    critical:
+      - text: "暴击！精神冲击撕裂{target}的意识！"
+        delay_percent: 70
+      - text: "造成伤害{damage}！"
+        delay_percent: 100
+    
+    counter_cast:
+      - text: "{caster}趁机反击！"
+        delay_percent: 0
+    
+    counter_hit:
+      - text: "反击命中{target}！造成伤害{damage}！"
+        delay_percent: 100
+  
+  # === 学习条件（默认） ===
+  required_realm: "练气期"
+  required_level: 1
+
+# ========================================
+# data/skills/base/blood_magic.yaml
+# 血系法术基础模板
+# ========================================
+blood_magic:
+  type: "active"
+  category: "magic"
+  element: "blood"
+  range: "melee"                           # 血系偏近战
+  hit_type: "magical"
+  target_type: "single"
+  
+  level_formula:
+    max_level: 200
+    
+    damage:
+      base: 50                             # 血系基础伤害更高
+      grow: 0.035
+    
+    accuracy:
+      base: 0.8
+      per_level: 0.001
+      max: 0.95
+    
+    cast_time:
+      base: 8.0
+      per_level: -0.03
+      min: 2.0
+    
+    cooldown:
+      base: 3
+      per_level: -0.01
+      min: 1
+    
+    cost_qi:
+      base: 30
+      per_level: 0.6
+      max: 200
+    
+    counter_chance:
+      base: 0.05
+      per_level: 0.0005
+    
+    # 血系特有：吸血比例成长
+    lifesteal_ratio:
+      base: 0.3
+      per_level: 0.002
+      max: 0.8
+  
+  counter_weight: 5                        # 血系反击权重更高
+  
+  stat_scaling:
+    strength: 0.8
+    intelligence: 0.6
+  
+  battle_text:
+    cast:
+      - text: "{caster}五指成爪，掌心血光凝聚..."
+        delay_percent: 0
+      - text: "血色灵气在{caster}周身狂涌！"
+        delay_percent: 40
+    
+    hit:
+      - text: "血爪洞穿{target}！"
+        delay_percent: 70
+      - text: "精血涌入{caster}体内！造成伤害{damage}，恢复生命{heal}！"
+        delay_percent: 100
+    
+    dodge:
+      - text: "{target}闪开了血爪！"
+        delay_percent: 100
+    
+    critical:
+      - text: "暴击！血爪撕裂{target}要害！"
+        delay_percent: 70
+      - text: "大量精血被抽取！造成伤害{damage}，恢复生命{heal}！"
+        delay_percent: 100
+  
+  required_realm: "筑基期"
+  required_level: 10
+
+# ========================================
+# data/skills/base/physical_combat.yaml
+# 物理系战技基础模板
+# ========================================
+physical_combat:
+  type: "active"
+  category: "combat"
+  element: "physical"
+  range: "melee"
+  hit_type: "physical"
+  target_type: "single"
+  
+  level_formula:
+    max_level: 200
+    
+    damage:
+      base: 20
+      grow: 0.025
+    
+    accuracy:
+      base: 0.9                            # 物理攻击命中更高
+      per_level: 0.0005
+      max: 0.98
+    
+    cast_time:
+      base: 0                              # 物理攻击瞬发
+      per_level: 0
+      min: 0
+    
+    cooldown:
+      base: 0
+      per_level: 0
+      min: 0
+    
+    cost_qi:
+      base: 0                              # 普通攻击不消耗
+      per_level: 0
+      max: 0
+    
+    counter_chance:
+      base: 0.03
+      per_level: 0.0003
+  
+  counter_weight: 1
+  
+  stat_scaling:
+    strength: 1.5
+    agility: 0.3
+  
+  battle_text:
+    cast: []
+    
+    hit:
+      - text: "{caster}挥舞武器！"
+        delay_percent: 0
+      - text: "击中{target}！造成伤害{damage}！"
+        delay_percent: 100
+    
+    dodge:
+      - text: "{caster}攻击落空！"
+        delay_percent: 100
+    
+    critical:
+      - text: "暴击！{caster}击中{target}要害！"
+        delay_percent: 0
+      - text: "造成伤害{damage}！"
+        delay_percent: 100
+  
+  required_realm: "练气期"
+  required_level: 1
+
+# ========================================
+# data/skills/base/passive_skills.yaml
+# 被动技能基础模板
+# ========================================
+passive_skill:
+  type: "passive"
+  category: "support"
+  
+  # 被动技能没有等级成长，学会即永久生效
+  effects: []                              # 子技能需要定义具体效果
+  
+  required_realm: "练气期"
+  required_level: 1

@@ -1,37 +1,36 @@
-skills:
-  普通攻击:
+  # ========================================
+  # 主动技能：普通攻击
+  # ========================================
+skills: 
+  basic_attack:
     name: "普通攻击"
+    desc: "最基础的攻击方式"
     type: "active"
-    cast_time: 1.5
+    cast_time: 0
     cooldown: 0
     cost_qi: 0
     accuracy: 0.9
+    counter_chance: 0.03
+    counter_weight: 1
     
     effects:
       - type: "damage"
-        value: 10
-        scale_with: "strength"
-        scale_ratio: 1.0
+        value: 20
     
     battle_text:
-      cast:
+      cast: []
+      hit:
         - text: "{caster}举起武器！"
           delay_percent: 0
-      
-      hit:
         - text: "{caster}击中了{target}！造成伤害{damage}！"
           delay_percent: 100
-      
       dodge:
+        - text: "{caster}举起武器！"
+          delay_percent: 0
         - text: "{target}闪开了攻击！"
           delay_percent: 100
-      
-      countered:
-        - text: "{caster}击中了{target}！造成伤害{damage}！"
-          delay_percent: 50
-        - text: "{target}趁机反击！"
-          delay_percent: 100
-      
       critical:
-        - text: "会心一击！{caster}重创{target}！造成伤害{damage}！"
+        - text: "{caster}举起武器！"
+          delay_percent: 0
+        - text: "暴击！{caster}击中了{target}要害！造成伤害{damage}！"
           delay_percent: 100

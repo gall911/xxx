@@ -1,0 +1,65 @@
+quests:
+  # --- [任务1: 新手入门] ---
+  修仙入门_1:
+    id: "quest_xiyu_001"
+    name: "寻找信道"
+    type: "collect"
+    
+    description: |
+      |238S0NY收音机|n：滋滋...
+      “检测到碳基生命体。警告：你的熵值过高，如果不进行修仙，
+      将在3天内自然降解。
+      
+      想要活命？去|220琉璃古道|n，抓几条|051极光蛇|n。
+      我需要它们体内的|201微量霓虹液|n来冷却我的线路。
+      快去！滋滋...为了部落...不对...为了大道！”
+    
+    objectives:
+      - type: "collect"
+        target: "微量霓虹液" # 极光蛇掉落
+        count: 5
+        current: 0
+    
+    requirements:
+      level_min: 1
+    
+    rewards:
+      exp: 150
+      items:
+        - name: "新手耳机" # 装备
+          count: 1
+    
+    quest_giver: "sony_radio"
+    quest_finisher: "sony_radio"
+    completion_text: |
+      收音机像吸管一样吸干了霓虹液，发出一声满足的颤音。
+      “啊...透心凉，心飞扬。信号增强了。”
+
+  # --- [任务2: 跑腿/探索] ---
+  修仙入门_2:
+    id: "quest_xiyu_002"
+    name: "供奉罗汉"
+    type: "deliver" # 送信/跑腿类
+    
+    description: |
+      |238S0NY收音机|n：
+      “既然连上了信号，就得去拜码头。
+      往南走，去那艘破船里，找到我的老伙计|208自动贩卖机|n。
+      
+      把这枚|w古老的硬币|n投给它。
+      它那里有上古神水‘可口可乐’，那可是筑基灵液。”
+    
+    objectives:
+      - type: "deliver"
+        target: "vending_machine" # 目标NPC key
+        item: "古老的硬币" # 任务开始时给玩家的道具
+    
+    rewards:
+      exp: 200
+      items:
+        - name: "冰镇可乐" # 恢复药剂
+          count: 1
+          desc: "黑色的冒泡液体，喝一口精神百倍。"
+    
+    quest_giver: "sony_radio"
+    quest_finisher: "vending_machine"

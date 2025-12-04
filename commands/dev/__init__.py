@@ -9,6 +9,9 @@ from . import npc_commands
 from . import quick_commands
 from . import room_commands
 from . import test_commands
+from .test_quest_cmd import CmdTestQuest
+from .builder_command import CmdSpawnNPC, CmdQuickNPC, CmdSpawnRoom, CmdListData, CmdShowData
+
 
 # 2. 将核心的 CmdSet 直接暴露在顶层
 # 这样在 settings.py 里就可以直接写: from commands.dev import DevCmdSet

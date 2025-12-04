@@ -1,0 +1,23 @@
+# world/rss/feeds.yaml
+
+feeds:
+  # === Slashdot (修仙风：天机阁) ===
+  - key: "slashdot_main"
+    url: "https://rss.slashdot.org/Slashdot/slashdotMain"
+    # 10分钟检查一次 (600秒)
+    interval: 600
+    # 发送者名字
+    name: "天机阁"
+    # 这里填 "Global"，因为游戏里没有这个频道，
+    # 脚本就会自动切换成【系统全服广播】(SESSIONS.announce_all)
+    channel: "Global"
+    # 样式：talisman (就是你要的那个带框框的)
+    template: "talisman"
+
+  # === 备用源 (如果不想要可以删掉) ===
+  - key: "game_news"
+    url: "https://www.rockpapershotgun.com/feed"
+    interval: 1800
+    name: "万象楼"
+    channel: "Global" 
+    template: "simple"

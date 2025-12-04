@@ -1,12 +1,16 @@
-"""调试工具命令（完整版）"""
+"""
+调试工具命令（完整版 - 包含翻页 + 被动技能 + 详细初始化）
+"""
 from evennia import Command, search_object
+from evennia.utils.evmore import EvMore  # 翻页工具
+import json
 
 class CmdDebugGet(Command):
     """查看对象属性"""
     
     key = "xx get"
     aliases = ["xxg"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -37,8 +41,10 @@ class CmdDebugGet(Command):
             self.caller.msg(f"类型: {type(value).__name__}")
             
             if isinstance(value, (list, dict)):
-                import json
-                self.caller.msg(f"详细:\n{json.dumps(value, indent=2, ensure_ascii=False)}")
+                try:
+                    self.caller.msg(f"详细:\n{json.dumps(value, indent=2, ensure_ascii=False)}")
+                except:
+                    self.caller.msg(f"详细: {value}")
             
         except AttributeError:
             self.caller.msg(f"|r属性不存在:|n {attr_path}")
@@ -50,7 +56,7 @@ class CmdDebugSet(Command):
     
     key = "xx set"
     aliases = ["xxs"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -71,6 +77,7 @@ class CmdDebugSet(Command):
             if not obj:
                 return
         
+        # 尝试智能转换类型
         try:
             value = eval(value_str)
         except:
@@ -87,6 +94,12 @@ class CmdDebugSet(Command):
             
             self.caller.msg(f"|g成功设置:|n {obj.key}.{attr_path} = {value}")
             
+            # 特殊处理：如果改的是 key，自动刷新别名
+            if parts[-1] == 'key':
+                from evennia.utils.ansi import strip_ansi
+                clean = strip_ansi(str(value))
+                if clean != str(value): obj.aliases.add(clean)
+            
         except Exception as e:
             self.caller.msg(f"|r错误:|n {e}")
 
@@ -95,7 +108,7 @@ class CmdDebugReload(Command):
     
     key = "xx reload"
     aliases = ["xxr"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -120,16 +133,15 @@ class CmdDebugReload(Command):
                 self.caller.msg("|g配置文件已重新加载！|n")
             except Exception as e:
                 self.caller.msg(f"|r加载失败:|n {e}")
-            
         else:
             self.caller.msg("未知类型。使用: data 或 config")
 
 class CmdDebugData(Command):
-    """查看已加载的游戏数据"""
+    """查看已加载的游戏数据 (翻页版)"""
     
     key = "xx data"
     aliases = ["xxd"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -139,13 +151,8 @@ class CmdDebugData(Command):
             self.caller.msg("|w" + "=" * 50)
             self.caller.msg("|c游戏数据统计|n")
             self.caller.msg("|w" + "=" * 50)
-            self.caller.msg(f"境界: {len(GAME_DATA['realms'])} 个")
-            self.caller.msg(f"技能: {len(GAME_DATA['skills'])} 个")
-            self.caller.msg(f"物品: {len(GAME_DATA['items'])} 个")
-            self.caller.msg(f"词条: {len(GAME_DATA['affixes'])} 个")
-            self.caller.msg(f"配方: {len(GAME_DATA['recipes'])} 个")
-            self.caller.msg(f"NPC: {len(GAME_DATA['npcs'])} 个")
-            self.caller.msg(f"房间: {len(GAME_DATA['rooms'])} 个")
+            for k, v in GAME_DATA.items():
+                self.caller.msg(f"{k.capitalize()}: {len(v)} 个")
             self.caller.msg("|w" + "=" * 50)
             return
         
@@ -157,21 +164,33 @@ class CmdDebugData(Command):
         
         data = GAME_DATA[data_type]
         
-        self.caller.msg(f"\n|w{data_type.upper()} ({len(data)} 个)|n")
-        self.caller.msg("|w" + "=" * 50)
+        # === 使用 EvMore 分页 ===
+        lines = []
+        lines.append(f"|w=== {data_type.upper()} 数据列表 ({len(data)}) ===|n")
         
-        for key in list(data.keys())[:20]:
-            self.caller.msg(f"  - {key}")
+        if isinstance(data, dict):
+            # 字典类型排序显示
+            for key in sorted(data.keys()):
+                val = data[key]
+                info = ""
+                if isinstance(val, dict):
+                    if 'name' in val: info = f" - {val['name']}"
+                    elif 'key' in val: info = f" - {val['key']}"
+                lines.append(f"  |g{key}|n{info}")
+        elif isinstance(data, list):
+            for item in data:
+                lines.append(f"  {item}")
+                
+        lines.append("|w=== 到底了 ===|n")
         
-        if len(data) > 20:
-            self.caller.msg(f"\n... 还有 {len(data) - 20} 个")
+        EvMore(self.caller, "\n".join(lines))
 
 class CmdQuickInit(Command):
-    """快速初始化对象属性（修复版）"""
+    """快速初始化对象属性（完整版）"""
     
     key = "xx init"
     aliases = ["xxi"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -202,11 +221,11 @@ class CmdQuickInit(Command):
         self.caller.msg(f"技能: {target.ndb.skills}")
 
 class CmdAddPassive(Command):
-    """添加被动技能"""
+    """添加被动技能（补回来的）"""
     
     key = "xx passive"
     aliases = ["xxp"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -214,7 +233,7 @@ class CmdAddPassive(Command):
             self.caller.msg("用法: xx passive <目标> <技能名>")
             self.caller.msg("\n可用被动技能:")
             from world.loaders.game_data import GAME_DATA
-            for key, data in GAME_DATA['skills'].items():
+            for key, data in GAME_DATA.get('skills', {}).items():
                 if data.get('type') == 'passive':
                     self.caller.msg(f"  - {key}")
             return
@@ -228,8 +247,8 @@ class CmdAddPassive(Command):
             if not target:
                 return
         
-        from world.loaders.game_data import get_data
-        skill_data = get_data('skills', skill_name)
+        from world.loaders.game_data import GAME_DATA
+        skill_data = GAME_DATA.get('skills', {}).get(skill_name)
         
         if not skill_data:
             self.caller.msg(f"技能不存在: {skill_name}")
@@ -247,3 +266,16 @@ class CmdAddPassive(Command):
             self.caller.msg(f"|g成功为 {target.key} 添加被动技能: {skill_name}|n")
         else:
             self.caller.msg(f"{target.key} 已拥有 {skill_name}")
+
+class CmdCheckRoom(Command):
+    """检查当前房间的真实身份"""
+    key = "xx check"
+    locks = "cmd:perm(Builder)"
+    
+    def func(self):
+        room = self.caller.location
+        self.caller.msg(f"=== 房间诊断报告 ===")
+        self.caller.msg(f"Key: {room.key}")
+        self.caller.msg(f"ID: #{room.id}")
+        self.caller.msg(f"Aliases: {room.aliases.all()}")
+        self.caller.msg(f"Tags: {room.tags.all()}")

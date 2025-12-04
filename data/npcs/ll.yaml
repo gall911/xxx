@@ -99,9 +99,9 @@ npcs:
       - "野蛮冲撞"
       - "欢喜禅唱" # 音波攻击
 
-  sect_master:
-    prototype_key: "sect_master"
-    key: "sect_master"
+  sect_master2:
+    prototype_key: "sect_master2"
+    key: "大黑天魔主"
     name: "|500明尊·大黑天魔主|n"
     unique: true
     location: "throne_001" # 对应：天阙·摩诃曼艳云顶

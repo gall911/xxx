@@ -4,37 +4,18 @@ Exits
 Exits are connectors between Rooms. An exit always has a destination property
 set and has a single command defined on itself with the same name as its key,
 for allowing Characters to traverse the exit to its destination.
-
 """
 
-from evennia.objects.objects import DefaultExit
+from evennia import DefaultExit
 
-from .objects import ObjectParent
-
-
-class Exit(ObjectParent, DefaultExit):
+# 移除 ObjectParent 继承以防止循环引用
+# 如果你确实需要在 ObjectParent 中定义通用的方法，
+# 建议将 ObjectParent 移动到一个单独的 mixins.py 文件中，然后从那里导入。
+class Exit(DefaultExit):
     """
     Exits are connectors between rooms. Exits are normal Objects except
     they defines the `destination` property and overrides some hooks
     and methods to represent the exits.
-
-    See mygame/typeclasses/objects.py for a list of
-    properties and methods available on all Objects child classes like this.
-
-    """
-
-    pass
-"""
-Exits
-
-typeclasses/exits.py
-"""
-from evennia import DefaultExit
-
-class Exit(DefaultExit):
-    """
-    出口是房间之间的连接器。
-    在 Evennia 中，出口本身就是命令。
     """
 
     def at_object_creation(self):
@@ -61,11 +42,9 @@ class Exit(DefaultExit):
         }
 
         # 转换为小写进行匹配
-        key = self.key.lower()
-        
-        if key in auto_aliases:
-            for alias in auto_aliases[key]:
-                self.aliases.add(alias)
-
-    # 这里的 desc 我们通常保留默认即可，因为我们在 Room.return_appearance 里处理了显示
-    # 但如果你想让 'look west' 时有特殊显示，可以在这里写 return_appearance
+        # 注意：self.key 可能是多字节字符，lower() 通常没问题，但要注意
+        if self.key: 
+            key = self.key.lower()
+            if key in auto_aliases:
+                for alias in auto_aliases[key]:
+                    self.aliases.add(alias)

@@ -1,96 +1,88 @@
 """
-Command sets
-
-All commands in the game must be grouped in a cmdset.  A given command
-can be part of any number of cmdsets and cmdsets can be added/removed
-and merged onto entities at runtime.
-
-To create new commands to populate the cmdset, see
-`commands/command.py`.
-
-This module wraps the default command sets of Evennia; overloads them
-to add/remove commands from the default lineup. You can create your
-own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
-
+commands/default_cmdsets.py
+核心命令集配置文件 - 稳健防崩版
 """
-
 from evennia import default_cmds
-from commands.dev.dev_cmdset import DevCmdSet
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
-    The `CharacterCmdSet` contains general in-game commands like `look`,
-    `get`, etc available on in-game Character objects. It is merged with
-    the `AccountCmdSet` when an Account puppets a Character.
+    所有玩家角色的基础命令集。
+    这里的东西，所有人出生就自带。
     """
-
-    key = "DefaultCharacter"
+    key = "Character"
 
     def at_cmdset_creation(self):
         """
-        Populates the cmdset
+        组装命令集
         """
+        # 1. 【核心保险】先加载官方基础命令 (n, s, look, get, inventory...)
+        # 只要这行在，基础功能就永远不会丢。
         super().at_cmdset_creation()
-        #
-        # any commands you add below will overload the default ones.
-        #
+        
+        # 2. 【开发工具】加载全自动扫描雷达 (DevCmdSet)
+        # 使用 try-except 保护，万一开发文件报错，不影响玩家正常游戏
+        try:
+            from commands.dev.dev_cmdset import DevCmdSet
+            self.add(DevCmdSet)
+        except Exception as e:
+            print(f"|r[警告] 开发命令集加载失败 (不影响基础游戏): {e}|n")
+
+        # 3. 【游戏功能】加载任务系统 (Quest)
+        try:
+            from commands.quest_commands import (
+                CmdQuest, CmdQuestList, CmdAbandon, 
+                CmdAcceptQuest, CmdCompleteQuest
+            )
+            self.add(CmdQuest())
+            self.add(CmdQuestList())
+            self.add(CmdAbandon())
+            self.add(CmdAcceptQuest())
+            self.add(CmdCompleteQuest())
+        except ImportError:
+            # 如果你还没写好 quest_commands.py，这里会静默跳过，不会报错
+            pass
+        except Exception as e:
+            print(f"|r[警告] 任务命令加载失败: {e}|n")
+
+        # 4. 【游戏功能】加载 NPC 交互 (Talk)
+        try:
+            from commands.npc_commands import CmdTalk, CmdNPCInfo
+            self.add(CmdTalk())
+            self.add(CmdNPCInfo())
+        except ImportError:
+            pass
+        except Exception as e:
+            print(f"|r[警告] NPC命令加载失败: {e}|n")
+
+        
+            
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
     """
-    This is the cmdset available to the Account at all times. It is
-    combined with the `CharacterCmdSet` when the Account puppets a
-    Character. It holds game-account-specific commands, channel
-    commands, etc.
+    账号级别的命令 (OOC, 聊天频道等)
     """
-
     key = "DefaultAccount"
 
     def at_cmdset_creation(self):
-        """
-        Populates the cmdset
-        """
         super().at_cmdset_creation()
-        #
-        # any commands you add below will overload the default ones.
-        #
 
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):
     """
-    Command set available to the Session before being logged in.  This
-    holds commands like creating a new account, logging in, etc.
+    登录前的命令 (create, connect)
     """
-
     key = "DefaultUnloggedin"
 
     def at_cmdset_creation(self):
-        """
-        Populates the cmdset
-        """
         super().at_cmdset_creation()
-        #
-        # any commands you add below will overload the default ones.
-        #
 
 
 class SessionCmdSet(default_cmds.SessionCmdSet):
     """
-    This cmdset is made available on Session level once logged in. It
-    is empty by default.
+    Session 级别的命令 (通常为空)
     """
-
     key = "DefaultSession"
 
     def at_cmdset_creation(self):
-        """
-        This is the only method defined in a cmdset, called during
-        its creation. It should populate the set with command instances.
-
-        As and example we just add the empty base `Command` object.
-        It prints some info.
-        """
         super().at_cmdset_creation()
-        #
-        # any commands you add below will overload the default ones.
-        #

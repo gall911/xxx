@@ -480,6 +480,9 @@ class QuestSystem:
                 completable.append(quest_id)
         
         return completable
-
+def on_your_event(self, character, event_data):
+    """你的新事件"""
+    # 调用通用处理逻辑
+    self._process_objectives(character, 'your_type', event_data)
 # 全局单例
 QUEST_SYSTEM = QuestSystem()

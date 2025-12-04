@@ -1,24 +1,29 @@
 quests:
-  每日修炼:
-    id: "daily_cultivation"
-    name: "每日修炼"
-    type: "cultivate"
+  # ==================== 更多每日任务 ====================
+  
+  每日采集:
+    id: "daily_gathering"
+    name: "每日采集"
+    type: "collect"
     
     description: |
-      修炼是修仙者的日常功课。
-      今日修炼30分钟，可获得额外奖励。
+      采集15株灵草，为宗门做贡献。
     
     objectives:
-      - type: "cultivate"
-        duration: 1800
+      - type: "collect"
+        target: "灵草"
+        count: 15
         current: 0
     
     requirements:
       level_min: 1
     
     rewards:
-      exp: 50
-      gold: 20
+      exp: 80
+      gold: 40
+      items:
+        - name: "宗门贡献点"
+          count: 10
     
     quest_giver: null
     quest_finisher: null
@@ -27,30 +32,95 @@ quests:
     level: 1
     difficulty: "简单"
   
-  每日猎杀:
-    id: "daily_hunting"
-    name: "每日猎杀"
-    type: "kill"
+  每日炼丹:
+    id: "daily_alchemy"
+    name: "每日炼丹"
+    type: "craft"
     
     description: |
-      击杀10只野外妖兽，维护村庄安全。
+      炼制3颗丹药，精进炼丹术。
     
     objectives:
-      - type: "kill"
-        target: "野猪"
-        count: 10
+      - type: "craft"
+        target: "聚气丹"
+        count: 3
         current: 0
     
     requirements:
-      level_min: 1
+      level_min: 3
     
     rewards:
       exp: 100
-      gold: 50
+      gold: 60
     
     quest_giver: null
     quest_finisher: null
     repeatable: true
     daily: true
-    level: 1
+    level: 3
     difficulty: "简单"
+  
+  每日试炼:
+    id: "daily_trial"
+    name: "每日试炼"
+    type: "multi"
+    
+    description: |
+      完成综合试炼，获得丰厚奖励。
+    
+    objectives:
+      - type: "kill"
+        target: "妖兽"
+        count: 3
+        current: 0
+      - type: "collect"
+        target: "灵草"
+        count: 5
+        current: 0
+    
+    requirements:
+      level_min: 10
+    
+    rewards:
+      exp: 200
+      gold: 100
+      items:
+        - name: "随机丹药包"
+          count: 1
+    
+    quest_giver: null
+    quest_finisher: null
+    repeatable: true
+    daily: true
+    level: 10
+    difficulty: "普通"
+  
+  # ==================== 可重复任务 ====================
+  
+  妖兽讨伐:
+    id: "repeatable_hunt"
+    name: "妖兽讨伐令"
+    type: "kill"
+    
+    description: |
+      讨伐公告板：击杀5只妖兽，可重复接取。
+    
+    objectives:
+      - type: "kill"
+        target: "妖兽"
+        count: 5
+        current: 0
+    
+    requirements:
+      level_min: 8
+    
+    rewards:
+      exp: 150
+      gold: 80
+    
+    quest_giver: "公告板"
+    quest_finisher: "公告板"
+    repeatable: true  # 可重复，但不是每日
+    daily: false
+    level: 8
+    difficulty: "普通"

@@ -4,6 +4,7 @@ import yaml
 from pathlib import Path
 from evennia.utils import logger
 from .game_data import GAME_DATA
+from copy import deepcopy
 
 def load_yaml_files_in_dir(dir_path, data_key=None):
     """
@@ -15,15 +16,6 @@ def load_yaml_files_in_dir(dir_path, data_key=None):
     
     Returns:
         dict: 合并后的数据字典
-    
-    Example:
-        # items/elixirs.yaml:
-        # items:
-        #   聚气丹: {...}
-        #   筑基丹: {...}
-        
-        result = load_yaml_files_in_dir('data/items', 'items')
-        # result = {'聚气丹': {...}, '筑基丹': {...}}
     """
     result = {}
     dir_path = Path(dir_path)
@@ -94,6 +86,75 @@ def load_single_yaml(file_path):
         logger.log_err(f"[数据] 加载失败 {file_path.name}: {e}")
         return {}
 
+def load_skills_with_inheritance(base_path='data/skills'):
+    """
+    加载技能配置，支持继承
+    
+    Returns:
+        dict: {skill_key: skill_config}
+    """
+    base_path = Path(base_path)
+    all_skills = {}
+    base_configs = {}
+    
+    # 1. 先加载所有base配置
+    base_dir = base_path / 'base'
+    if base_dir.exists():
+        for yaml_file in base_dir.rglob('*.yaml'):
+            try:
+                with open(yaml_file, 'r', encoding='utf-8') as f:
+                    data = yaml.safe_load(f) or {}
+                    base_configs.update(data)
+                    logger.log_info(f"[技能] 加载基础配置: {yaml_file.name}")
+            except Exception as e:
+                logger.log_err(f"[技能] 加载失败 {yaml_file.name}: {e}")
+    
+    # 2. 加载所有技能配置
+    for yaml_file in base_path.rglob('*.yaml'):
+        if 'base' in yaml_file.parts:
+            continue  # 跳过base目录
+        
+        try:
+            with open(yaml_file, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f) or {}
+                
+                # 兼容旧格式：skills: {...}
+                if 'skills' in data:
+                    data = data['skills']
+                
+                for skill_key, skill_config in data.items():
+                    # 处理继承
+                    if 'inherit' in skill_config:
+                        inherit_key = skill_config['inherit']
+                        if inherit_key in base_configs:
+                            # 深拷贝基础配置
+                            final_config = deepcopy(base_configs[inherit_key])
+                            # 合并当前配置（覆盖基础配置）
+                            _deep_merge(final_config, skill_config)
+                            all_skills[skill_key] = final_config
+                        else:
+                            logger.log_warn(f"[技能] {skill_key} 继承的基础配置 {inherit_key} 不存在")
+                            all_skills[skill_key] = skill_config
+                    else:
+                        all_skills[skill_key] = skill_config
+                
+                logger.log_info(f"[技能] 加载: {yaml_file.name}")
+        except Exception as e:
+            logger.log_err(f"[技能] 加载失败 {yaml_file.name}: {e}")
+    
+    return all_skills
+
+def _deep_merge(base, override):
+    """
+    深度合并字典
+    override 的值会覆盖 base
+    """
+    for key, value in override.items():
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            _deep_merge(base[key], value)
+        else:
+            base[key] = value
+
 def load_all_data():
     """
     加载所有游戏数据到 GAME_DATA 全局字典
@@ -128,11 +189,8 @@ def load_all_data():
     GAME_DATA['recipes'] = recipes_data.get('recipes', {})
     logger.log_info(f"[数据] 配方: {len(GAME_DATA['recipes'])} 个")
     
-    # 5. 加载技能
-    GAME_DATA['skills'] = load_yaml_files_in_dir(
-        base_path / 'skills', 
-        'skills'
-    )
+    # 5. 加载技能（支持继承）
+    GAME_DATA['skills'] = load_skills_with_inheritance(base_path / 'skills')
     logger.log_info(f"[数据] 技能: {len(GAME_DATA['skills'])} 个")
     
     # 6. 加载NPC

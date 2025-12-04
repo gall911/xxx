@@ -1,16 +1,17 @@
 """
 战斗系统核心 - 修复版
+支持：反击判定、100%命中反击、轮流回合制
 """
 import random
 from twisted.internet import reactor
 from evennia.utils import logger
 from world.loaders.game_data import GAME_DATA, get_config, get_data
 from world.systems.skill_effects import apply_effect
+from world.systems.quest_system import QUEST_SYSTEM
 
 class CombatSystem:
     DEBUG_COMBAT = False
     """战斗系统"""
-    
     
     def __init__(self):
         self.turn_interval = get_config('combat.turn_interval', 2.0)
@@ -33,7 +34,6 @@ class CombatSystem:
         target.ndb.combat_round = 0
         target.ndb.skill_cooldowns = {}
         
-        #logger.log_info(f"[战斗] {attacker.key} vs {target.key} 开始")
         return True
     
     def end_combat(self, char1, char2, winner=None):
@@ -50,9 +50,26 @@ class CombatSystem:
         
         logger.log_info(f"[战斗] {char1.key} vs {char2.key} 结束")
     
-    def use_skill(self, attacker, target, skill_key, callback=None):
-        """使用技能"""
-        skill_data = get_data('skills', skill_key)
+    def use_skill(self, attacker, target, skill_key, skill_level=None, is_counter_attack=False, callback=None):
+        """使用技能
+        
+        Args:
+            attacker: 攻击者
+            target: 目标
+            skill_key: 技能key
+            skill_level (int): 技能等级（None则从角色读取）
+            is_counter_attack (bool): 是否为反击攻击（反击100%命中，不触发反击链）
+            callback: 回调函数
+        """
+        # ========== 新增：支持等级系统 ==========
+        if skill_level is None:
+            # 从角色的learned_skills读取等级
+            learned = getattr(attacker.db, 'learned_skills', {}) or {}
+            skill_level = learned.get(skill_key, 1)
+        
+        # 获取指定等级的技能配置
+        from world.loaders.skill_loader import get_skill_at_level
+        skill_data = get_skill_at_level(skill_key, skill_level)
         
         if not skill_data:
             if callback:
@@ -78,14 +95,15 @@ class CombatSystem:
         # 获取施法时间
         cast_time = skill_data.get('cast_time', 0)
         
+        # ========== 修改：反击时优先使用 counter_cast 文本 ==========
+        if is_counter_attack:
+            cast_texts = skill_data.get('battle_text', {}).get('counter_cast', 
+                         skill_data.get('battle_text', {}).get('cast', []))
+        else:
+            cast_texts = skill_data.get('battle_text', {}).get('cast', [])
+        
         # 显示施法描述
-        self._show_battle_text(
-            skill_data.get('battle_text', {}).get('cast', []),
-            cast_time,
-            attacker,
-            target,
-            {}
-        )
+        self._show_battle_text(cast_texts, cast_time, attacker, target, {})
         
         # 在施法完成后执行效果
         reactor.callLater(
@@ -95,10 +113,11 @@ class CombatSystem:
             target,
             skill_data,
             skill_key,
+            is_counter_attack,
             callback
         )
     
-    def _execute_skill_effects(self, attacker, target, skill_data, skill_key, callback):
+    def _execute_skill_effects(self, attacker, target, skill_data, skill_key, is_counter_attack, callback):
         """执行技能效果"""
         context = {
             'attacker': attacker,
@@ -108,63 +127,120 @@ class CombatSystem:
             'total_heal': 0,
         }
         
-        # 1. 命中判定
-        hit_result = self._check_hit(attacker, target, skill_data)
+        # ========== 新增：反击判定（在命中判定之前） ==========
+        # 反击攻击不触发反击链
+        if not is_counter_attack:
+            if self._check_counter_before_hit(attacker, target, skill_data):
+                # 反击成功 → 目标不受伤 + 反击攻击
+                # 显示统一的反击触发文本
+                defender_name = target.name or target.key
+                counter_msg = f"|y{defender_name}身形一闪，格挡了攻击！|n"
+                attacker.msg(counter_msg)
+                target.msg(counter_msg)
+                
+                reactor.callLater(
+                    0.5,
+                    self._execute_counter,
+                    target,
+                    attacker,
+                    lambda: callback({
+                        'success': True,
+                        'countered': True,
+                        'hit': False
+                    }) if callback else None
+                )
+                return  # 直接返回，不继续执行后面的伤害
+        
+        # ========== 命中判定 ==========
+        # 反击攻击100%命中
+        if is_counter_attack:
+            hit_result = {'hit': True, 'is_critical': False}
+        else:
+            hit_result = self._check_hit(attacker, target, skill_data)
         
         if not hit_result['hit']:
             # 闪避
             battle_texts = skill_data.get('battle_text', {}).get('dodge', [])
             max_delay = self._show_battle_text(battle_texts, 0, attacker, target, context)
             
-            # 在所有描述显示完后调用回调
-            reactor.callLater(max_delay + 0.5, lambda: callback({'success': True, 'hit': False}) if callback else None)
+            reactor.callLater(
+                max_delay + 0.5, 
+                lambda: callback({
+                    'success': True, 
+                    'hit': False,
+                    'countered': False
+                }) if callback else None
+            )
             return
         
-        # 2. 暴击判定
+        # 暴击判定
         context['is_critical'] = hit_result.get('is_critical', False)
         
-        # 3. 应用效果
+        # 应用效果
         for effect_config in skill_data.get('effects', []):
             result = apply_effect(effect_config, attacker, target, context)
         
-        # 4. 反击判定
-        counter_triggered = self._check_counter(attacker, target, context)
-        
-        # 5. 显示战斗描述
-        if counter_triggered:
-            battle_texts = skill_data.get('battle_text', {}).get('countered', [])
-        elif context.get('is_critical'):
-            battle_texts = skill_data.get('battle_text', {}).get('critical', [])
+        # ========== 修改：反击时优先使用 counter_hit 文本 ==========
+        if is_counter_attack:
+            if context.get('is_critical'):
+                battle_texts = skill_data.get('battle_text', {}).get('counter_critical',
+                              skill_data.get('battle_text', {}).get('critical', []))
+            else:
+                battle_texts = skill_data.get('battle_text', {}).get('counter_hit',
+                              skill_data.get('battle_text', {}).get('hit', []))
         else:
-            battle_texts = skill_data.get('battle_text', {}).get('hit', [])
+            # 正常攻击
+            if context.get('is_critical'):
+                battle_texts = skill_data.get('battle_text', {}).get('critical', [])
+            else:
+                battle_texts = skill_data.get('battle_text', {}).get('hit', [])
         
         max_delay = self._show_battle_text(battle_texts, 0, attacker, target, context)
         
-        # 6. 执行反击
-        if counter_triggered:
-            reactor.callLater(
-                max_delay + 0.5,
-                self._execute_counter,
-                target,
-                attacker,
-                lambda: callback({
-                    'success': True,
-                    'hit': True,
-                    'damage': context.get('total_damage', 0),
-                    'counter': True
-                }) if callback else None
-            )
-        else:
-            # 在所有描述显示完后调用回调
-            reactor.callLater(
-                max_delay + 0.5,
-                lambda: callback({
-                    'success': True,
-                    'hit': True,
-                    'damage': context.get('total_damage', 0),
-                    'counter': False
-                }) if callback else None
-            )
+        # 在所有描述显示完后调用回调
+        reactor.callLater(
+            max_delay + 0.5,
+            lambda: callback({
+                'success': True,
+                'hit': True,
+                'damage': context.get('total_damage', 0),
+                'countered': False
+            }) if callback else None
+        )
+    
+    def _check_counter_before_hit(self, attacker, target, skill_data):
+        """
+        在命中判定前，先判断是否反击
+        
+        Returns:
+            bool: True=反击成功（目标不受伤+反击）, False=进入正常命中判定
+        """
+        # 1. 基础反击率
+        base_rate = get_config('combat.counter.base_rate', 0.02)
+        
+        # 2. 技能配置的反击率
+        skill_counter = skill_data.get('counter_chance', 0)
+        
+        # 3. 目标的反击率属性（装备+被动技能）
+        target_counter = getattr(target.ndb, 'counter_rate', 0) or 0
+        
+        # 4. 等级压制
+        target_level = getattr(target.ndb, 'level', 1) or 1
+        attacker_level = getattr(attacker.ndb, 'level', 1) or 1
+        level_diff = target_level - attacker_level
+        level_bonus = level_diff * get_config('combat.counter.level_diff_bonus', 0.01)
+        
+        # 5. 敏捷加成
+        target_agility = getattr(target.ndb, 'agility', 10) or 10
+        agility_bonus = target_agility * get_config('combat.counter.agility_bonus', 0.001)
+        
+        # 6. 总反击率
+        total_rate = base_rate + skill_counter + target_counter + level_bonus + agility_bonus
+        max_rate = get_config('combat.counter.max_rate', 0.50)
+        final_rate = min(max(total_rate, 0), max_rate)
+        
+        # 7. 判定
+        return random.random() < final_rate
     
     def _check_hit(self, attacker, target, skill_data):
         """命中判定"""
@@ -191,79 +267,109 @@ class CombatSystem:
         
         return {'hit': True, 'is_critical': is_critical}
     
-    def _check_counter(self, attacker, target, context):
-        """反击判定"""
-        passive_skills = getattr(target.ndb, 'passive_skills', []) or []
-        
-        for passive_key in passive_skills:
-            passive_data = get_data('skills', passive_key)
-            
-            if not passive_data:
-                continue
-            
-            if passive_data.get('trigger') != 'on_hit':
-                continue
-            
-            chance = passive_data.get('chance', 1.0)
-            if random.random() < chance:
-                context['counter_passive'] = passive_data
-                return True
-        
-        return False
-    
     def _execute_counter(self, defender, attacker, callback):
-        """执行反击"""
-        counter_skill_name = self._choose_counter_skill(defender)
+        """执行反击（100%命中）"""
+        counter_result = self._choose_counter_skill(defender)
         
-        if not counter_skill_name:
+        # ========== 新系统：返回(skill_key, skill_level) ==========
+        if isinstance(counter_result, tuple):
+            counter_skill_key, counter_skill_level = counter_result
+        else:
+            # 兼容旧代码
+            counter_skill_key = counter_result
+            counter_skill_level = 1
+        
+        if not counter_skill_key:
             if callback:
                 callback()
             return
         
         # 显示反击触发文本
-        passive_skills = getattr(defender.ndb, 'passive_skills', [])
-        for passive_key in passive_skills:
-            passive_data = get_data('skills', passive_key)
-            if passive_data and passive_data.get('trigger') == 'on_hit':
-                trigger_text = passive_data.get('battle_text', {}).get('trigger', '')
-                if trigger_text:
-                    msg = trigger_text.format(
-                        caster=defender.key,
-                        counter_skill=counter_skill_name
-                    )
-                    defender.msg(msg)
-                    attacker.msg(msg)
-                break
+        defender_name = defender.name or defender.key
+        attacker_name = attacker.name or attacker.key
         
-        # 执行反击技能
-        self.use_skill(defender, attacker, counter_skill_name, callback=lambda result: callback() if callback else None)
+        counter_msg = f"|y{defender_name}趁机反击！|n"
+        defender.msg(counter_msg)
+        attacker.msg(counter_msg)
+        
+        # 执行反击技能（100%命中）
+        self.use_skill(
+            defender, 
+            attacker, 
+            counter_skill_key,
+            skill_level=counter_skill_level,  # ← 传递等级
+            is_counter_attack=True,
+            callback=lambda result: callback() if callback else None
+        )
     
     def _choose_counter_skill(self, character):
-        """选择反击技能"""
-        skills = getattr(character.ndb, 'skills', None)
+        """
+        选择反击技能（支持权重+等级）
         
-        if not skills:
-            return '普通攻击'
+        Returns:
+            tuple: (skill_key, skill_level)
+        """
+        # ========== 新系统：从装备的技能选择 ==========
+        active_skills = character.get_active_skills()  # [(skill_key, level), ...]
         
+        if not active_skills:
+            return ('basic_attack', 1)
+        
+        # 收集可用技能及其权重
         available = []
-        for skill_key in skills:
-            skill_data = get_data('skills', skill_key)
-            if not skill_data:
-                continue
-            
-            if skill_data.get('type') == 'passive':
-                continue
-            
+        weights = []
+        
+        for skill_key, skill_level in active_skills:
+            # 检查冷却
             cooldown_remaining = character.ndb.skill_cooldowns.get(skill_key, 0)
             if cooldown_remaining > 0:
                 continue
             
-            available.append(skill_key)
+            # 获取技能配置（用于读取权重）
+            skill_data = get_data('skills', skill_key)
+            if not skill_data:
+                continue
+            
+            # 获取反击权重（默认1）
+            weight = skill_data.get('counter_weight', 1)
+            
+            available.append((skill_key, skill_level))
+            weights.append(weight)
         
         if not available:
-            return '普通攻击'
+            return ('basic_attack', 1)
         
-        return random.choice(available)
+        # 按权重随机选择
+        import random
+        chosen = random.choices(available, weights=weights, k=1)[0]
+        return chosen
+    
+    def _choose_skill_weighted(self, available_skills):
+        """
+        按权重选择技能（用于战斗回合）
+        
+        Args:
+            available_skills: [(skill_key, level), ...]
+        
+        Returns:
+            tuple: (skill_key, skill_level)
+        """
+        if not available_skills:
+            return ('basic_attack', 1)
+        
+        weights = []
+        for skill_key, skill_level in available_skills:
+            skill_data = get_data('skills', skill_key)
+            if skill_data:
+                # 可以自定义权重字段，这里用counter_weight通用
+                weight = skill_data.get('counter_weight', 1)
+            else:
+                weight = 1
+            weights.append(weight)
+        
+        import random
+        chosen = random.choices(available_skills, weights=weights, k=1)[0]
+        return chosen
     
     def _show_battle_text(self, battle_texts, base_cast_time, attacker, target, context):
         """
@@ -281,9 +387,10 @@ class CombatSystem:
             delay = base_cast_time * (delay_percent / 100.0)
             max_delay = max(max_delay, delay)
             
+            # 使用中文名显示
             variables = {
-                'caster': attacker.key,
-                'target': target.key,
+                'caster': attacker.name or attacker.key,
+                'target': target.name or target.key,
                 'damage': context.get('total_damage', 0),
                 'heal': context.get('total_heal', 0),
                 'reflect_damage': context.get('reflect_damage', 0),
@@ -338,36 +445,16 @@ class CombatSystem:
     
     def _reduce_cooldowns(self, character):
         """减少技能冷却"""
+        if not hasattr(character.ndb, 'skill_cooldowns'):
+            character.ndb.skill_cooldowns = {}
+        
         for skill_key in list(character.ndb.skill_cooldowns.keys()):
             character.ndb.skill_cooldowns[skill_key] -= 1
             if character.ndb.skill_cooldowns[skill_key] <= 0:
                 del character.ndb.skill_cooldowns[skill_key]
     
-    def _choose_skill_for_round(self, character):
-        """为回合选择技能"""
-        skills = getattr(character.ndb, 'skills', None)
-        
-        if not skills:
-            return '普通攻击'
-        
-        available = []
-        for skill_key in skills:
-            skill_data = get_data('skills', skill_key)
-            if not skill_data:
-                continue
-            
-            if skill_data.get('type') == 'passive':
-                continue
-            
-            if character.ndb.skill_cooldowns.get(skill_key, 0) > 0:
-                continue
-            
-            available.append(skill_key)
-        
-        if not available:
-            return '普通攻击'
-        
-        return random.choice(available)
+    # ========== 删除：旧的技能选择方法 ==========
+    # _choose_skill_for_round() 已被新系统替代，不再需要
     
     def calculate_combat_rewards(self, winner, loser):
         """计算战斗奖励"""
@@ -381,5 +468,9 @@ class CombatSystem:
         
         base_gold = gold_per_level * loser_level
         gold_reward = int(base_gold * random.uniform(0.8, 1.2))
+        
+        # 通知任务系统击杀事件
+        if hasattr(winner, 'account'):  # 确保是玩家
+            QUEST_SYSTEM.on_kill(winner, loser.key)
         
         return {'exp': exp_reward, 'gold': gold_reward, 'items': []}

@@ -1,0 +1,22 @@
+# RSS 配置 - 修仙版
+default_channel: "Public" # 如果找不到特定频道，尝试发到这个频道
+system_broadcast_fallback: true # 如果连上面的频道都找不到，是否全服系统广播(announce_all)
+
+# 修仙风格的前缀模版 (随机抽取)
+prefixes:
+  - "【天道传音】忽闻九天之上传来一阵波动："
+  - "【万界通识】修仙界近日流传着一则异闻："
+  - "【飞剑传书】一位神秘大能刚刚破空送来消息："
+  - "【灵网波动】护山大阵捕获到来自异域的一缕神念："
+
+# RSS 源列表 (支持多源轮询)
+feeds:
+  - name: "Slashdot"
+    url: "https://rss.slashdot.org/Slashdot/slashdotMain"
+    target_channel: "Tech" # 尝试发到 Tech 频道
+    enabled: true
+
+  - name: "HackerNews" # 示例第二个源
+    url: "https://news.ycombinator.com/rss"
+    target_channel: "Tech"
+    enabled: true

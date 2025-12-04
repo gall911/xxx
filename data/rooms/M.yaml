@@ -1,343 +1,315 @@
-# data/rooms/qym.yaml
 rooms:
   M记遗址:
-    key: "|135M记遗址|n"
-    name: "mcd_ruins"
-    desc: "|095破败金色拱门|n下，|183油腻桌椅|n间散落着|198蕾丝内衣|n。女厕镜后暗门透出|206粉色灵雾|n，混合着|213胭脂与情欲|n的气息。"
+    key: '|135M记遗址|n'
+    name: mcd_ruins
+    desc: '|095破败金色拱门|n下，|183油腻桌椅|n间散落着|198蕾丝内衣|n。女厕镜后暗门透出|206粉色灵雾|n，混合着|213胭脂与情欲|n的气息。'
     exits:
-      - direction: "east"
-        to: "潮湿暗道"
-        desc: "踏入暗门"
-
+    - direction: east
+      to: 潮湿暗道
+      desc: 踏入暗门
   潮湿暗道:
-    key: "|094潮湿暗道|n"
-    name: "damp_tunnel" 
-    desc: "|242湿滑石壁|n上|045水珠晶莹|n，|207迷离灵光|n中似有|219曼妙胴影|n摇曳。|225暖昧水声|n与|213娇喘低吟|n在耳畔萦绕。"
+    key: '|094潮湿暗道|n'
+    name: damp_tunnel
+    desc: '|242湿滑石壁|n上|045水珠晶莹|n，|207迷离灵光|n中似有|219曼妙胴影|n摇曳。|225暖昧水声|n与|213娇喘低吟|n在耳畔萦绕。'
     exits:
-      - direction: "west"
-        to: "M记遗址"
-        desc: "退回遗址"
-      - direction: "east"
-        to: "星岛湖岸"
-        desc: "走向光亮"
-
+    - direction: west
+      to: M记遗址
+      desc: 退回遗址
+    - direction: east
+      to: 星岛湖岸
+      desc: 走向光亮
   星岛湖岸:
-    key: "|045星岛湖岸|n"
-    name: "star_lake_shore"
-    desc: "|087碧湖映星|n，|051十二仙岛|n悬浮。|219薄纱女修|n踏波起舞，|207裙裾飞扬|n间|198玉腿隐现|n，|213银铃笑声|n酥入骨髓。"
+    key: '|045星岛湖岸|n'
+    name: star_lake_shore
+    desc: '|087碧湖映星|n，|051十二仙岛|n悬浮。|219薄纱女修|n踏波起舞，|207裙裾飞扬|n间|198玉腿隐现|n，|213银铃笑声|n酥入骨髓。'
     exits:
-      - direction: "west"
-        to: "潮湿暗道"
-        desc: "返回暗道"
-      - direction: "north"
-        to: "合欢殿"
-        desc: "前往合欢殿"
-      - direction: "east"
-        to: "鸳鸯浴池"
-        desc: "通往浴池"
-      - direction: "south"
-        to: "玉女峰"
-        desc: "登上玉女峰"
-
+    - direction: west
+      to: 潮湿暗道
+      desc: 返回暗道
+    - direction: north
+      to: 合欢殿
+      desc: 前往合欢殿
+    - direction: east
+      to: 鸳鸯浴池
+      desc: 通往浴池
+    - direction: south
+      to: 玉女峰
+      desc: 登上玉女峰
   合欢殿:
-    key: "|207合欢殿|n"
-    name: "union_joy_temple"
-    desc: "|219粉纱暖帐|n轻摇，|225交颈鸳鸯|n缠绵。|198雪肌香汗|n淋漓，|213娇吟喘息|n交织成|206情欲乐章|n。"
+    key: '|207合欢殿|n'
+    name: union_joy_temple
+    desc: '|219粉纱暖帐|n轻摇，|225交颈鸳鸯|n缠绵。|198雪肌香汗|n淋漓，|213娇吟喘息|n交织成|206情欲乐章|n。'
     exits:
-      - direction: "south"
-        to: "星岛湖岸"
-        desc: "回到湖岸"
-      - direction: "up"
-        to: "天女阁"
-        desc: "登阁寻欢"
-
+    - direction: south
+      to: 星岛湖岸
+      desc: 回到湖岸
+    - direction: up
+      to: 天女阁
+      desc: 登阁寻欢
   鸳鸯浴池:
-    key: "|039鸳鸯浴池|n"
-    name: "lovebird_pool"
-    desc: "|051温泉氤氲|n中|219玉体沉浮|n，|207水波荡漾|n间|198樱红点点|n。|225纤手撩水|n溅湿|213薄透纱衣|n。"
+    key: '|039鸳鸯浴池|n'
+    name: lovebird_pool
+    desc: '|051温泉氤氲|n中|219玉体沉浮|n，|207水波荡漾|n间|198樱红点点|n。|225纤手撩水|n溅湿|213薄透纱衣|n。'
     exits:
-      - direction: "west"
-        to: "星岛湖岸"
-        desc: "返回湖岸"
-      - direction: "north"
-        to: "媚香园"
-        desc: "进入媚香园"
-
+    - direction: west
+      to: 星岛湖岸
+      desc: 返回湖岸
+    - direction: north
+      to: 媚香园
+      desc: 进入媚香园
   天女阁:
-    key: "|219天女阁|n"
-    name: "goddess_pavilion"
-    desc: "|225云端仙阁|n飘渺，|207天女赤足|n舞金铃。|213纱衣滑落|n露|198香肩玉背|n，|206媚眼如丝|n勾魂摄魄。"
+    key: '|219天女阁|n'
+    name: goddess_pavilion
+    desc: '|225云端仙阁|n飘渺，|207天女赤足|n舞金铃。|213纱衣滑落|n露|198香肩玉背|n，|206媚眼如丝|n勾魂摄魄。'
     exits:
-      - direction: "down"
-        to: "合欢殿"
-        desc: "下楼入浴"
-      - direction: "east"
-        to: "霓裳阁"
-        desc: "前往霓裳阁"
-
+    - direction: down
+      to: 合欢殿
+      desc: 下楼入浴
+    - direction: east
+      to: 霓裳阁
+      desc: 前往霓裳阁
   玉女峰:
-    key: "|051玉女峰|n"
-    name: "jade_maiden_peak"
-    desc: "|045翠峰云雾|n间，|219素手抚琴|n。|207衣带渐宽|n时|198峰峦微颤|n，|213琴音撩动|n|206春心荡漾|n。"
+    key: '|051玉女峰|n'
+    name: jade_maiden_peak
+    desc: '|045翠峰云雾|n间，|219素手抚琴|n。|207衣带渐宽|n时|198峰峦微颤|n，|213琴音撩动|n|206春心荡漾|n。'
     exits:
-      - direction: "north"
-        to: "星岛湖岸"
-        desc: "下到湖岸"
-      - direction: "east"
-        to: "偷窥洞"
-        desc: "潜入偷窥洞"
-
+    - direction: north
+      to: 星岛湖岸
+      desc: 下到湖岸
+    - direction: east
+      to: 偷窥洞
+      desc: 潜入偷窥洞
   偷窥洞:
-    key: "|242偷窥洞|n"
-    name: "peep_cave"
-    desc: "|059石隙微光|n中，|207鸳鸯戏水|n。|198交合身影|n在|213水雾朦胧|n间起伏，|219呻吟喘息|n声声入耳。"
+    key: '|242偷窥洞|n'
+    name: peep_cave
+    desc: '|059石隙微光|n中，|207鸳鸯戏水|n。|198交合身影|n在|213水雾朦胧|n间起伏，|219呻吟喘息|n声声入耳。'
     exits:
-      - direction: "west"
-        to: "玉女峰"
-        desc: "退出洞穴"
-      - direction: "down"
-        to: "双修密室"
-        desc: "潜入密室"
-
+    - direction: west
+      to: 玉女峰
+      desc: 退出洞穴
+    - direction: down
+      to: 双修密室
+      desc: 潜入密室
   双修密室:
-    key: "|206双修密室|n"
-    name: "dual_cultivation_room"
-    desc: "|095暖玉床榻|n上|219阴阳交融|n，|207灵光流转|n间|198身躯纠缠|n。|213元阴元阳|n在|225极致欢愉|n中升华。"
+    key: '|206双修密室|n'
+    name: dual_cultivation_room
+    desc: '|095暖玉床榻|n上|219阴阳交融|n，|207灵光流转|n间|198身躯纠缠|n。|213元阴元阳|n在|225极致欢愉|n中升华。'
     exits:
-      - direction: "up"
-        to: "偷窥洞"
-        desc: "离开密室"
-      - direction: "east"
-        to: "幻情阵"
-        desc: "进入幻阵"
-
+    - direction: up
+      to: 偷窥洞
+      desc: 离开密室
+    - direction: east
+      to: 幻情阵
+      desc: 进入幻阵
   媚香园:
-    key: "|213媚香园|n"
-    name: "charm_fragrance_garden"
-    desc: "|198奇花异草|n吐|207迷情芬芳|n，|219女修醉卧|n花丛。|225罗裳半解|n露|206粉嫩蓓蕾|n，|051蝶舞蜂游|n采蜜忙。"
+    key: '|213媚香园|n'
+    name: charm_fragrance_garden
+    desc: '|198奇花异草|n吐|207迷情芬芳|n，|219女修醉卧|n花丛。|225罗裳半解|n露|206粉嫩蓓蕾|n，|051蝶舞蜂游|n采蜜忙。'
     exits:
-      - direction: "south"
-        to: "鸳鸯浴池"
-        desc: "返回浴池"
-      - direction: "north"
-        to: "醉仙楼"
-        desc: "登上醉仙楼"
-
+    - direction: south
+      to: 鸳鸯浴池
+      desc: 返回浴池
+    - direction: north
+      to: 醉仙楼
+      desc: 登上醉仙楼
   醉仙楼:
-    key: "|225醉仙楼|n"
-    name: "drunken_immortal_tower"
-    desc: "|094琼浆玉液|n醉|219红颜知己|n，|207纤指抚琴|n奏|213靡靡之音|n。|198酥胸微露|n倚|206栏杆望月|n，|051春色满楼|n。"
+    key: '|225醉仙楼|n'
+    name: drunken_immortal_tower
+    desc: '|094琼浆玉液|n醉|219红颜知己|n，|207纤指抚琴|n奏|213靡靡之音|n。|198酥胸微露|n倚|206栏杆望月|n，|051春色满楼|n。'
     exits:
-      - direction: "south"
-        to: "媚香园"
-        desc: "下楼入园"
-      - direction: "up"
-        to: "飞仙台"
-        desc: "登飞仙台"
-
+    - direction: south
+      to: 媚香园
+      desc: 下楼入园
+    - direction: up
+      to: 飞仙台
+      desc: 登飞仙台
   幻情阵:
-    key: "|207幻情阵|n"
-    name: "illusion_love_array"
-    desc: "|051迷雾缭绕|n现|219心魔幻影|n，|213昔日情人|n|206赤身相拥|n。|198温热吐息|n在|225耳鬓厮磨|n，|095情欲如潮|n涌。"
+    key: '|207幻情阵|n'
+    name: illusion_love_array
+    desc: '|051迷雾缭绕|n现|219心魔幻影|n，|213昔日情人|n|206赤身相拥|n。|198温热吐息|n在|225耳鬓厮磨|n，|095情欲如潮|n涌。'
     exits:
-      - direction: "west"
-        to: "双修密室"
-        desc: "退出幻阵"
-      - direction: "east"
-        to: "玉髓池"
-        desc: "通往玉髓池"
-
+    - direction: west
+      to: 双修密室
+      desc: 退出幻阵
+    - direction: east
+      to: 玉髓池
+      desc: 通往玉髓池
   玉髓池:
-    key: "|051玉髓池|n"
-    name: "jade_marrow_pool"
-    desc: "|087灵液滋润|n|219冰肌玉骨|n，|207氤氲水汽|n中|198双峰起伏|n。|213纤腰扭动|n激起|225涟漪阵阵|n，|206娇喘细细|n。"
+    key: '|051玉髓池|n'
+    name: jade_marrow_pool
+    desc: '|087灵液滋润|n|219冰肌玉骨|n，|207氤氲水汽|n中|198双峰起伏|n。|213纤腰扭动|n激起|225涟漪阵阵|n，|206娇喘细细|n。'
     exits:
-      - direction: "west"
-        to: "幻情阵"
-        desc: "返回幻阵"
-      - direction: "north"
-        to: "极乐台"
-        desc: "登上极乐台"
-
+    - direction: west
+      to: 幻情阵
+      desc: 返回幻阵
+    - direction: north
+      to: 极乐台
+      desc: 登上极乐台
   霓裳阁:
-    key: "|219霓裳阁|n"
-    name: "rainbow_attire_pavilion"
-    desc: "|207七彩云裳|n堆|198雪肤凝脂|n，|213轻解罗衣|n试|225透明薄纱|n。|206镜前转身|n露|051曼妙曲线|n，|095春光乍泄|n。"
+    key: '|219霓裳阁|n'
+    name: rainbow_attire_pavilion
+    desc: '|207七彩云裳|n堆|198雪肤凝脂|n，|213轻解罗衣|n试|225透明薄纱|n。|206镜前转身|n露|051曼妙曲线|n，|095春光乍泄|n。'
     exits:
-      - direction: "west"
-        to: "天女阁"
-        desc: "返回天女阁"
-      - direction: "east"
-        to: "相思林"
-        desc: "进入相思林"
-
+    - direction: west
+      to: 天女阁
+      desc: 返回天女阁
+    - direction: east
+      to: 相思林
+      desc: 进入相思林
   极乐台:
-    key: "|225极乐台|n"
-    name: "bliss_platform"
-    desc: "|051云端高台|n上|219男女交合|n，|207灵肉碰撞|n出|213绚烂光华|n。|198潮红满面|n仰|206颈呻吟|n，|095登临极乐|n。"
+    key: '|225极乐台|n'
+    name: bliss_platform
+    desc: '|051云端高台|n上|219男女交合|n，|207灵肉碰撞|n出|213绚烂光华|n。|198潮红满面|n仰|206颈呻吟|n，|095登临极乐|n。'
     exits:
-      - direction: "south"
-        to: "玉髓池"
-        desc: "下到玉池"
-      - direction: "up"
-        to: "销魂窟"
-        desc: "进入销魂窟"
-
+    - direction: south
+      to: 玉髓池
+      desc: 下到玉池
+    - direction: up
+      to: 销魂窟
+      desc: 进入销魂窟
   相思林:
-    key: "|045相思林|n"
-    name: "love_sickness_forest"
-    desc: "|094翠竹掩映|n间|219情侣缠绵|n，|207唇齿相交|n诉|213爱意绵绵|n。|198双手游走|n探|225神秘幽谷|n，|051鸟语花香|n伴。"
+    key: '|045相思林|n'
+    name: love_sickness_forest
+    desc: '|094翠竹掩映|n间|219情侣缠绵|n，|207唇齿相交|n诉|213爱意绵绵|n。|198双手游走|n探|225神秘幽谷|n，|051鸟语花香|n伴。'
     exits:
-      - direction: "west"
-        to: "霓裳阁"
-        desc: "离开树林"
-      - direction: "east"
-        to: "软玉温香"
-        desc: "进入暖阁"
-
+    - direction: west
+      to: 霓裳阁
+      desc: 离开树林
+    - direction: east
+      to: 软玉温香
+      desc: 进入暖阁
   软玉温香:
-    key: "|198软玉温香|n"
-    name: "soft_jade_warm_fragrance"
-    desc: "|219芙蓉帐暖|n度|225春宵千金|n，|207肌肤相亲|n如|213丝绸相叠|n。|206吐气如兰|n绕|051耳畔挑情|n，|095欲火焚身|n。"
+    key: '|198软玉温香|n'
+    name: soft_jade_warm_fragrance
+    desc: '|219芙蓉帐暖|n度|225春宵千金|n，|207肌肤相亲|n如|213丝绸相叠|n。|206吐气如兰|n绕|051耳畔挑情|n，|095欲火焚身|n。'
     exits:
-      - direction: "west"
-        to: "相思林"
-        desc: "退出暖阁"
-      - direction: "north"
-        to: "露华台"
-        desc: "登上露华台"
-
+    - direction: west
+      to: 相思林
+      desc: 退出暖阁
+    - direction: north
+      to: 露华台
+      desc: 登上露华台
   露华台:
-    key: "|051露华台|n"
-    name: "dew_brilliance_platform"
-    desc: "|045晨露未干|n时|219女修沐光|n，|207薄纱湿透|n贴|198凹凸曲线|n。|213朝阳映照|n显|225透明轮廓|n，|206私处隐现|n。"
+    key: '|051露华台|n'
+    name: dew_brilliance_platform
+    desc: '|045晨露未干|n时|219女修沐光|n，|207薄纱湿透|n贴|198凹凸曲线|n。|213朝阳映照|n显|225透明轮廓|n，|206私处隐现|n。'
     exits:
-      - direction: "south"
-        to: "软玉温香"
-        desc: "下到暖阁"
-      - direction: "east"
-        to: "瑶池"
-        desc: "前往瑶池"
-
+    - direction: south
+      to: 软玉温香
+      desc: 下到暖阁
+    - direction: east
+      to: 瑶池
+      desc: 前往瑶池
   瑶池:
-    key: "|039瑶池|n"
-    name: "jade_pool"
-    desc: "|087仙池碧波|n荡|219裸身仙子|n，|207玉臂轻展|n撩|198晶莹水珠|n。|213双腿交叠|n掩|225芳草秘境|n，|051天鹅戏水|n。"
+    key: '|039瑶池|n'
+    name: jade_pool
+    desc: '|087仙池碧波|n荡|219裸身仙子|n，|207玉臂轻展|n撩|198晶莹水珠|n。|213双腿交叠|n掩|225芳草秘境|n，|051天鹅戏水|n。'
     exits:
-      - direction: "west"
-        to: "露华台"
-        desc: "返回露台"
-      - direction: "north"
-        to: "绮罗帐"
-        desc: "进入绮罗帐"
-
+    - direction: west
+      to: 露华台
+      desc: 返回露台
+    - direction: north
+      to: 绮罗帐
+      desc: 进入绮罗帐
   销魂窟:
-    key: "|206销魂窟|n"
-    name: "ecstasy_cave"
-    desc: "|242幽深洞穴|n藏|219绝世妖娆|n，|207蛇腰扭动|n似|213水波荡漾|n。|198朱唇轻启|n吐|225迷魂香气|n，|051一夜销魂|n。"
+    key: '|206销魂窟|n'
+    name: ecstasy_cave
+    desc: '|242幽深洞穴|n藏|219绝世妖娆|n，|207蛇腰扭动|n似|213水波荡漾|n。|198朱唇轻启|n吐|225迷魂香气|n，|051一夜销魂|n。'
     exits:
-      - direction: "down"
-        to: "极乐台"
-        desc: "下到极乐台"
-      - direction: "east"
-        to: "海棠春"
-        desc: "通往海棠春"
-
+    - direction: down
+      to: 极乐台
+      desc: 下到极乐台
+    - direction: east
+      to: 海棠春
+      desc: 通往海棠春
   绮罗帐:
-    key: "|213绮罗帐|n"
-    name: "beautiful_silk_curtain"
-    desc: "|219鲛绡宝帐|n内|207肢体交缠|n，|198香汗淋漓|n湿|225鸳鸯锦被|n。|206呻吟呜咽|n伴|051床榻吱呀|n，|095春色无边|n。"
+    key: '|213绮罗帐|n'
+    name: beautiful_silk_curtain
+    desc: '|219鲛绡宝帐|n内|207肢体交缠|n，|198香汗淋漓|n湿|225鸳鸯锦被|n。|206呻吟呜咽|n伴|051床榻吱呀|n，|095春色无边|n。'
     exits:
-      - direction: "south"
-        to: "瑶池"
-        desc: "返回瑶池"
-      - direction: "east"
-        to: "云雨阁"
-        desc: "进入云雨阁"
-
+    - direction: south
+      to: 瑶池
+      desc: 返回瑶池
+    - direction: east
+      to: 云雨阁
+      desc: 进入云雨阁
   飞仙台:
-    key: "|051飞仙台|n"
-    name: "flying_immortal_platform"
-    desc: "|087高空云台|n上|219双修飞升|n，|207灵光爆射|n中|198身躯震颤|n。|213极致快感|n引|225天雷勾动|n，|206羽化登仙|n。"
+    key: '|051飞仙台|n'
+    name: flying_immortal_platform
+    desc: '|087高空云台|n上|219双修飞升|n，|207灵光爆射|n中|198身躯震颤|n。|213极致快感|n引|225天雷勾动|n，|206羽化登仙|n。'
     exits:
-      - direction: "down"
-        to: "醉仙楼"
-        desc: "下到醉仙楼"
-      - direction: "up"
-        to: "极境"
-        desc: "进入极境"
-
+    - direction: down
+      to: 醉仙楼
+      desc: 下到醉仙楼
+    - direction: up
+      to: 极境
+      desc: 进入极境
   海棠春:
-    key: "|207海棠春|n"
-    name: "crabapple_spring"
-    desc: "|198海棠花下|n卧|219醉美人|n，|213罗裙散乱|n露|225腿心春色|n。|051蜂蝶徘徊|n恋|206花蜜香甜|n，|095春梦了无痕|n。"
+    key: '|207海棠春|n'
+    name: crabapple_spring
+    desc: '|198海棠花下|n卧|219醉美人|n，|213罗裙散乱|n露|225腿心春色|n。|051蜂蝶徘徊|n恋|206花蜜香甜|n，|095春梦了无痕|n。'
     exits:
-      - direction: "west"
-        to: "销魂窟"
-        desc: "返回销魂窟"
-      - direction: "north"
-        to: "玉体横陈"
-        desc: "进入暖阁"
-
+    - direction: west
+      to: 销魂窟
+      desc: 返回销魂窟
+    - direction: north
+      to: 玉体横陈
+      desc: 进入暖阁
   云雨阁:
-    key: "|219云雨阁|n"
-    name: "cloud_rain_pavilion"
-    desc: "|207巫山云雨|n度|213春宵时刻|n，|198娇躯承欢|n在|225猛烈冲击|n下。|206莺啼婉转|n诉|051欲仙欲死|n，|095灵肉交融|n。"
+    key: '|219云雨阁|n'
+    name: cloud_rain_pavilion
+    desc: '|207巫山云雨|n度|213春宵时刻|n，|198娇躯承欢|n在|225猛烈冲击|n下。|206莺啼婉转|n诉|051欲仙欲死|n，|095灵肉交融|n。'
     exits:
-      - direction: "west"
-        to: "绮罗帐"
-        desc: "退出云雨阁"
-      - direction: "east"
-        to: "花径"
-        desc: "步入花径"
-
+    - direction: west
+      to: 绮罗帐
+      desc: 退出云雨阁
+    - direction: east
+      to: 花径
+      desc: 步入花径
   玉体横陈:
-    key: "|198玉体横陈|n"
-    name: "jade_body_display"
-    desc: "|219暖玉榻上|n陈|207绝色佳人|n，|213四肢舒展|n任|225采撷品尝|n。|051烛光摇曳|n映|206起伏曲线|n，|095任君怜爱|n。"
+    key: '|198玉体横陈|n'
+    name: jade_body_display
+    desc: '|219暖玉榻上|n陈|207绝色佳人|n，|213四肢舒展|n任|225采撷品尝|n。|051烛光摇曳|n映|206起伏曲线|n，|095任君怜爱|n。'
     exits:
-      - direction: "south"
-        to: "海棠春"
-        desc: "返回海棠春"
-      - direction: "east"
-        to: "蓬莱"
-        desc: "通往蓬莱"
-
+    - direction: south
+      to: 海棠春
+      desc: 返回海棠春
+    - direction: east
+      to: 蓬莱
+      desc: 通往蓬莱
   花径:
-    key: "|213花径|n"
-    name: "flower_path"
-    desc: "|045幽深小径|n通|219秘密花园|n，|207露珠晶莹|n湿|198粉嫩花瓣|n。|225轻探慢捻|n引|051娇颤连连|n，|206春水潺潺|n。"
+    key: '|213花径|n'
+    name: flower_path
+    desc: '|045幽深小径|n通|219秘密花园|n，|207露珠晶莹|n湿|198粉嫩花瓣|n。|225轻探慢捻|n引|051娇颤连连|n，|206春水潺潺|n。'
     exits:
-      - direction: "west"
-        to: "云雨阁"
-        desc: "返回云雨阁"
-      - direction: "east"
-        to: "蓬莱"
-        desc: "通往蓬莱"
-
+    - direction: west
+      to: 云雨阁
+      desc: 返回云雨阁
+    - direction: east
+      to: 蓬莱
+      desc: 通往蓬莱
   蓬莱:
-    key: "|039蓬莱|n"
-    name: "penglai"
-    desc: "|087海上仙山|n隐|219裸浴仙女|n，|207波涛轻抚|n|198雪白胴体|n。|213海风撩起|n|225金色长发|n，|051鱼跃观赏|n。"
+    key: '|039蓬莱|n'
+    name: penglai
+    desc: '|087海上仙山|n隐|219裸浴仙女|n，|207波涛轻抚|n|198雪白胴体|n。|213海风撩起|n|225金色长发|n，|051鱼跃观赏|n。'
     exits:
-      - direction: "west"
-        to: "玉体横陈"
-        desc: "返回暖阁"
-      - direction: "east"
-        to: "花径"
-        desc: "步入花径"
-      - direction: "north"
-        to: "极境"
-        desc: "进入极境"
-
+    - direction: west
+      to: 玉体横陈
+      desc: 返回暖阁
+    - direction: east
+      to: 花径
+      desc: 步入花径
+    - direction: north
+      to: 极境
+      desc: 进入极境
   极境:
-    key: "|051极境|n"
-    name: "ultimate_realm"
-    desc: "|045天人合一|n达|219情欲巅峰|n，|207神魂颠倒|n忘|213世间一切|n。|198痉挛颤抖|n中|225灵光迸发|n，|206羽化登仙|n。"
+    key: '|051极境|n'
+    name: ultimate_realm
+    desc: '|045天人合一|n达|219情欲巅峰|n，|207神魂颠倒|n忘|213世间一切|n。|198痉挛颤抖|n中|225灵光迸发|n，|206羽化登仙|n。'
     exits:
-      - direction: "south"
-        to: "蓬莱"
-        desc: "返回蓬莱"
-      - direction: "down"
-        to: "飞仙台"
-        desc: "下到飞仙台"
+    - direction: south
+      to: 蓬莱
+      desc: 返回蓬莱
+    - direction: down
+      to: 飞仙台
+      desc: 下到飞仙台

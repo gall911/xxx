@@ -1,207 +1,222 @@
 rooms:
   玄璃幻境入口:
-    key: "|505玄璃幻境入口|n"
-    name: "xuanli_gate"
-    desc: |
-      灵雾缭绕，一座雕刻着飞凤纹的青玉门悄然敞开。
+    key: '|505玄璃幻境入口|n'
+    name: xuanli_gate
+    desc: '灵雾缭绕，一座雕刻着飞凤纹的青玉门悄然敞开。
+
       两名身披薄雾轻纱的侍者立于门侧，她们眉目含笑，神情温柔却透着难言的神秘。
+
       微风拂来，一阵似有若无的花香让人心头微热，却又沉静。
+
+      '
     exits:
-      - direction: "north"
-        to: "瑶光曲径"
-        desc: "灵光牵引，你迈入幻境深处"
-      - direction: "south"
-        to: "外界"
-        desc: "回头仍见青玉门静默矗立"
-
-
+    - direction: north
+      to: 瑶光曲径
+      desc: 灵光牵引，你迈入幻境深处
+    - direction: south
+      to: 外界
+      desc: 回头仍见青玉门静默矗立
   瑶光曲径:
-    key: "|020瑶光曲径|n"
-    name: "yaoguang_path"
-    desc: |
-      曲折的小径由晶莹的白石铺成，踩上去如踏在温润玉面。
+    key: '|020瑶光曲径|n'
+    name: yaoguang_path
+    desc: '曲折的小径由晶莹的白石铺成，踩上去如踏在温润玉面。
+
       两侧是高耸的蓝色光藤，随风摆动，宛如在向来者点头致意。
+
       偶尔有轻盈的步伐声在光藤间传来，却不见身影，让人心绪微动。
+
+      '
     exits:
-      - direction: "east"
-        to: "星纱亭"
-        desc: "循着微光前往"
-      - direction: "north"
-        to: "灵羽台"
-        desc: "灵风轻拂而来"
-
-
+    - direction: east
+      to: 星纱亭
+      desc: 循着微光前往
+    - direction: north
+      to: 灵羽台
+      desc: 灵风轻拂而来
   星纱亭:
-    key: "|135星纱亭|n"
-    name: "stars_gazebo"
-    desc: |
-      六角亭由柔亮的星纹轻纱垂挂，随风荡起层层波光。
+    key: '|135星纱亭|n'
+    name: stars_gazebo
+    desc: '六角亭由柔亮的星纹轻纱垂挂，随风荡起层层波光。
+
       一位亭姬倚栏而立，眸中倒映着星辉，像能看穿人的心事。
+
       她抬手示意你小坐，语声含笑：“旅人，请歇一歇脚。”
+
+      '
     exits:
-      - direction: "west"
-        to: "瑶光曲径"
-        desc: "回到幽光小径"
-      - direction: "north"
-        to: "灵羽台"
-        desc: "循着亭姬指引"
-
-
+    - direction: west
+      to: 瑶光曲径
+      desc: 回到幽光小径
+    - direction: north
+      to: 灵羽台
+      desc: 循着亭姬指引
   灵羽台:
-    key: "|515灵羽台|n"
-    name: "feather_terrace"
-    desc: |
-      平台悬于半空，脚下云潮翻涌。
+    key: '|515灵羽台|n'
+    name: feather_terrace
+    desc: '平台悬于半空，脚下云潮翻涌。
+
       数只灵鹤在空中盘旋，羽毛亮如银霜。
+
       一名幻境守者端坐台侧，眉宇沉静，却有种难言的温柔。
+
+      '
     exits:
-      - direction: "south"
-        to: "瑶光曲径"
-        desc: "回到白石小径"
-      - direction: "north"
-        to: "浮灯桥"
-        desc: "灯影摇曳"
-
-
+    - direction: south
+      to: 瑶光曲径
+      desc: 回到白石小径
+    - direction: north
+      to: 浮灯桥
+      desc: 灯影摇曳
   浮灯桥:
-    key: "|500浮灯桥|n"
-    name: "lantern_bridge"
-    desc: |
-      长桥跨越在澄净的湖面上，数百盏灵灯漂浮于水面，
+    key: '|500浮灯桥|n'
+    name: lantern_bridge
+    desc: '长桥跨越在澄净的湖面上，数百盏灵灯漂浮于水面，
+
       每一盏都映着淡淡身影，仿佛是入梦之人的记忆碎片。
+
       风一吹，灯影微晃，如心湖泛起轻波。
+
+      '
     exits:
-      - direction: "south"
-        to: "灵羽台"
-        desc: "回到云台"
-      - direction: "north"
-        to: "镜月轩"
-        desc: "灯火尽头是一座静室"
-
-
+    - direction: south
+      to: 灵羽台
+      desc: 回到云台
+    - direction: north
+      to: 镜月轩
+      desc: 灯火尽头是一座静室
   镜月轩:
-    key: "|025镜月轩|n"
-    name: "mirror_moon_house"
-    desc: |
-      轩内挂着一面古镜，镜面如秋水，照见人心深处的欲念与执念。
+    key: '|025镜月轩|n'
+    name: mirror_moon_house
+    desc: '轩内挂着一面古镜，镜面如秋水，照见人心深处的欲念与执念。
+
       一名面覆轻纱的女子正守在镜前，她的声音像月光般清凉：
+
       “看见的不一定是你自己。”
+
+      '
     exits:
-      - direction: "east"
-        to: "琼音殿"
-        desc: "若心中留声，便往东去"
-      - direction: "west"
-        to: "清离池"
-        desc: "循着水声而行"
-
-
+    - direction: east
+      to: 琼音殿
+      desc: 若心中留声，便往东去
+    - direction: west
+      to: 清离池
+      desc: 循着水声而行
   琼音殿:
-    key: "|020琼音殿|n"
-    name: "qiongyin_palace"
-    desc: |
-      大殿金梁玉柱，殿中悬挂着无弦琴。
+    key: '|020琼音殿|n'
+    name: qiongyin_palace
+    desc: '大殿金梁玉柱，殿中悬挂着无弦琴。
+
       柔和清音自琴中流出，像从天外落下，让人心绪宁静。
+
       有弟子在殿角练习轻声咏唱，余韵绕梁。
+
+      '
     exits:
-      - direction: "west"
-        to: "镜月轩"
-        desc: "回到古镜旁"
-      - direction: "north"
-        to: "流光庭"
-        desc: "沿殿门外的光影前行"
-
-
+    - direction: west
+      to: 镜月轩
+      desc: 回到古镜旁
+    - direction: north
+      to: 流光庭
+      desc: 沿殿门外的光影前行
   清离池:
-    key: "|135清离池|n"
-    name: "qingli_pool"
-    desc: |
-      池水温柔而澄澈，不时泛起一圈圈浅光。
+    key: '|135清离池|n'
+    name: qingli_pool
+    desc: '池水温柔而澄澈，不时泛起一圈圈浅光。
+
       几只灵鱼掠过池底，尾鳍拖出淡淡光痕。
+
       一位擅水之女修在池畔静坐，她的笑意如水般柔顺。
+
+      '
     exits:
-      - direction: "east"
-        to: "镜月轩"
-        desc: "回到光镜之所"
-      - direction: "north"
-        to: "风眠榭"
-        desc: "随风声而去"
-
-
+    - direction: east
+      to: 镜月轩
+      desc: 回到光镜之所
+    - direction: north
+      to: 风眠榭
+      desc: 随风声而去
   风眠榭:
-    key: "|513风眠榭|n"
-    name: "wind_rest_pavilion"
-    desc: |
-      轻榭被数百根风笛围绕，清风拂过便奏出低沉旋律，
+    key: '|513风眠榭|n'
+    name: wind_rest_pavilion
+    desc: '轻榭被数百根风笛围绕，清风拂过便奏出低沉旋律，
+
       像有人在耳畔低声诉语，让人心口发痒，却安稳。
+
       榭中长榻柔软，适合短暂歇息。
+
+      '
     exits:
-      - direction: "south"
-        to: "清离池"
-        desc: "循水润之气返回"
-      - direction: "north"
-        to: "玄璃心殿"
-        desc: "前往幻境核心"
-
-
+    - direction: south
+      to: 清离池
+      desc: 循水润之气返回
+    - direction: north
+      to: 玄璃心殿
+      desc: 前往幻境核心
   玄璃心殿:
-    key: "|525玄璃心殿|n"
-    name: "xuanli_core"
-    desc: |
-      殿堂中央漂浮着一块玄璃心石，散发微暖光晕。
+    key: '|525玄璃心殿|n'
+    name: xuanli_core
+    desc: '殿堂中央漂浮着一块玄璃心石，散发微暖光晕。
+
       四周站立着幻境的四名心守者，她们姿态各异，却都肃穆端雅。
+
       你靠近时，心石轻颤，仿佛在回应你的气息。
+
+      '
     exits:
-      - direction: "south"
-        to: "风眠榭"
-        desc: "回到风的低吟"
-      - direction: "north"
-        to: "魇光壁"
-        desc: "幻境最深处"
-
-
+    - direction: south
+      to: 风眠榭
+      desc: 回到风的低吟
+    - direction: north
+      to: 魇光壁
+      desc: 幻境最深处
   魇光壁:
-    key: "|015魇光壁|n"
-    name: "nightwall"
-    desc: |
-      高墙似用夜色铸成，光线被吞噬得一干二净。
+    key: '|015魇光壁|n'
+    name: nightwall
+    desc: '高墙似用夜色铸成，光线被吞噬得一干二净。
+
       只有微弱的灵光如呼吸般闪烁，仿佛墙后藏着古老的秘密。
+
       墙前立着守关人，他的眼中没有敌意，却也毫无表情。
+
+      '
     exits:
-      - direction: "south"
-        to: "玄璃心殿"
-        desc: "退回光明处"
-      - direction: "north"
-        to: "梦折界"
-        desc: "穿过此处便不可回头"
-
-
+    - direction: south
+      to: 玄璃心殿
+      desc: 退回光明处
+    - direction: north
+      to: 梦折界
+      desc: 穿过此处便不可回头
   梦折界:
-    key: "|500梦折界|n"
-    name: "dream_split_realm"
-    desc: |
-      四周如碎镜拼合，时空在你脚下折叠扭转。
+    key: '|500梦折界|n'
+    name: dream_split_realm
+    desc: '四周如碎镜拼合，时空在你脚下折叠扭转。
+
       有人影掠过镜面，那是你曾经的自己或未来的倒影。
+
       脚步声回荡如梦呓，使人分不清现实与幻境。
+
+      '
     exits:
-      - direction: "south"
-        to: "魇光壁"
-        desc: "回到夜光之壁"
-      - direction: "north"
-        to: "幻歧门"
-        desc: "最后的门已在眼前"
-
-
+    - direction: south
+      to: 魇光壁
+      desc: 回到夜光之壁
+    - direction: north
+      to: 幻歧门
+      desc: 最后的门已在眼前
   幻歧门:
-    key: "|025幻歧门|n"
-    name: "illusion_fork_gate"
-    desc: |
-      门上绘满古老纹路，如流水般缓缓流动。
+    key: '|025幻歧门|n'
+    name: illusion_fork_gate
+    desc: '门上绘满古老纹路，如流水般缓缓流动。
+
       这里是玄璃幻境的尽头，也是入口。
+
       若你推开此门，一切将重新开始。
+
+      '
     exits:
-      - direction: "south"
-        to: "梦折界"
-        desc: "回到镜碎之境"
-      - direction: "north"
-        to: "玄璃幻境入口"
-        desc: "循环回到最初之地"
+    - direction: south
+      to: 梦折界
+      desc: 回到镜碎之境
+    - direction: north
+      to: 玄璃幻境入口
+      desc: 循环回到最初之地

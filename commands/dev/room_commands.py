@@ -1,85 +1,89 @@
 """
-房间管理命令 - 终极修复版
-自动兼容 ID 连接和中文名连接，拯救心累
+房间管理命令 - 翻页终极版
+1. xxlr 支持翻页 (EvMore)，不再刷屏
+2. xxbr 保持原样 (显示中文名 + 自动出口逻辑)
 """
 import os
+import sys
 import yaml
 from evennia import Command, create_object, search_tag
-from evennia.utils.search import search_object
-from evennia.utils.evtable import EvTable
-from world.loaders.game_data import GAME_DATA
+from evennia.utils.evmore import EvMore  # 引入翻页工具
 from typeclasses.rooms import Room
-from typeclasses.exits import Exit
+
+# 安全获取Exit类
+def get_exit_class_safe():
+    if "typeclasses.exits" in sys.modules:
+        try: return sys.modules["typeclasses.exits"].Exit
+        except AttributeError: pass
+    try:
+        from typeclasses.exits import Exit
+        return Exit
+    except Exception:
+        from evennia import DefaultExit
+        return DefaultExit
+
+BATCH_TAG_CATEGORY = "batch_code"
 
 # =============================================================
-# 1. 原版命令 (保留不动)
+# 1. 列表命令 (已集成 EvMore 分页)
 # =============================================================
-
 class CmdRoomList(Command):
     """
-    列出所有房间
+    列出所有房间 (带翻页)
     """
     key = "xx list room"
     aliases = ["xxlr"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
-        rooms = Room.objects.all()
+        rooms = Room.objects.all().order_by('id')
         if not rooms:
             self.caller.msg("没有找到任何房间。")
             return
         
+        count = len(rooms)
+        
+        # === 核心修改：准备一个列表来存所有行 ===
+        lines = []
+        lines.append(f"|w=== 房间列表 ({count}) ===|n")
+        
         for room in rooms:
-            desc = room.db.desc if room.db.desc else ""
-            room_line = f"|[300 #{room.id}|n |115 |lc@tel #{room.id}|lt{room.key}|le|n"
-            if desc:
-                room_line += f" - {desc[:11]}..."
-            self.caller.msg(room_line)
-        self.caller.msg(f"\n总计: {len(rooms)} 个房间")
+            # 1. 获取 Batch ID
+            uid = ""
+            tags = room.tags.get(category=BATCH_TAG_CATEGORY, return_list=True)
+            if tags:
+                uid = tags[0]
+            if not uid:
+                aliases = room.aliases.all()
+                if aliases: uid = aliases[0]
+            
+            batch_id_str = f"|g[{uid}]|n" if uid else ""
+            
+            # 2. 构造点击链接
+            cmd = f"@tel #{room.id}"
+            clickable_name = f"|lc{cmd}|lt{room.key}|le"
+            
+            # 3. 把这一行加到列表里 (而不是直接发)
+            line = f"|w(#{room.id})|n {clickable_name} {batch_id_str}"
+            lines.append(line)
+            
+        lines.append("|w=== 到底了 ===|n")
 
-class CmdRoomAdd(Command):
-    """
-    旧版创建 (保留)
-    """
-    key = "xx add room"
-    aliases = ["xxar"]
-    locks = "cmd:all()"
-    help_category = "开发"
-    
-    def func(self):
-        if not self.args: return
-        room_key = self.args.strip()
-        room_data = GAME_DATA['rooms'].get(room_key)
-        if not room_data: return
-        new_room = create_object(Room, key=room_data.get('key', room_key))
-        new_room.db.desc = room_data.get('desc', '未定义描述')
-        self.caller.msg(f"|g成功创建:|n {new_room.key}")
-
-class CmdRoomConnect(Command):
-    """
-    旧版连接 (保留)
-    """
-    key = "xx connect rooms"
-    aliases = ["xxcr"]
-    locks = "cmd:all()"
-    help_category = "开发"
-    def func(self): pass
+        # === 最后：把列表交给 EvMore 处理 ===
+        # 它会自动分页，回车下一页，q 退出
+        EvMore(self.caller, "\n".join(lines))
 
 # =============================================================
-# 2. 全自动批量命令 (智能识别 ID 和 中文名)
+# 2. 批量生成命令 (保持不变)
 # =============================================================
-
 class CmdRoomBatch(Command):
     """
     全自动批量创建/更新房间与出口
-    
-    用法: xx batch room <yaml文件名>
     """
-    
     key = "xx batch room"
     aliases = ["xxbr"]
-    locks = "cmd:all()"
+    locks = "cmd:perm(Builder)"
     help_category = "开发"
     
     def func(self):
@@ -93,111 +97,81 @@ class CmdRoomBatch(Command):
         file_path = os.path.join("data", "rooms", filename)
         
         if not os.path.exists(file_path):
-            self.caller.msg(f"找不到文件: {file_path}")
+            self.caller.msg(f"|r找不到文件:|n {file_path}")
             return
             
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = yaml.safe_load(f)
         except Exception as e:
-            self.caller.msg(f"YAML错误: {e}")
+            self.caller.msg(f"|rYAML读取错误:|n {e}")
             return
 
         rooms_data_source = data.get('rooms')
-        if not rooms_data_source:
-             self.caller.msg(f"错误: YAML文件中没有 'rooms:' 顶层key")
-             return
+        if not rooms_data_source: return
 
-        # =====================================================
-        # 数据标准化：提取 (ID, 中文名Key, 配置内容)
-        # =====================================================
         processed_list = []
-
         if isinstance(rooms_data_source, list):
             for item in rooms_data_source:
                 uid = item.get('id')
-                config = None
-                struct_name = None # 比如 "瀚海·埋骨沙丘"
-                
-                # 提取那个不是'id'的键，作为结构名
-                for k, v in item.items():
-                    if k != 'id' and isinstance(v, dict):
-                        struct_name = k
-                        config = v
-                        break
-                
-                if uid and config:
-                    # 如果没有取到结构名，就用uid代替
-                    if not struct_name: struct_name = uid
-                    processed_list.append((uid, struct_name, config))
-                    
+                config = next((v for k, v in item.items() if isinstance(v, dict)), {})
+                struct_name = next((k for k, v in item.items() if isinstance(v, dict)), uid)
+                if uid: processed_list.append((str(uid), struct_name, config))     
         elif isinstance(rooms_data_source, dict):
             for uid, config in rooms_data_source.items():
-                processed_list.append((uid, uid, config)) # 字典模式没有额外的结构名
+                processed_list.append((str(uid), str(uid), config))
 
-        # =====================================================
-        # 第一步：造房 & 建立双重索引
-        # =====================================================
-        room_cache = {} # 这是一个神奇的缓存，存了ID也存了中文名
-        
+        room_cache = {} 
         self.caller.msg(f"|w开始处理 {filename}...|n")
         
         for uid, struct_name, config in processed_list:
-            # 使用 tag 查找，确保唯一性
-            found = search_tag(uid, category="batch_room")
-            room_key = config.get('key', uid) # 带颜色的名字
+            found = search_tag(uid, category=BATCH_TAG_CATEGORY)
+            if not found:
+                found = self.caller.search(uid, global_search=True, quiet=True)
+            
+            room_key = config.get('key', uid)
             
             if found:
                 room = found[0]
-                self.caller.msg(f"更新: {uid} / {struct_name}")
+                self.caller.msg(f"更新: {uid} ({room_key})")
             else:
-                room = create_object(
-                    Room, 
-                    key=room_key,
-                    tags=[(uid, "batch_room")]
-                )
-                self.caller.msg(f"创建: {uid}")
+                room = create_object(Room, key=room_key)
+                self.caller.msg(f"创建: {uid} ({room_key})")
             
-            # 更新基本属性
-            room.key = room_key
-            if 'desc' in config: room.db.desc = config['desc']
+            room.tags.add(uid, category=BATCH_TAG_CATEGORY)
+            room.aliases.add(uid)
             if 'name' in config: room.aliases.add(config['name'])
             
-            # 存自定义属性
+            room.key = room_key
+            if 'desc' in config: room.db.desc = config['desc']
             for k, v in config.items():
-                if k not in ['key', 'desc', 'exits', 'name']:
+                if k not in ['key', 'desc', 'exits', 'name', 'id']:
                     setattr(room.db, k, v)
             
-            # 【关键修改】：将ID和结构名(中文名)都指向这个房间对象
-            # 这样无论 YAML 的 to: 写的是 "gate_001" 还是 "罗刹·金刚媚骨门" 都能找到！
             room_cache[uid] = room
             room_cache[struct_name] = room 
 
-        # =====================================================
-        # 第二步：修路 (出口)
-        # =====================================================
-        count_exits = 0
+        count_exits_created = 0
+        count_exits_updated = 0
+        ExitClass = get_exit_class_safe()
+        
         for uid, struct_name, config in processed_list:
             src = room_cache.get(uid)
             if not src: continue
             
             for ex_conf in config.get('exits', []):
                 direction = ex_conf.get('direction')
-                target_str = ex_conf.get('to') # 这里可能是ID，也可能是中文名
+                target_str = str(ex_conf.get('to'))
                 
-                # 直接查缓存，因为我们存了两份Key，所以怎么查都有
                 target = room_cache.get(target_str)
-                
-                # 如果缓存里没找到（可能是跨文件的ID），尝试数据库直接查 tag
                 if not target:
-                    t_found = search_tag(target_str, category="batch_room")
+                    t_found = search_tag(target_str, category=BATCH_TAG_CATEGORY)
+                    if not t_found:
+                        t_found = self.caller.search(target_str, global_search=True, quiet=True)
                     if t_found: target = t_found[0]
 
-                if not target:
-                    self.caller.msg(f"|r出口错误:|n {struct_name} -> {target_str} (目标不存在)")
-                    continue
+                if not target: continue
                 
-                # 检查出口是否已存在
                 found_exit = None
                 for ex in src.exits:
                     if ex.key == direction:
@@ -205,28 +179,27 @@ class CmdRoomBatch(Command):
                         break
                 
                 exit_desc = ex_conf.get('desc', '')
-                
                 if found_exit:
-                    found_exit.destination = target
+                    if found_exit.destination != target:
+                        found_exit.destination = target
                     found_exit.db.desc = exit_desc
+                    count_exits_updated += 1
                 else:
                     create_object(
-                        Exit, 
+                        ExitClass, 
                         key=direction, 
                         location=src, 
                         destination=target,
                         attributes=[('desc', exit_desc)]
                     )
-                    count_exits += 1
+                    count_exits_created += 1
         
-        self.caller.msg(f"|g全部完成！检查/连接出口: {count_exits}个|n")
+        self.caller.msg(f"|g全部完成！新建出口: {count_exits_created}, 更新/检查出口: {count_exits_updated}|n")
 
     def _list_files(self):
         try:
             path = os.path.join("data", "rooms")
-            if not os.path.exists(path):
-                os.makedirs(path)
+            if not os.path.exists(path): os.makedirs(path)
             files = [f for f in os.listdir(path) if f.endswith('.yaml')]
             self.caller.msg("可用文件: " + ", ".join(files))
-        except:
-            pass
+        except: pass

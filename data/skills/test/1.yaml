@@ -1,0 +1,91 @@
+skills:
+  # ========== 主动技能：魅影诱莲舞 ==========
+  phantom_lotus_dance:                     # 英文key（用于命令交互）
+    # === 基础信息 ===
+    name: "魅影诱莲舞"                        # 中文名（用于显示）
+    desc: |
+      西域魔宗秘传的魅惑舞功，非但能魅人心神，更蕴含缠绕真气，
+      能于幻象中摄取敌人精元。此舞九曲回肠，一动一静皆是杀机，
+      舞毕，敌手往往精气大损，心神荡漾。
+    type: "active"                         # 技能类型：主动
+    
+    # === 施法参数 (参数不变) ===
+    cast_time: 5                           # 施法时间（秒）
+    cooldown: 2                            # 冷却时间（回合）
+    cost_qi: 25                            # 消耗灵力
+    
+    # === 命中相关 (参数不变) ===
+    accuracy: 0.85
+    accuracy_scale:
+      agility: 0.0015
+ 
+    # === 反击相关 (参数不变) ===
+    counter_chance: 0.02
+    counter_weight: 3
+    
+    # === 技能效果 (效果不变) ===
+    effects:
+      - type: "damage"
+        value: 40
+        #element: "charm"
+      
+     # - type: "status_effect"
+       # effect_id: "lotus_slow"
+       # duration: 1
+       # stat_debuff: "speed"
+       # value: 0.15
+    
+    # === 战斗描述 (重写) ===
+    battle_text:
+      # --- 施法阶段：铺垫与魅惑 ---
+      cast:
+        - text: "{caster}身形突变，轻纱漫舞，双臂如出水芙蓉般抬起，异香骤起！"
+          delay_percent: 0
+        - text: "她**一捻指，一回眸**，媚眼如丝，令{target}心头狂跳，真元微乱！"
+          delay_percent: 30
+        - text: "九道流光丝带自{caster}广袖中飞出，流转霞光，封锁周遭三尺空间！"
+          delay_percent: 70
+      
+      # --- 命中阶段：缠绕与掠夺 (重点强化动作和数值表现) ---
+      hit:
+        - text: "{caster}身形幻化出数道残影，**莲步错落**，于电光火石间将流光丝带收拢！"
+          delay_percent: 50
+        - text: "丝带如九条血蟒，瞬间缠绕住{target}的**百骸七脉**，真气被强行吸扯！"
+          delay_percent: 75
+        - text: "{target}只觉全身精气被掠夺一空，脸色惨白！造成伤害{damage}！身形骤然迟滞！" # 数值格式优化
+          delay_percent: 100
+      
+      # --- 闪避阶段：避开魅惑 (沿用好评的台词) ---
+      dodge:
+        - text: "{target}察觉杀机，强提一口真气，闭目避开{caster}的绝世容颜！"
+          delay_percent: 60
+        - text: "流光丝带擦过咽喉，未伤分毫。{target}暗道：**好险！**"
+          delay_percent: 100
+    
+      # --- 暴击阶段：魂飞魄散 (强化致命感) ---
+      critical:
+        - text: "暴击！{caster}**红唇轻启，吐气如兰**，魅术突破{target}神识防线，勾魂夺魄！" # 更细节的魅惑描写
+          delay_percent: 50
+        - text: "九条丝带洞穿{target}护体灵光，将其精元核心强行抽出！"
+          delay_percent: 75
+        - text: "{target}心神失守，遭受重创！造成伤害{damage}！**若再中一击，性命不保！**" # 强调结果的严重性
+          delay_percent: 100
+      
+      # --- 反击专用：衔接流畅 (解决突兀感，强调借力) ---
+      counter_cast:
+        - text: "{caster}借着{target}攻击的**反震之力**，身姿如水蛇般扭转，展开魅影之舞！" # 强调借力与流畅性
+          delay_percent: 0
+        - text: "流光丝带瞬间爆发，反袭{target}！"
+          delay_percent: 40
+      
+      counter_hit:
+        - text: "丝带缠绕，{target}反击之势被破，真气被掠夺！"
+          delay_percent: 60
+        - text: "造成伤害{damage}，并使其动作凝滞！"
+          delay_percent: 100
+      
+      counter_critical:
+        - text: "反击暴击！{caster}**笑靥如花**，丝带瞬间绞杀而至！"
+          delay_percent: 60
+        - text: "造成伤害{damage}！{target}如遭雷击，**气血逆行！**"
+          delay_percent: 100

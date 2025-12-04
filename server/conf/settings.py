@@ -1,4 +1,4 @@
-r"""
+"""
 Evennia settings file.
 
 The available options are found in the default settings file found
@@ -35,26 +35,6 @@ from evennia.settings_default import *
 SERVERNAME = "xxx"
 
 
-######################################################################
-# Settings given in secret_settings.py override those in this file.
-######################################################################
-try:
-    from server.conf.secret_settings import *
-except ImportError:
-    print("secret_settings.py file not found or failed to import.")
-SILENCED_SYSTEM_CHECKS = ["models.W042"]
-
-# 减少日志输出
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'WARNING',  # 改为WARNING减少输出
-        },
-    },
-}
 
 ######################################################################
 # 密码验证配置
@@ -65,10 +45,3 @@ AUTH_PASSWORD_VALIDATORS = []
 ######################################################################
 # 指定未登录时使用的指令集
 CMDSET_UNLOGGEDIN = "commands.menu_login.UnloggedinCmdSet"
-AMP_HOST = '127.0.0.1'
-
-# 确保其他接口也是纯 IPv4
-AMP_INTERFACE = '127.0.0.1'
-WEBSERVER_INTERFACES = ['127.0.0.1']
-ssh_INTERFACE = '127.0.0.1'
-TELNET_INTERFACES = ['127.0.0.1']

@@ -1,5 +1,5 @@
 skills:
-  重击:
+  dtt:
     name: "重击"
     type: "active"
     cast_time: 3

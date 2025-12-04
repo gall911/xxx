@@ -1,0 +1,193 @@
+quests:
+  # ==================== 隐藏/触发任务 ====================
+  
+  神秘的遗迹:
+    id: "hidden_ruins"
+    name: "神秘的遗迹"
+    type: "explore"
+    
+    description: |
+      你在古籍中发现了一张模糊的地图，
+      标记着一处隐藏的上古遗迹...
+    
+    objectives:
+      - type: "explore"
+        target: "上古遗迹_入口"
+        visited: false
+    
+    requirements:
+      level_min: 20
+      realm: "金丹期"
+      # 需要先完成某个特定任务解锁
+      completed_quests: ["天命之路_1"]
+    
+    rewards:
+      exp: 2000
+      gold: 1000
+      items:
+        - name: "上古卷轴"
+          count: 1
+      unlock_areas: ["上古遗迹_大厅"]
+    
+    quest_giver: null  # 自动触发
+    quest_finisher: null
+    repeatable: false
+    level: 20
+    difficulty: "传说"
+  
+  # ==================== 任务链示例 ====================
+  
+  宗门秘闻_1:
+    id: "sect_secret_1"
+    name: "宗门秘闻·线索"
+    type: "talk"
+    
+    description: |
+      你听说宗门藏书阁的老人知道一些秘密，
+      去找他聊聊吧。
+    
+    objectives:
+      - type: "talk"
+        target: "藏书阁长老"
+        talked: false
+    
+    requirements:
+      level_min: 25
+    
+    rewards:
+      exp: 500
+    
+    quest_giver: null
+    quest_finisher: "藏书阁长老"
+    repeatable: false
+    chain_next: "宗门秘闻_2"  # 链接下一个任务
+    level: 25
+    difficulty: "普通"
+  
+  宗门秘闻_2:
+    id: "sect_secret_2"
+    name: "宗门秘闻·调查"
+    type: "collect"
+    
+    description: |
+      藏书阁长老：想知道真相？去禁地找到
+      三块古老的碑文拓片给我。
+    
+    objectives:
+      - type: "collect"
+        target: "碑文拓片"
+        count: 3
+        current: 0
+    
+    requirements:
+      completed_quests: ["宗门秘闻_1"]  # 必须完成前置
+    
+    rewards:
+      exp: 1000
+      items:
+        - name: "宗门令牌"
+          count: 1
+    
+    quest_giver: "藏书阁长老"
+    quest_finisher: "藏书阁长老"
+    repeatable: false
+    chain_next: "宗门秘闻_3"
+    level: 25
+    difficulty: "困难"
+  
+  宗门秘闻_3:
+    id: "sect_secret_3"
+    name: "宗门秘闻·真相"
+    type: "explore"
+    
+    description: |
+      根据碑文的指引，密室就在后山某处...
+    
+    objectives:
+      - type: "explore"
+        target: "后山_密室"
+        visited: false
+    
+    requirements:
+      completed_quests: ["宗门秘闻_2"]
+    
+    rewards:
+      exp: 2000
+      gold: 1500
+      items:
+        - name: "上古功法残卷"
+          count: 1
+      unlock_skills: ["玄天剑诀"]
+    
+    quest_giver: null
+    quest_finisher: null
+    repeatable: false
+    chain_next: null  # 任务链结束
+    level: 25
+    difficulty: "传说"
+  
+  # ==================== 互斥任务示例 ====================
+  
+  正道之选:
+    id: "righteous_path"
+    name: "正道之选"
+    type: "talk"
+    
+    description: |
+      正道盟主：加入我们正道联盟，
+      共同维护修真界的和平！
+    
+    objectives:
+      - type: "talk"
+        target: "正道盟主"
+        talked: false
+    
+    requirements:
+      level_min: 30
+      # 不能完成魔道任务
+      not_completed_quests: ["魔道之路"]
+    
+    rewards:
+      exp: 3000
+      items:
+        - name: "正道令牌"
+          count: 1
+      unlock_areas: ["正道圣地"]
+    
+    quest_giver: "正道盟主"
+    quest_finisher: "正道盟主"
+    repeatable: false
+    level: 30
+    difficulty: "史诗"
+  
+  魔道之路:
+    id: "demonic_path"
+    name: "魔道之路"
+    type: "talk"
+    
+    description: |
+      魔道宗主：力量才是一切，加入魔道，
+      获得真正的强大！
+    
+    objectives:
+      - type: "talk"
+        target: "魔道宗主"
+        talked: false
+    
+    requirements:
+      level_min: 30
+      # 不能完成正道任务
+      not_completed_quests: ["正道之选"]
+    
+    rewards:
+      exp: 3000
+      items:
+        - name: "魔道令牌"
+          count: 1
+      unlock_areas: ["魔道禁地"]
+    
+    quest_giver: "魔道宗主"
+    quest_finisher: "魔道宗主"
+    repeatable: false
+    level: 30
+    difficulty: "史诗"

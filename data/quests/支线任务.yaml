@@ -1,0 +1,176 @@
+quests:
+  # ==================== 支线任务示例 ====================
+  
+  猎人委托_1:
+    id: "hunter_commission_1"
+    name: "猎人的委托"
+    type: "kill"
+    
+    description: |
+      猎人：最近森林里的魔狼越来越多，
+      帮我清理10只魔狼，我会给你丰厚的报酬。
+    
+    objectives:
+      - type: "kill"
+        target: "魔狼"
+        count: 10
+        current: 0
+    
+    requirements:
+      level_min: 8
+      level_max: 15
+      realm: null
+      completed_quests: []
+      not_completed_quests: []
+    
+    rewards:
+      exp: 300
+      gold: 150
+      items:
+        - name: "魔狼皮"
+          count: 5
+        - name: "回春丹"
+          count: 3
+    
+    quest_giver: "猎人"
+    quest_finisher: "猎人"
+    repeatable: false
+    daily: false
+    chain_next: null
+    level: 8
+    difficulty: "普通"
+  
+  铸剑师的请求:
+    id: "blacksmith_request"
+    name: "铸剑师的请求"
+    type: "collect"
+    
+    description: |
+      铸剑师：我需要一些寒铁矿石来打造神兵，
+      去矿洞深处采集5块寒铁矿石给我。
+    
+    objectives:
+      - type: "collect"
+        target: "寒铁矿石"
+        count: 5
+        current: 0
+    
+    requirements:
+      level_min: 10
+      realm: "筑基期"
+    
+    rewards:
+      exp: 500
+      gold: 300
+      items:
+        - name: "精铁长剑"
+          count: 1
+    
+    quest_giver: "铸剑师"
+    quest_finisher: "铸剑师"
+    repeatable: false
+    level: 10
+    difficulty: "普通"
+  
+  # ==================== 多目标任务 ====================
+  
+  复合任务_试炼:
+    id: "multi_objective_trial"
+    name: "修行者的试炼"
+    type: "multi"
+    
+    description: |
+      长老：真正的修行者需要全面发展，
+      完成以下试炼，证明你的实力！
+    
+    objectives:
+      - type: "kill"
+        target: "妖兽"
+        count: 5
+        current: 0
+      - type: "collect"
+        target: "灵芝"
+        count: 3
+        current: 0
+      - type: "cultivate"
+        duration: 600  # 10分钟
+        current: 0
+    
+    requirements:
+      level_min: 15
+      realm: "筑基期"
+    
+    rewards:
+      exp: 1000
+      gold: 500
+      items:
+        - name: "筑基丹"
+          count: 2
+      unlock_skills: ["剑气"]
+    
+    quest_giver: "修炼长老"
+    quest_finisher: "修炼长老"
+    repeatable: false
+    level: 15
+    difficulty: "困难"
+  
+  # ==================== 技能使用任务 ====================
+  
+  技能修炼:
+    id: "skill_practice"
+    name: "剑术修炼"
+    type: "use_skill"
+    
+    description: |
+      剑术教头：熟能生巧，使用重击技能100次，
+      让身体记住这招式的感觉。
+    
+    objectives:
+      - type: "use_skill"
+        target: "重击"
+        count: 100
+        current: 0
+    
+    requirements:
+      level_min: 5
+    
+    rewards:
+      exp: 200
+      unlock_skills: ["连击"]
+    
+    quest_giver: "剑术教头"
+    quest_finisher: "剑术教头"
+    repeatable: false
+    level: 5
+    difficulty: "简单"
+  
+  # ==================== 制作任务 ====================
+  
+  炼丹入门:
+    id: "alchemy_intro"
+    name: "炼丹入门"
+    type: "craft"
+    
+    description: |
+      炼丹师：想学炼丹术吗？先炼制5颗聚气丹，
+      让我看看你的天赋如何。
+    
+    objectives:
+      - type: "craft"
+        target: "聚气丹"
+        count: 5
+        current: 0
+    
+    requirements:
+      level_min: 3
+    
+    rewards:
+      exp: 150
+      gold: 100
+      unlock_skills: ["炼丹术"]
+    
+    quest_giver: "炼丹师"
+    quest_finisher: "炼丹师"
+    repeatable: false
+    level: 3
+    difficulty: "简单"
