@@ -1,0 +1,75 @@
+# ========================================
+# data/skills/spirit/fireball.yaml
+# 火球术 - 继承spirit_magic
+# ========================================
+skills:
+  fireball:                                # 英文key，永远是fireball
+    inherit: "spirit_magic"                # 继承精神系法术模板
+    
+    # === 覆盖基础信息 ===
+    name: "火球术"                          # 中文名
+    desc: |
+      最基础的火系法术，凝聚火焰元素形成火球攻击敌人。
+      威力随修炼等级提升，最高可达200级。
+    
+    element: "fire"                        # 改成火元素
+    
+    # === 微调等级公式 ===
+    level_formula:
+      damage:
+        base: 40                           # 火球术基础伤害更高
+        grow: 0.035                        # 成长更快
+      
+      # 其他参数继承spirit_magic，不写=使用默认
+    
+    # === 技能特效 ===
+    effects:
+      - type: "damage"
+        element: "fire"
+        value: "{level_damage}" 
+      - type: "dot"                        # 持续燃烧效果
+        element: "fire"
+        duration: 3                        # 持续3回合
+        tick_damage: 5                     # 每回合5点伤害
+    
+    # === 自定义战斗文本 ===
+    battle_text:
+      cast:
+        - text: "{caster}掌心火光涌动..."
+          delay_percent: 0
+        - text: "灼热的火球逐渐成形！"
+          delay_percent: 50
+      
+      hit:
+        - text: "火球轰向{target}！"
+          delay_percent: 70
+        - text: "造成伤害{damage}！{target}陷入燃烧状态！"
+          delay_percent: 100
+      
+      dodge:
+        - text: "{target}侧身躲过火球！"
+          delay_percent: 70
+        - text: "火球擦身而过，炸出一团火焰！"
+          delay_percent: 100
+      
+      critical:
+        - text: "火球精准命中{target}头部！"
+          delay_percent: 70
+        - text: "火焰爆炸！造成伤害{damage}！"
+          delay_percent: 100
+      
+      counter_cast:
+        - text: "{caster}反手一记火球！"
+          delay_percent: 0
+      
+      counter_hit:
+        - text: "火球命中{target}！造成伤害{damage}！"
+          delay_percent: 100
+    
+    # === 学习条件 ===
+    required_realm: "练气期"
+    required_level: 1
+
+
+
+

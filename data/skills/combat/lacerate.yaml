@@ -1,0 +1,52 @@
+# ========================================
+# combat/lacerate.yaml
+# 撕裂 - 伤害+流血DoT
+# ========================================
+  lacerate:
+    inherit: "physical_combat"
+    
+    name: "撕裂"
+    desc: "造成深度创伤，使敌人持续流血"
+    
+    level_formula:
+      damage:
+        base: 35
+        grow: 0.028
+      
+      bleed_damage:
+        base: 12
+        per_level: 0.4
+        max: 35
+      
+      cooldown:
+        base: 3
+        per_level: -0.012
+        min: 1
+      
+      cost_qi:
+        base: 18
+        per_level: 0.45
+        max: 110
+    
+    effects:
+      - type: damage
+        value: "{level_damage}"
+        element: physical
+      
+      - type: apply_bleed
+        tick_damage: "{level_bleed_damage}"
+        heal_reduce: 0.5
+        duration: 4
+    
+    battle_text:
+      cast:
+        - text: "{caster}利刃闪过！"
+          delay_percent: 0
+      hit:
+        - text: "撕裂命中{target}！造成{damage}点伤害！"
+          delay_percent: 50
+        - text: "{target}伤口鲜血淋漓！"
+          delay_percent: 100
+    
+    required_realm: "练气期"
+    required_level: 8

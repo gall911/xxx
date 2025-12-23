@@ -1,91 +1,83 @@
-skills:
-  # ========== 主动技能：魅影诱莲舞 ==========
-  phantom_lotus_dance:                     # 英文key（用于命令交互）
-    # === 基础信息 ===
-    name: "魅影诱莲舞"                        # 中文名（用于显示）
+phantom_soul_capture: # 技能英文key：魅影摄魂
+    inherit: "spirit_magic" 
+    name: "魅影摄魂"
     desc: |
-      西域魔宗秘传的魅惑舞功，非但能魅人心神，更蕴含缠绕真气，
-      能于幻象中摄取敌人精元。此舞九曲回肠，一动一静皆是杀机，
-      舞毕，敌手往往精气大损，心神荡漾。
-    type: "active"                         # 技能类型：主动
+      西域魔宗秘传的幻术与吸精功法结合。施术者以【幻象神魂】入侵敌人心神，
+      在【 target】最渴望的极乐幻境中，强行掠夺精元。敌人将在温柔的陷阱中，
+      精气被完全吸干，死时依然面带微笑。
+    element: "fire" 
+    cooldown: 2                          # 冷却10回合
+    # === 微调等级公式 ===
+    level_formula:
+      damage:
+        base: 40                           # 火球术基础伤害更高
+        grow: 0.07                        # 成长更快
+      
+      # 覆盖施法时间 - 1级时29秒，每级减少0.5秒，最快8秒
+      cast_time:
+        base: 29.0
+        per_level: -0.5
+        min: 8.0
     
-    # === 施法参数 (参数不变) ===
-    cast_time: 5                           # 施法时间（秒）
-    cooldown: 2                            # 冷却时间（回合）
-    cost_qi: 25                            # 消耗灵力
+      # 其他参数继承spirit_magic，不写=使用默认
     
-    # === 命中相关 (参数不变) ===
-    accuracy: 0.85
-    accuracy_scale:
-      agility: 0.0015
- 
-    # === 反击相关 (参数不变) ===
-    counter_chance: 0.02
-    counter_weight: 3
-    
-    # === 技能效果 (效果不变) ===
+    # === 技能特效 ===
     effects:
       - type: "damage"
-        value: 40
-        #element: "charm"
-      
-     # - type: "status_effect"
-       # effect_id: "lotus_slow"
-       # duration: 1
-       # stat_debuff: "speed"
-       # value: 0.15
-    
-    # === 战斗描述 (重写) ===
+        element: "fire"
+        value: "{level_damage}" 
+      - type: "dot"                        # 持续燃烧效果
+        element: "fire"
+        duration: 3                        # 持续3回合
+        tick_damage: 5                     # 每回合5点伤害     
     battle_text:
-      # --- 施法阶段：铺垫与魅惑 ---
+      # --- 施法阶段：魅惑入侵与幻象升起 (重点：非肢体、纯意念、幻象) ---
       cast:
-        - text: "{caster}身形突变，轻纱漫舞，双臂如出水芙蓉般抬起，异香骤起！"
-          delay_percent: 0
-        - text: "她**一捻指，一回眸**，媚眼如丝，令{target}心头狂跳，真元微乱！"
-          delay_percent: 30
-        - text: "九道流光丝带自{caster}广袖中飞出，流转霞光，封锁周遭三尺空间！"
-          delay_percent: 70
+        - text: "{caster}红唇微启，**一缕带着曼陀罗冷香的气息**向{target}扑面而去，银铃骤响！"
+          delay_percent: 0 # 施法开始时显示
+        - text: "只见{caster}身后，一道**赤裸而妖冶的【幻影】**悄然浮现，那幻影轻盈地贴向{target}的后心！"
+          delay_percent: 40 # 施法40%时显示
+        - text: "{target}猛然发现自己已置身于**最渴望的温柔乡**中，身体燥热，心防彻底瓦解！"
+          delay_percent: 50 # 幻觉生效
       
-      # --- 命中阶段：缠绕与掠夺 (重点强化动作和数值表现) ---
+      # --- 命中阶段：掠夺与极乐 (重点：神魂缠绕，主动献祭) ---
       hit:
-        - text: "{caster}身形幻化出数道残影，**莲步错落**，于电光火石间将流光丝带收拢！"
-          delay_percent: 50
-        - text: "丝带如九条血蟒，瞬间缠绕住{target}的**百骸七脉**，真气被强行吸扯！"
-          delay_percent: 75
-        - text: "{target}只觉全身精气被掠夺一空，脸色惨白！造成伤害{damage}！身形骤然迟滞！" # 数值格式优化
-          delay_percent: 100
+        - text: "魅眼如丝，**{caster}的【幻影】**在{target}耳畔吐气如兰：“**把你的精元，献给我...**”"
+          delay_percent: 60 # 魅惑达到高潮
+        - text: "{target}神魂缠绕，只觉身体被**极度渴求的冰冷与火热**包裹，无法自控地释放灵力！"
+          delay_percent: 80 # 抽取过程
+        - text: "精血化作血线涌入{caster}体内！{target}脸色惨白，精气大损！造成伤害{damage}，恢复生命{heal}！"
+          delay_percent: 100 # 命中结束，结算数值
       
-      # --- 闪避阶段：避开魅惑 (沿用好评的台词) ---
+      # --- 闪避阶段：清醒与脱离 ---
       dodge:
-        - text: "{target}察觉杀机，强提一口真气，闭目避开{caster}的绝世容颜！"
+        - text: "{target}猛咬舌尖，**强行挣脱了【幻影】的拥抱**，剧痛令其瞬间清醒！"
           delay_percent: 60
-        - text: "流光丝带擦过咽喉，未伤分毫。{target}暗道：**好险！**"
-          delay_percent: 100
-    
-      # --- 暴击阶段：魂飞魄散 (强化致命感) ---
-      critical:
-        - text: "暴击！{caster}**红唇轻启，吐气如兰**，魅术突破{target}神识防线，勾魂夺魄！" # 更细节的魅惑描写
-          delay_percent: 50
-        - text: "九条丝带洞穿{target}护体灵光，将其精元核心强行抽出！"
-          delay_percent: 75
-        - text: "{target}心神失守，遭受重创！造成伤害{damage}！**若再中一击，性命不保！**" # 强调结果的严重性
+        - text: "幻象溃散，{target}冷汗湿透衣衫，暗道：**这魔女的魅术，险些葬送我道基！**"
           delay_percent: 100
       
-      # --- 反击专用：衔接流畅 (解决突兀感，强调借力) ---
+      # --- 暴击阶段：魂飞魄散 (重点：致命快感，彻底被榨干) ---
+      critical:
+        - text: "暴击！【幻影】瞬间化为**{target}最依恋的模样**，极尽诱惑，将{target}拉入无尽的沉沦！"
+          delay_percent: 60
+        - text: "神魂失守，{target}发出一声**极度颤抖而满足的低吼**，精元核心被【幻影】强行抽出！造成伤害{damage}，恢复生命{heal}！"
+          delay_percent: 100
+      
+      # --- 反击专用（可选）---
       counter_cast:
-        - text: "{caster}借着{target}攻击的**反震之力**，身姿如水蛇般扭转，展开魅影之舞！" # 强调借力与流畅性
+        - text: "{caster}借着{target}攻击的反震，**妖冶一笑**，【幻影】瞬间缠绕上去！"
           delay_percent: 0
-        - text: "流光丝带瞬间爆发，反袭{target}！"
+        - text: "魅惑气息暴涨！{target}的反击之势被破！"
           delay_percent: 40
       
-      counter_hit:
-        - text: "丝带缠绕，{target}反击之势被破，真气被掠夺！"
+      counter_hit: 
+        - text: "魅惑入体，{target}只觉**心猿意马**，无力抵挡那股吸力！"
           delay_percent: 60
-        - text: "造成伤害{damage}，并使其动作凝滞！"
+        - text: "造成伤害{damage}，恢复生命{heal}！"
           delay_percent: 100
       
-      counter_critical:
-        - text: "反击暴击！{caster}**笑靥如花**，丝带瞬间绞杀而至！"
+      counter_critical: 
+        - text: "反击暴击！【幻影】在{target}眼前**化为血色莲花**，瞬间凋零！"
           delay_percent: 60
-        - text: "造成伤害{damage}！{target}如遭雷击，**气血逆行！**"
+        - text: "花瓣划破{target}神魂，精血被掠夺一空！造成伤害{damage}，恢复生命{heal}！"
           delay_percent: 100

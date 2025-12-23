@@ -1,0 +1,33 @@
+# spirit/blind.yaml
+  blind:
+    inherit: "spirit_magic"
+    
+    name: "致盲术"
+    desc: "释放强光，降低命中率"
+    
+    level_formula:
+      accuracy_reduce:
+        base: -0.25
+        per_level: -0.003
+        max: -0.5
+      
+      cost_qi:
+        base: 15
+        per_level: 0.4
+        max: 100
+    
+    effects:
+      - type: apply_blind
+        value: "{level_accuracy_reduce}"
+        duration: 3
+    
+    battle_text:
+      cast:
+        - text: "{caster}指尖闪光！"
+          delay_percent: 0
+      hit:
+        - text: "强光刺入{target}双眼！"
+          delay_percent: 50
+    
+    required_realm: "练气期"
+    required_level: 6

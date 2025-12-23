@@ -1,0 +1,81 @@
+# ========================================
+# base/ice_shield.yaml - 冰霜护盾模板
+# ========================================
+skills:
+  ice_shield:
+    inherit: "_base"
+    type: "active"
+    
+    name: "冰霜护盾"
+    desc: "生成一个冰霜护盾，提升防御并对近战攻击者造成反震伤害"
+    
+    category: "support"
+    element: "water"
+    range: "self"
+    hit_type: "magic"
+    target_type: "self"
+    
+    level_formula:
+      damage:
+        base: 0
+        grow: 0
+      
+      accuracy:
+        base: 0
+        per_level: 0
+        max: 0
+      
+      cast_time:
+        base: 2.5
+        per_level: -0.02
+        min: 1.5
+      
+      cooldown:
+        base: 10
+        per_level: -0.03
+        min: 5
+      
+      cost_qi:
+        base: 30
+        per_level: 0.5
+        max: 120
+      
+      counter_chance:
+        base: 0.05
+        per_level: 0.001
+        max: 0.15
+    
+    counter_weight: 3
+    
+    stat_scaling:
+      strength: 0.0
+      intelligence: 1.5
+      agility: 0.0
+    
+    effects:
+      - type: "defense_boost"
+        value: 0.2
+        duration: 15
+        per_level: 0.01
+      - type: "reflect_damage"
+        value: 0.15
+        duration: 15
+        per_level: 0.005
+      - type: "slow_on_hit"
+        value: 0.1
+        duration: 3
+        per_level: 0.005
+    
+    battle_text:
+      cast:
+        - text: "{caster}周围形成一层冰霜护盾！"
+          delay_percent: 0
+      hit:
+        - text: "冰霜护盾提升了{caster}的防御！"
+          delay_percent: 0
+      critical:
+        - text: "冰霜护盾异常坚固！{caster}防御大幅提升！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 6

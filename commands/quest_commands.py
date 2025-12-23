@@ -368,9 +368,6 @@ class CmdAcceptQuest(Command):
 class CmdCompleteQuest(Command):
     """
     完成任务 (通常由NPC对话触发)
-    
-    用法:
-      complete <任务名/ID>
     """
     
     key = "complete"
@@ -408,3 +405,22 @@ class CmdCompleteQuest(Command):
             self.caller.msg(f"|g恭喜! 完成任务: {result}|n")
         else:
             self.caller.msg(f"|r{result}|n")
+            # --- START OF FILE quest_commands.py ---
+# ... (保留你上面写的所有的 import 和 Command 类) ...
+
+# ... 在文件的最下面添加以下代码 ...
+
+from evennia import CmdSet
+
+class QuestCmdSet(CmdSet):
+    """
+    任务系统命令集
+    """
+    key = "QuestCmdSet"
+    
+    def at_cmdset_creation(self):
+        self.add(CmdQuest())
+        self.add(CmdQuestList())
+        self.add(CmdAbandon())
+        self.add(CmdAcceptQuest())
+        self.add(CmdCompleteQuest())

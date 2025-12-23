@@ -1,14 +1,81 @@
+# data/configs/game_settings.yaml
 game:
   name: "修仙MUD"
-  version: "0.1.0"
-
-player:
-  starting_realm: "练气期"
-  starting_stats:
-    hp: 100
-    max_hp: 100
-    qi: 50
-    max_qi: 50
-    strength: 10
-    agility: 10
-    intelligence: 10
+  version: "0.2.0"
+  
+  # ========== 存档系统配置 ==========
+  save_system:
+    # 自动存档开关
+    auto_save_enabled: true
+    
+    # 自动存档间隔 (秒)
+    auto_save_interval: 3000  # 5分钟
+    
+    # 任务完成时立即存档
+    save_on_quest_complete: true
+    
+    # 下线时立即存档 (建议始终开启)
+    save_on_logout: true
+    
+    # 服务器关闭时存档 (建议始终开启)
+    save_on_shutdown: true
+    
+    # 存档日志
+    save_log_enabled: true
+    save_log_detail: false  # 是否记录详细信息
+    
+    # 🔥 战斗结束时存档 (可选，默认关闭)
+    save_on_combat_end: false
+    # 说明: 开启后每场战斗都会触发全量存档
+    # 优点: 数据更安全，崩溃几乎不丢数据
+    # 缺点: 频繁战斗时数据库压力大
+    # 建议: 测试期关闭，上线后根据玩家数量决定
+    
+    # 升级时存档 (可选，默认关闭)
+    save_on_level_up: true
+    # 说明: 开启后每次升级都会触发存档
+    # 适合慢节奏游戏，升级不频繁的情况
+  
+  # 开发模式配置
+  dev_mode:
+    use_attribute_registry: true
+    debug_combat: false
+    debug_progression: false
+  
+  # 背包系统
+  default_inventory_size: 20
+  
+  # 分类翻译
+  inventory_categories:
+    currency: "货币"
+    consumable: "消耗品"
+    equipment: "装备"
+    material: "材料"
+    quest: "任务"
+    misc: "杂物"
+  
+  # 玩家配置
+  player:
+    starting_realm: "练气期"
+    starting_level: 1
+    starter_pack_file: "data/configs/starter_pack.yaml"  # 新手包配置文件
+    
+    # 升级系统配置
+    progression:
+      exp_display_threshold: 1000000   # 经验显示简化阈值 (>100万显示为 1.0M)
+      level_up_restore_hp: true        # 升级时是否回满血
+      level_up_restore_qi: true        # 升级时是否回满灵力
+      level_up_message: "|y✨ 恭喜升级！|n"
+    
+    # 突破系统配置
+    breakthrough:
+      auto_prompt_when_max_level: true     # 满级时自动提示可突破
+      allow_skip_requirements: false       # 是否允许跳过突破条件 (测试用)
+      breakthrough_success_rate: 1.0       # 突破成功率 (1.0=100%)
+      breakthrough_restore_full: true      # 突破成功后是否满血满灵力
+    
+    # 战斗经验配置
+    combat:
+      exp_reward_formula: "enemy_level * 10"   # 杀怪经验公式
+      exp_level_difference_penalty: true       # 等级差惩罚
+      exp_bonus_first_kill: 1.5                # 首杀奖励倍率

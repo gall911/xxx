@@ -1,0 +1,133 @@
+# data/items/base/equipment.yaml
+# 装备配置 - 完整示例
+
+items:
+  # ========== 武器 ==========
+  xuantie_sword:
+    name: 玄铁重剑
+    desc: 沉重的玄铁长剑，重剑无锋
+    category: equipment
+    storage: db
+    stackable: false
+    persistent: true
+    slot: main_hand
+    rarity: rare
+    required_level: 5
+    base_stats:
+      strength: 20
+      attack: 50
+      durability: 100
+    affix_slots: 3
+    enhance_max: 15
+    can_craft: true
+    craft_recipe: craft_xuantie_sword
+  
+  basic_sword:
+    name: 铁剑
+    desc: 普通的铁质长剑
+    category: equipment
+    storage: db
+    stackable: false
+    slot: main_hand
+    rarity: common
+    required_level: 1
+    base_stats:
+      strength: 10
+      attack: 25
+      durability: 80
+    affix_slots: 2
+    enhance_max: 10
+    can_craft: true
+    craft_recipe: craft_basic_sword
+  
+  # ========== 防具 ==========
+  basic_armor:
+    name: 布甲
+    desc: 基础的布制护甲
+    category: equipment
+    storage: db
+    stackable: false
+    slot: body
+    rarity: common
+    required_level: 1
+    base_stats:
+      constitution: 10
+      defense: 20
+      durability: 80
+    affix_slots: 2
+    enhance_max: 10
+    can_craft: true
+    craft_recipe: craft_basic_armor
+  
+  iron_armor:
+    name: 铁甲
+    desc: 坚固的铁质护甲
+    category: equipment
+    storage: db
+    stackable: false
+    slot: body
+    rarity: uncommon
+    required_level: 5
+    base_stats:
+      constitution: 20
+      defense: 40
+      durability: 100
+    affix_slots: 3
+    enhance_max: 12
+    can_craft: true
+    craft_recipe: craft_iron_armor
+  
+  # ========== 饰品 ==========
+  jade_ring:
+    name: 玉戒
+    desc: 精致的玉石戒指，隐隐发光
+    category: equipment
+    storage: db
+    stackable: false
+    slot: ring_1
+    rarity: uncommon
+    required_level: 10
+    base_stats:
+      spirit: 15
+      max_qi: 50
+      durability: 100
+    affix_slots: 2
+    enhance_max: 15
+    can_craft: true
+    craft_recipe: craft_jade_ring
+  
+  superior_jade_ring:
+    name: 上品玉戒
+    desc: 极品玉石打造的戒指，灵气逼人
+    category: equipment
+    storage: db
+    stackable: false
+    slot: ring_1
+    rarity: rare
+    required_level: 15
+    base_stats:
+      spirit: 30
+      max_qi: 100
+      durability: 150
+    affix_slots: 3
+    enhance_max: 15
+    can_craft: true
+    craft_recipe: merge_jade_ring
+  
+  # ========== 法宝 ==========
+  spirit_artifact:
+    name: 灵器
+    desc: 蕴含灵气的本命法宝
+    category: equipment
+    storage: db
+    stackable: false
+    slot: artifact
+    rarity: epic
+    required_level: 20
+    base_stats:
+      spirit: 50
+      spell_power: 100
+      durability: 200
+    affix_slots: 4
+    enhance_max: 20
+    can_craft: false

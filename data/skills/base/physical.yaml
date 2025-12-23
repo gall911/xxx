@@ -1,0 +1,58 @@
+# ========================================
+# base/physical.yaml - 物理战技模板
+# ========================================
+  physical_combat:
+    inherit: "_base"
+    type: "active"
+    
+    name: "物理战技"
+    desc: "纯粹的物理攻击，瞬发无消耗"
+    
+    category: "combat"
+    element: "physical"
+    range: "melee"
+    hit_type: "physical"
+    
+    level_formula:
+      damage:
+        base: 25
+        grow: 0.025
+      
+      accuracy:
+        base: 0.92
+        per_level: 0.0005
+        max: 0.98
+      
+      cast_time:
+        base: 0
+        per_level: 0
+        min: 0
+      
+      cooldown:
+        base: 1
+        per_level: -0.005
+        min: 0
+      
+      cost_qi:
+        base: 10
+        per_level: 0.3
+        max: 80
+    
+    counter_weight: 3
+    
+    stat_scaling:
+      strength: 1.5
+      intelligence: 0.0
+      agility: 0.3
+    
+    battle_text:
+      cast: []
+      hit:
+        - text: "{caster}击中{target}！造成{damage}点伤害！"
+          delay_percent: 0
+      critical:
+        - text: "暴击！{caster}命中要害！造成{damage}点伤害！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 1

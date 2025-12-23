@@ -1,0 +1,82 @@
+# data/items/base/starter_items.yaml
+# 新手包专用物品配置
+
+# ========== 武器类 (storage: db) ==========
+wooden_sword:
+  name: 木剑
+  desc: 简易的木制长剑，虽然不锋利但足够防身
+  category: equipment
+  storage: db
+  stackable: false
+  persistent: true
+  slot: weapon
+  required_level: 1
+  base_stats:
+    strength: 5
+    attack: 10
+    durability: 50
+
+# ========== 防具类 (storage: db) ==========
+cloth_robe:
+  name: 布袍
+  desc: 简单的布制长袍，提供基础的防护
+  category: equipment
+  storage: db
+  stackable: false
+  persistent: true
+  slot: armor
+  required_level: 1
+  base_stats:
+    constitution: 5
+    defense: 10
+    durability: 40
+
+# ========== 消耗品类 (storage: attr) ==========
+healing_herb:
+  name: 疗伤草药
+  desc: 常见的疗伤草药，可以处理轻微伤口
+  category: consumable
+  storage: attr
+  stackable: true
+  persistent: false
+  effects:
+    action: heal
+    value: 20
+
+# ========== 修炼资源类 (storage: attr) ==========
+low_grade_spirit_stone:
+  name: 下品灵石
+  desc: 品质较低的灵石，蕴含少量灵气，可用于基础修炼
+  category: material
+  storage: attr
+  stackable: true
+  persistent: false
+  effects:
+    action: cultivation_aid
+    value: 10
+
+# ========== 特殊道具类 (storage: attr) ==========
+cultivation_survival_guide:
+  name: 修仙生存手册
+  desc: 记录了修仙界基础知识和生存技巧的小册子，新手必备
+  category: special
+  storage: attr
+  stackable: false
+  persistent: false
+  effects:
+    action: knowledge
+    topics:
+      - 基础修炼方法
+      - 常见灵草识别
+      - 简易炼丹术
+      - 妖兽应对策略
+      - 修仙界礼仪
+
+# ========== 货币类 (storage: attr) ==========
+copper_coin:
+  name: 铜钱
+  desc: 最基础的货币单位，用于日常交易
+  category: currency
+  storage: attr
+  stackable: true
+  persistent: false

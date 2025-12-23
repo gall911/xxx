@@ -1,0 +1,19 @@
+# ========================================
+# data/skills/physical/basic_attack.yaml
+# 普通攻击 - 继承physical_combat
+# ========================================
+  basic_attack:
+    inherit: "physical_combat"
+    
+    name: "普通攻击"
+    desc: "最基础的攻击方式，不消耗灵力。"
+    
+    # 完全使用默认配置
+    
+    effects:
+      - type: "damage"
+        element: "physical"
+        value: "{level_damage}"
+        damage_variance: 0.3  # 伤害浮动±30%
+    
+    # 使用默认战斗文本

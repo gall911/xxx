@@ -1,0 +1,172 @@
+# data/items/base/std_items.yaml
+# 标准物品配置 - 新格式
+
+# ========== 货币类 (storage: attr) ==========
+# 🔥 货币也用 attr，保证下线不丢失！
+gold:
+  name: 金币
+  desc: 大陆通用货币，闪烁着金色光芒
+  category: currency
+  storage: attr       # ✅ 改成attr，下线会保存
+  stackable: true
+  persistent: false
+
+silver:
+  name: 银币
+  desc: 常用的银质货币
+  category: currency
+  storage: attr       # ✅ 改成attr
+  stackable: true
+  persistent: false
+
+copper:
+  name: 铜币
+  desc: 最基础的货币
+  category: currency
+  storage: attr       # ✅ 改成attr
+  stackable: true
+  persistent: false
+
+
+# ========== 消耗品类 (storage: attr) ==========
+huichundan:
+  name: 回春丹
+  desc: 恢复气血50点的丹药，散发着淡淡药香
+  category: consumable
+  storage: attr       # ✅ 消耗品用attr（内存+延迟落盘）
+  stackable: true
+  persistent: false
+  effects:
+    action: heal
+    value: 50
+  
+# 🔥 如果你想要纯内存不保存（像金币那样），改成：
+# storage: ndb
+# 但这样下线后就丢失了，不推荐用于消耗品！
+
+jujidan:
+  name: 聚气丹
+  aliases: jqd
+  desc: 恢复真气50点的丹药，蕴含灵气
+  category: consumable
+  storage: attr
+  stackable: true
+  persistent: false
+  effects:
+    action: restore_qi
+    value: 50
+
+dali_pill:
+  name: 大力丸
+  desc: 临时增加力量的丹药，持续30秒
+  category: consumable
+  storage: attr
+  stackable: true
+  persistent: false
+  effects:
+    action: buff
+    buff_name: 大力
+    duration: 30
+    stats:
+      strength: 10
+
+zhuji_dan:
+  name: 筑基丹
+  desc: 帮助突破境界的珍贵丹药
+  category: consumable
+  storage: attr
+  stackable: true
+  persistent: false
+  required_level: 10
+  effects:
+    action: breakthrough
+    success_rate: 0.3
+
+
+# ========== 材料类 (storage: attr) ==========
+iron_ore:
+  name: 玄铁矿
+  desc: 采矿获得的矿石，可用于锻造
+  category: material
+  storage: attr
+  stackable: true
+  persistent: false
+
+spirit_stone:
+  name: 灵石
+  desc: 蕴含灵气的石头，可用于修炼
+  category: material
+  storage: attr
+  stackable: true
+  persistent: false
+
+herb_basic:
+  name: 基础草药
+  desc: 炼丹的基础材料
+  category: material
+  storage: attr
+  stackable: true
+  persistent: false
+
+
+# ========== 装备类 (storage: db) ==========
+xuantie_sword:
+  name: 玄铁重剑
+  desc: 沉重的玄铁长剑，重剑无锋
+  category: equipment
+  storage: db         # DB对象存储
+  stackable: false
+  persistent: true    # 需要独立状态
+  slot: weapon
+  required_level: 5
+  base_stats:
+    strength: 20
+    attack: 50
+    durability: 100
+
+basic_armor:
+  name: 布甲
+  desc: 基础的布制护甲
+  category: equipment
+  storage: db
+  stackable: false
+  persistent: true
+  slot: armor
+  required_level: 1
+  base_stats:
+    constitution: 10
+    defense: 20
+    durability: 80
+
+jade_ring:
+  name: 玉戒
+  aliases: yjz
+  desc: 精致的玉石戒指，隐隐发光
+  category: equipment
+  storage: db
+  stackable: false
+  persistent: true
+  slot: ring_1
+  required_level: 10
+  base_stats:
+    spirit: 15
+    max_qi: 50
+    durability: 100
+
+
+# ========== 任务道具类 (storage: attr) ==========
+quest_letter:
+  name: 密信
+  desc: 一封密封的信件，似乎很重要
+  category: quest
+  storage: attr
+  stackable: false
+  persistent: false
+
+village_token:
+  name: 村长令牌
+  desc: 村长的身份令牌
+  category: quest
+  storage: attr
+  stackable: false
+  persistent: false

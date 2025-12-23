@@ -1,0 +1,76 @@
+# ========================================
+# base/frost_arrow.yaml - 冰霜箭模板
+# ========================================
+skills:
+  frost_arrow:
+    inherit: "_base"
+    type: "active"
+    
+    name: "冰霜箭"
+    desc: "发射一枚冰霜箭，对目标造成伤害并减速"
+    
+    category: "combat"
+    element: "water"
+    range: "ranged"
+    hit_type: "magic"
+    target_type: "single"
+    
+    level_formula:
+      damage:
+        base: 20
+        grow: 0.03
+      
+      accuracy:
+        base: 0.88
+        per_level: 0.0008
+        max: 0.95
+      
+      cast_time:
+        base: 2.0
+        per_level: -0.015
+        min: 1.0
+      
+      cooldown:
+        base: 3
+        per_level: -0.01
+        min: 1
+      
+      cost_qi:
+        base: 25
+        per_level: 0.4
+        max: 100
+      
+      counter_chance:
+        base: 0.03
+        per_level: 0.0003
+        max: 0.1
+    
+    counter_weight: 2
+    
+    stat_scaling:
+      strength: 0.2
+      intelligence: 1.2
+      agility: 0.1
+    
+    effects:
+      - type: "slow"
+        value: 0.2
+        duration: 5
+        per_level: 0.01
+    
+    battle_text:
+      cast:
+        - text: "{caster}凝聚寒气，形成一枚冰霜箭！"
+          delay_percent: 0
+      hit:
+        - text: "冰霜箭击中{target}！造成{damage}点伤害并减速！"
+          delay_percent: 0
+      dodge:
+        - text: "{target}闪避了冰霜箭！"
+          delay_percent: 0
+      critical:
+        - text: "暴击！冰霜箭穿透{target}的防御！造成{damage}点伤害并大幅减速！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 4

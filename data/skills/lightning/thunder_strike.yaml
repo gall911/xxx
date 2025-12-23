@@ -1,0 +1,42 @@
+# ========================================
+  # lightning/thunder_strike.yaml
+  # 雷霆一击 - 高伤害+麻痹
+  # ========================================
+  thunder_strike:
+    inherit: "lightning_magic"
+    
+    name: "雷霆一击"
+    desc: "召唤天雷轰击敌人，有概率造成麻痹"
+    
+    level_formula:
+      damage:
+        base: 65
+        grow: 0.045
+      
+      cost_qi:
+        base: 35
+        per_level: 0.8
+        max: 180
+    
+    effects:
+      - type: damage
+        value: "{level_damage}"
+        element: lightning
+      
+      - type: apply_shock
+        tick_damage: 10
+        stun_chance: 0.15
+        duration: 2
+    
+    battle_text:
+      cast:
+        - text: "{caster}高举双手，雷云汇聚..."
+          delay_percent: 0
+        - text: "雷霆降临！"
+          delay_percent: 60
+      hit:
+        - text: "雷电贯穿{target}！造成{damage}点伤害！"
+          delay_percent: 80
+    
+    required_realm: "金丹期"
+    required_level: 20

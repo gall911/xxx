@@ -1,0 +1,41 @@
+# data/equip_slots.yaml
+
+slots:
+  # === 武器栏 ===
+  main_hand:
+    name: "主手"
+    accepts: ["weapon", "tool"]  # 只有 type: weapon 或 tool 的物品能放进去
+    order: 1  # 显示顺序
+
+  off_hand:
+    name: "副手"
+    accepts: ["weapon", "shield", "catalyst"]
+    order: 2
+
+  # === 防具栏 ===
+  head:
+    name: "头部"
+    accepts: ["helm", "hat"]
+    order: 3
+
+  body:
+    name: "身体"
+    accepts: ["armor", "cloth"]
+    order: 4
+
+  # === 饰品栏 ===
+  ring_1:
+    name: "左戒"
+    accepts: ["ring"]
+    order: 10
+  
+  ring_2:
+    name: "右戒"
+    accepts: ["ring"]
+    order: 11
+
+  # === 特殊 (修仙特色) ===
+  artifact:
+    name: "本命法宝"
+    accepts: ["artifact"]
+    order: 99

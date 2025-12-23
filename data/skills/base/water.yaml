@@ -1,0 +1,65 @@
+# ========================================
+# 剩余7个基础模板
+# 使用时分成独立文件
+# ========================================
+
+# ========================================
+# base/water.yaml - 水系模板
+# ========================================
+skills:
+  water_magic:
+    inherit: "_base"
+    
+    name: "水系法术"
+    desc: "操控水元素，兼具伤害和控制"
+    
+    category: "magic"
+    element: "water"
+    range: "ranged"
+    hit_type: "magical"
+    
+    level_formula:
+      damage:
+        base: 40
+        grow: 0.03
+      
+      accuracy:
+        base: 0.88
+        per_level: 0.001
+        max: 0.95
+      
+      cast_time:
+        base: 5.5
+        per_level: -0.02
+        min: 2.0
+      
+      cooldown:
+        base: 2
+        per_level: -0.01
+        min: 1
+      
+      cost_qi:
+        base: 22
+        per_level: 0.55
+        max: 140
+    
+    counter_weight: 2
+    
+    stat_scaling:
+      strength: 0.0
+      intelligence: 1.0
+      agility: 0.0
+    
+    battle_text:
+      cast:
+        - text: "{caster}凝聚水元素..."
+          delay_percent: 0
+      hit:
+        - text: "水流命中{target}！造成{damage}点伤害！"
+          delay_percent: 70
+      critical:
+        - text: "暴击！冰柱贯穿！造成{damage}点伤害！"
+          delay_percent: 70
+    
+    required_realm: "筑基期"
+    required_level: 8

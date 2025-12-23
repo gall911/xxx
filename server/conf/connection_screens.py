@@ -24,7 +24,7 @@ import traceback
 import sys
 
 # 让 RuntimeWarning 变成致命错误，强制打印堆栈
-warnings.simplefilter('error', RuntimeWarning)
+warnings.simplefilter("error", RuntimeWarning)
 
 try:
     # 尝试诱发报错
@@ -39,16 +39,12 @@ from django.conf import settings
 from evennia import utils
 
 CONNECTION_SCREEN = """
-|b==============================================================|n
- Welcome to |g{}|n, version {}!
 
- If you have an existing account, connect to it by typing:
-      |wconnect <username> <password>|n
- If you need to create an account, type (without the <>'s):
-      |wcreate <username> <password>|n
-
- If you have spaces in your username, enclose it in quotes.
- Enter |whelp|n for more info. |wlook|n will re-show this screen.
-|b==============================================================|n""".format(
+                          
+       Welcome to |g{}|n, version {}!                              
+                        
+        ^G~                          ^57.^755GJ~         .:J5~.     .^^.^:      
+                         
+""".format(
     settings.SERVERNAME, utils.get_evennia_version("short")
 )

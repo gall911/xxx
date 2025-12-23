@@ -1,1 +1,116 @@
-recipes: {}
+# ========================================
+# data/items/recipes.yaml - 合成配方
+# ========================================
+recipes:
+  # === 武器合成 ===
+  craft_basic_sword:
+    name: 锻造铁剑
+    type: equipment
+    materials:
+      iron_ore: 10
+      gold: 100
+    result:
+      item_key: basic_sword
+      amount: 1
+      quality: normal
+    required_level: 1
+  
+  craft_xuantie_sword:
+    name: 锻造玄铁重剑
+    type: equipment
+    materials:
+      iron_ore: 50
+      spirit_stone: 10
+      gold: 1000
+    result:
+      item_key: xuantie_sword
+      amount: 1
+      quality: rare
+    required_level: 5
+  
+  # === 防具合成 ===
+  craft_basic_armor:
+    name: 缝制布甲
+    type: equipment
+    materials:
+      herb_basic: 20
+      gold: 100
+    result:
+      item_key: basic_armor
+      amount: 1
+      quality: normal
+    required_level: 1
+  
+  craft_iron_armor:
+    name: 锻造铁甲
+    type: equipment
+    materials:
+      iron_ore: 30
+      gold: 500
+    result:
+      item_key: iron_armor
+      amount: 1
+      quality: normal
+    required_level: 5
+  
+  # === 饰品合成 ===
+  craft_jade_ring:
+    name: 打造玉戒
+    type: equipment
+    materials:
+      jade_ore: 10
+      spirit_stone: 5
+      gold: 1000
+    result:
+      item_key: jade_ring
+      amount: 1
+      quality: random
+    required_level: 10
+  
+  # === 装备合并（两个玉戒合成上品玉戒）===
+  merge_jade_ring:
+    name: 玉戒升级
+    type: equipment_merge
+    source_item: jade_ring
+    source_count: 2
+    materials:
+      spirit_stone: 20
+      gold: 5000
+    result:
+      item_key: superior_jade_ring
+      amount: 1
+    inherit_affixes: best
+    required_level: 15
+  
+  # === 消耗品合成 ===
+  craft_huichundan:
+    name: 炼制回春丹
+    type: consumable
+    materials:
+      herb_basic: 5
+      spirit_stone: 1
+    result:
+      item_key: huichundan
+      amount: 10
+    required_level: 1
+  
+  craft_jujidan:
+    name: 炼制聚气丹
+    type: consumable
+    materials:
+      herb_basic: 8
+      spirit_stone: 2
+    result:
+      item_key: jujidan
+      amount: 10
+    required_level: 5
+
+# === 新增材料物品（用于合成）===
+items:
+  jade_ore:
+    name: 玉石矿
+    desc: 蕴含灵气的玉石原矿
+    category: material
+    storage: attr
+    stackable: true
+    persistent: false

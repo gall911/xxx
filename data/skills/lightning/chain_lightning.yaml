@@ -1,0 +1,41 @@
+# ========================================
+  # lightning/chain_lightning.yaml
+  # 连锁闪电 - 范围伤害
+  # ========================================
+  chain_lightning:
+    inherit: "lightning_magic"
+    
+    name: "连锁闪电"
+    desc: "释放连锁闪电，可弹射攻击多个敌人"
+    target_type: "area"
+    
+    level_formula:
+      damage:
+        base: 45
+        grow: 0.038
+      
+      cost_qi:
+        base: 30
+        per_level: 0.7
+        max: 160
+    
+    effects:
+      - type: damage
+        value: "{level_damage}"
+        element: lightning
+      
+      - type: apply_shock
+        tick_damage: 6
+        stun_chance: 0.1
+        duration: 2
+    
+    battle_text:
+      cast:
+        - text: "{caster}释放闪电！"
+          delay_percent: 0
+      hit:
+        - text: "闪电链弹射到{target}！造成{damage}点伤害！"
+          delay_percent: 50
+    
+    required_realm: "金丹期"
+    required_level: 22

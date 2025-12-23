@@ -3,12 +3,13 @@
 功能：自动扫描当前文件夹下所有的 .py 文件，把里面的 Command 类全加载进来。
 解放双手，再也不用手动 add 了！
 """
+import psutil
 import os
 import importlib
 import inspect
 from evennia import CmdSet, Command
 from django.conf import settings
-
+from commands.dev.tb import CmdTestCombatDebug, CmdClearDebugMobs       
 class DevCmdSet(CmdSet):
     """
     智能开发命令集
@@ -17,11 +18,16 @@ class DevCmdSet(CmdSet):
     priority = 1
 
     def at_cmdset_creation(self):
+         # 2. 添加测试命令
+        self.add(CmdTestCombatDebug)
+        self.add(CmdClearDebugMobs)
+        
         # 1. 获取当前脚本所在的文件夹路径 (commands/dev)
         current_dir = os.path.dirname(__file__)
         
         # 2. 定义包的路径前缀 (commands.dev)
         package_prefix = "commands.dev"
+       
         
         # 3. 扫描文件夹里所有的文件
         for filename in os.listdir(current_dir):

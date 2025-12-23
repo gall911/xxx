@@ -1,0 +1,87 @@
+  #/home/gg/xx/xxx/data/npcs/go_1_npc.yaml
+
+npcs:
+  # --- [功能性 NPC] ---
+
+  sony_radio:
+    prototype_key: "sony_radio"
+    key: "sony_radio"
+    name: "|233上古遗物·S0NY收音机|n"
+    unique: true
+    location: "sy_001" # 月牙泉
+    desc: |
+      一台黑色的砖头式收音机，天线断了一半。
+      它是一切新手的导师，掌握着“调频修仙”的奥秘。
+      |g(Quest Giver)|n
+
+  broken_vending_machine:
+    prototype_key: "vending_machine"
+    key: "vending_machine"
+    name: "|234罗汉·自动贩卖机|n"
+    unique: true
+    location: "sy_007" # 飞船货舱
+    desc: |
+      它的玻璃面板上有几道裂痕，像是一张哭泣的脸。
+      投币口被尊称为“功德箱”。
+      它售卖的不是饮料，而是被称为“琼浆”的古代碳酸液体。
+      |y(Merchant/Alchemist)|n
+
+  # --- [普通怪物] ---
+  # 这种怪不恶心，死了就是碎一地玻璃，很解压
+  glass_snake:
+    prototype_key: "glass_snake"
+    key: "glass_snake"
+    name: "|051琉璃·极光蛇|n"
+    unique: false
+    location: "sy_002" # 古道
+    desc: |
+      一条完全由光纤和透明软管构成的蛇。
+      它的体内流动着七彩的|201霓虹光液|n。
+      它在地上爬行时没有声音，只留下一道淡淡的光痕。
+    stats:
+      level: 3
+      max_hp: 200
+      strength: 15
+      agility: 40
+    drops:
+      - item: "断裂的光纤"
+        chance: 0.8
+      - item: "微量霓虹液" # 任务品
+        chance: 0.3
+
+  # --- [进阶怪物] ---
+  silicon_monk:
+    prototype_key: "silicon_monk"
+    key: "silicon_monk"
+    name: "|240苦行·硅基僧侣|n"
+    unique: false
+    location: "sy_004" # 全息回廊
+    desc: |
+      一具拥有自我行动能力的岩石机甲。
+      它盘腿漂浮在半空，核心处是一块散发热量的|rCPU|n。
+      它没有恶意，但它的散热程序会无差别攻击靠近的热源。
+    stats:
+      level: 8
+      max_hp: 600
+      strength: 40
+    skills:
+      - "过载高温"
+    drops:
+      - item: "烧焦的芯片"
+        chance: 0.5
+
+  # --- [精英/Boss] ---
+  cyber_dunhuang:
+    prototype_key: "cyber_dunhuang"
+    key: "cyber_dunhuang"
+    name: "|201故障·飞天幻影|n"
+    unique: true
+    location: "sy_005" # 广播塔
+    desc: |
+      由无数乱码和激光构成的巨大舞女形象。
+      她的反弹琵琶发出的是足以震碎内脏的|r次声波|n。
+      虽然美得惊心动魄，但只要被她的光带扫中，就会被格式化。
+    stats:
+      level: 15
+      max_hp: 1500
+      agility: 80

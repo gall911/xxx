@@ -1,0 +1,48 @@
+# ========================================
+# data/skills/spirit/ice_spike.yaml
+# 冰刺术 - 继承spirit_magic
+# ========================================
+  ice_spike:
+    inherit: "spirit_magic"
+    
+    name: "冰刺术"
+    desc: |
+      凝聚寒冰元素形成锋利的冰刺。
+      命中后有概率冰冻敌人1回合。
+    
+    element: "ice"
+    
+    level_formula:
+      damage:
+        base: 35
+        grow: 0.03
+    
+    effects:
+      - type: "damage"
+        element: "ice"
+        value: "{level_damage}"
+      - type: "freeze"                     # 冰冻效果
+        chance: 0.3                        # 30%概率
+        duration: 1                        # 持续1回合
+    
+    battle_text:
+      cast:
+        - text: "{caster}周身寒气凝聚..."
+          delay_percent: 0
+        - text: "空气中的水汽化作锋利的冰刺！"
+          delay_percent: 50
+      
+      hit:
+        - text: "冰刺刺穿{target}！"
+          delay_percent: 70
+        - text: "造成伤害{damage}！{target}被寒气侵袭！"
+          delay_percent: 100
+      
+      critical:
+        - text: "暴击！冰刺贯穿{target}要害！"
+          delay_percent: 70
+        - text: "造成伤害{damage}！{target}被冻结！"
+          delay_percent: 100
+    
+    required_realm: "练气期"
+    required_level: 5

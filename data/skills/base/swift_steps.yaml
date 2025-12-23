@@ -1,0 +1,77 @@
+# ========================================
+# base/swift_steps.yaml - 迅捷步法模板
+# ========================================
+skills:
+  swift_steps:
+    inherit: "_base"
+    type: "active"
+    
+    name: "迅捷步法"
+    desc: "提升移动速度和闪避率的身法技能"
+    
+    category: "support"
+    element: "physical"
+    range: "self"
+    hit_type: "physical"
+    target_type: "self"
+    
+    level_formula:
+      damage:
+        base: 0
+        grow: 0
+      
+      accuracy:
+        base: 0
+        per_level: 0
+        max: 0
+      
+      cast_time:
+        base: 1.0
+        per_level: -0.01
+        min: 0.5
+      
+      cooldown:
+        base: 5
+        per_level: -0.02
+        min: 2
+      
+      cost_qi:
+        base: 15
+        per_level: 0.2
+        max: 50
+      
+      counter_chance:
+        base: 0.05
+        per_level: 0.001
+        max: 0.2
+    
+    counter_weight: 2
+    
+    stat_scaling:
+      strength: 0.0
+      intelligence: 0.0
+      agility: 1.5
+    
+    effects:
+      - type: "agility_boost"
+        value: 0.15
+        duration: 10
+        per_level: 0.01
+      - type: "dodge_chance_boost"
+        value: 0.1
+        duration: 10
+        per_level: 0.005
+    
+    battle_text:
+      cast:
+        - text: "{caster}身形变得飘忽不定！"
+          delay_percent: 0
+      hit:
+        - text: "{caster}闪避率提升！"
+          delay_percent: 0
+      critical:
+        - text: "{caster}身法如风！闪避率大幅提升！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 3

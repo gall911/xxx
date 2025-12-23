@@ -1,0 +1,33 @@
+ # spirit/curse_of_pain.yaml
+  curse_of_pain:
+    inherit: "spirit_magic"
+    
+    name: "痛苦诅咒"
+    desc: "诅咒敌人，使其受到的伤害提升"
+    
+    level_formula:
+      damage_increase:
+        base: 0.3
+        per_level: 0.005
+        max: 0.6
+      
+      cost_qi:
+        base: 30
+        per_level: 0.7
+        max: 160
+    
+    effects:
+      - type: apply_curse
+        damage_increase: "{level_damage_increase}"
+        duration: 3
+    
+    battle_text:
+      cast:
+        - text: "{caster}施展痛苦诅咒..."
+          delay_percent: 0
+      hit:
+        - text: "诅咒附着在{target}身上！"
+          delay_percent: 70
+    
+    required_realm: "金丹期"
+    required_level: 22

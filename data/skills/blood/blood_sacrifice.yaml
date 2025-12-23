@@ -1,0 +1,53 @@
+ # blood/blood_sacrifice.yaml
+  blood_sacrifice:
+    inherit: "blood_magic"
+    
+    name: "血祭术"
+    desc: "献祭精血，爆发恐怖力量，但会受到反噬"
+    
+    level_formula:
+      damage:
+        base: 100
+        grow: 0.05
+      
+      cost_hp:
+        base: 25
+        per_level: 0.6
+        max: 80
+      
+      cost_qi:
+        base: 40
+        per_level: 1.0
+        max: 200
+    
+    stat_scaling:
+      strength: 0.8
+      intelligence: 2.0
+    
+    effects:
+      - type: damage
+        value: "{level_damage}"
+        element: blood
+        scale_with: "intelligence"
+        scale_ratio: 2.0
+      
+      - type: apply_weakness
+        value: -12
+        stat: "strength"
+        duration: 2
+        name: "虚弱（反噬）"
+    
+    battle_text:
+      cast:
+        - text: "{caster}咬破指尖，鲜血化为符文！"
+          delay_percent: 0
+        - text: "献祭{cost_hp}点生命值！"
+          delay_percent: 30
+      hit:
+        - text: "血色符文爆发！造成{damage}点伤害！"
+          delay_percent: 70
+        - text: "{caster}因反噬而虚弱..."
+          delay_percent: 100
+    
+    required_realm: "金丹期"
+    required_level: 30

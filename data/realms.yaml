@@ -1,65 +1,513 @@
 # data/realms.yaml
+# 境界配置 - 完整版
+# 包含: 基础属性、等级成长、升级曲线、突破条件
+
 realms:
+  # ================= 下境界 (凡人界) =================
+  
   练气期:
     level: 1
     name: "练气期"
-    max_qi: 100
-    qi_regen: 1        # 每回合恢复灵力
+    desc: "引气入体，踏上仙途。感应天地灵气，纳入体内。"
     
-    # 属性加成
-    attribute_bonus:
-      strength: 5
-      agility: 5
-      intelligence: 5
+    # 等级范围
+    max_level: 10              # 该境界最高等级
+    default_inventory_size: 50
+    # 升级经验曲线
+    exp_curve:
+      base: 100                # 1→2级需要100经验
+      multiplier: 1.5          # 每级递增系数 (2→3级需要150经验)
     
-    # 突破到下一境界的要求
-    breakthrough:
-      next_realm: "筑基期"
-      required_level: 10
-      required_exp: 1000
-      required_items:
-        - "筑基丹"
+    # 基础属性 (进入该境界时的初始值)
+    base_stats:
+      strength: 10
+      agility: 10
+      constitution: 10
+      intelligence: 10
+      max_hp: 100
+      max_qi: 100
+      critical_rate: 0.05      # 5%暴击率
     
-    desc: "踏入修仙之路的第一步，开始感应天地灵气"
-  
+    # 每升1级的属性成长
+    level_growth:
+      strength: 2
+      agility: 2
+      constitution: 2
+      intelligence: 2
+      max_hp: 20
+      max_qi: 15
+    
+    # 突破到下个境界的条件
+    breakthrough_requirements:
+      level: 10                # 必须满级
+      items:                   # 需要消耗的物品
+        筑基丹: 1
+      sect_contribution: 50    # 门派贡献
+      tasks: []                # 必须完成的任务 (可选)
+    
+    # 突破成功后进入的境界
+    next_realm: "筑基期"
+
+  # -----------------
+
   筑基期:
-    level: 2
+    level: 10
     name: "筑基期"
-    max_qi: 500
-    qi_regen: 5
+    desc: "百日筑基，铸造道基。灵力凝练如金，寿元延至两百载。"
     
-    attribute_bonus:
-      strength: 20
-      agility: 15
+    max_level: 10
+    exp_curve:
+      base: 500
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 30
+      agility: 25
+      constitution: 30
       intelligence: 20
+      max_hp: 500
+      max_qi: 300
+      critical_rate: 0.08
     
-    # 解锁的技能
-    unlock_skills:
-      - "御剑术"
-      - "灵盾"
+    level_growth:
+      strength: 5
+      agility: 4
+      constitution: 5
+      intelligence: 3
+      max_hp: 50
+      max_qi: 40
     
-    breakthrough:
-      next_realm: "金丹期"
-      required_level: 20
-      required_exp: 5000
-      required_items:
-        - "金丹"
+    breakthrough_requirements:
+      level: 10
+      items:
+        金丹种子: 1
+        天材地宝: 3
+      sect_contribution: 200
     
-    desc: "筑基成功，脱胎换骨，灵力大增"
-  
+    next_realm: "金丹期"
+
+  # -----------------
+
   金丹期:
-    level: 3
+    level: 20
     name: "金丹期"
-    max_qi: 2000
-    qi_regen: 20
+    desc: "一颗金丹吞入腹，我命由我不由天。凝聚金丹，神识初现。"
     
-    attribute_bonus:
-      strength: 50
-      agility: 40
-      intelligence: 60
+    max_level: 10
+    exp_curve:
+      base: 2000
+      multiplier: 1.5
     
-    unlock_skills:
-      - "金丹爆裂"
-      - "灵气护体"
+    base_stats:
+      strength: 80
+      agility: 60
+      constitution: 80
+      intelligence: 50
+      max_hp: 2000
+      max_qi: 1000
+      critical_rate: 0.10
     
-    desc: "凝结金丹，寿元大增，已是人间强者"
+    level_growth:
+      strength: 10
+      agility: 8
+      constitution: 10
+      intelligence: 6
+      max_hp: 200
+      max_qi: 100
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        元婴灵液: 1
+        渡劫丹: 5
+      sect_contribution: 1000
+      tasks:
+        - "金丹凝结试炼"
+    
+    next_realm: "元婴期"
+
+  # -----------------
+
+  元婴期:
+    level: 30
+    name: "元婴期"
+    desc: "碎丹成婴，元神出窍，瞬息千里。可御空飞行，掌控法宝。"
+    
+    max_level: 10
+    exp_curve:
+      base: 10000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 200
+      agility: 150
+      constitution: 200
+      intelligence: 150
+      max_hp: 8000
+      max_qi: 5000
+      critical_rate: 0.12
+    
+    level_growth:
+      strength: 25
+      agility: 20
+      constitution: 25
+      intelligence: 15
+      max_hp: 800
+      max_qi: 500
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        化神果: 1
+        九转仙丹: 1
+      sect_contribution: 5000
+      tasks:
+        - "元婴大成劫"
+    
+    next_realm: "化神期"
+
+  # -----------------
+
+  化神期:
+    level: 40
+    name: "化神期"
+    desc: "元婴化神，感悟天地法则，初步掌控空间之力。"
+    
+    max_level: 10
+    exp_curve:
+      base: 50000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 500
+      agility: 400
+      constitution: 500
+      intelligence: 400
+      max_hp: 30000
+      max_qi: 20000
+      critical_rate: 0.15
+    
+    level_growth:
+      strength: 60
+      agility: 50
+      constitution: 60
+      intelligence: 40
+      max_hp: 3000
+      max_qi: 2000
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        炼虚神丹: 1
+        空间碎片: 10
+      sect_contribution: 20000
+    
+    next_realm: "炼虚期"
+
+  # ================= 中境界 (灵界) =================
+
+  炼虚期:
+    level: 50
+    name: "炼虚期"
+    desc: "返虚入道，可撕裂虚空，穿梭位面。法力深厚，难逢敌手。"
+    
+    max_level: 10
+    exp_curve:
+      base: 200000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 1500
+      agility: 1200
+      constitution: 1500
+      intelligence: 1000
+      max_hp: 100000
+      max_qi: 80000
+      critical_rate: 0.18
+    
+    level_growth:
+      strength: 150
+      agility: 120
+      constitution: 150
+      intelligence: 100
+      max_hp: 10000
+      max_qi: 8000
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        合体圣丹: 1
+        虚空精华: 50
+      sect_contribution: 100000
+      tasks:
+        - "虚空试炼"
+    
+    next_realm: "合体期"
+
+  # -----------------
+
+  合体期:
+    level: 60
+    name: "合体期"
+    desc: "肉身与元神合二为一，法力无边，寿元万载。"
+    
+    max_level: 10
+    exp_curve:
+      base: 1000000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 5000
+      agility: 4000
+      constitution: 5000
+      intelligence: 4000
+      max_hp: 500000
+      max_qi: 300000
+      critical_rate: 0.20
+    
+    level_growth:
+      strength: 500
+      agility: 400
+      constitution: 500
+      intelligence: 400
+      max_hp: 50000
+      max_qi: 30000
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        大乘灵丹: 1
+        法则结晶: 100
+      sect_contribution: 500000
+    
+    next_realm: "大乘期"
+
+  # -----------------
+
+  大乘期:
+    level: 70
+    name: "大乘期"
+    desc: "修仙界的巅峰，只待仙门开启。可横扫下界，无人能敌。"
+    
+    max_level: 5              # 大乘期等级上限降低
+    exp_curve:
+      base: 5000000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 20000
+      agility: 15000
+      constitution: 20000
+      intelligence: 15000
+      max_hp: 2000000
+      max_qi: 1000000
+      critical_rate: 0.25
+    
+    level_growth:
+      strength: 2000
+      agility: 1500
+      constitution: 2000
+      intelligence: 1500
+      max_hp: 200000
+      max_qi: 100000
+    
+    breakthrough_requirements:
+      level: 5
+      items:
+        渡劫天丹: 1
+        雷劫结晶: 999
+      sect_contribution: 2000000
+      tasks:
+        - "九九天劫"
+    
+    next_realm: "渡劫期"
+
+  # -----------------
+
+  渡劫期:
+    level: 75
+    name: "渡劫期"
+    desc: "逆天而行，需历经九天雷劫。成则飞升，败则身死道消。"
+    
+    max_level: 5
+    exp_curve:
+      base: 20000000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 50000
+      agility: 40000
+      constitution: 50000
+      intelligence: 40000
+      max_hp: 5000000
+      max_qi: 3000000
+      critical_rate: 0.30
+    
+    level_growth:
+      strength: 5000
+      agility: 4000
+      constitution: 5000
+      intelligence: 4000
+      max_hp: 500000
+      max_qi: 300000
+    
+    breakthrough_requirements:
+      level: 5
+      items:
+        飞升令: 1
+        仙界通行证: 1
+      sect_contribution: 10000000
+      tasks:
+        - "雷劫试炼"
+        - "飞升台开启"
+    
+    next_realm: "真仙"
+
+  # ================= 上境界 (仙界) =================
+
+  真仙:
+    level: 80
+    name: "真仙"
+    desc: "渡过雷劫，飞升仙界，凝聚仙体。不老不死，与天地同寿。"
+    
+    max_level: 10
+    exp_curve:
+      base: 100000000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 200000
+      agility: 150000
+      constitution: 200000
+      intelligence: 150000
+      max_hp: 20000000
+      max_qi: 10000000
+      critical_rate: 0.35
+    
+    level_growth:
+      strength: 20000
+      agility: 15000
+      constitution: 20000
+      intelligence: 15000
+      max_hp: 2000000
+      max_qi: 1000000
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        金仙果: 1
+        仙灵石: 10000
+      sect_contribution: 50000000
+    
+    next_realm: "金仙"
+
+  # -----------------
+
+  金仙:
+    level: 90
+    name: "金仙"
+    desc: "金性不朽，不灭不坏。掌控仙界法则，可开辟小世界。"
+    
+    max_level: 10
+    exp_curve:
+      base: 500000000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 1000000
+      agility: 800000
+      constitution: 1000000
+      intelligence: 800000
+      max_hp: 100000000
+      max_qi: 50000000
+      critical_rate: 0.40
+    
+    level_growth:
+      strength: 100000
+      agility: 80000
+      constitution: 100000
+      intelligence: 80000
+      max_hp: 10000000
+      max_qi: 5000000
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        太乙神果: 1
+        混沌精华: 1000
+      sect_contribution: 500000000
+    
+    next_realm: "太乙玉仙"
+
+  # -----------------
+
+  太乙玉仙:
+    level: 100
+    name: "太乙玉仙"
+    desc: "太乙道果，演化自身小世界。可掌控时间，逆转阴阳。"
+    
+    max_level: 10
+    exp_curve:
+      base: 2000000000
+      multiplier: 1.5
+    
+    base_stats:
+      strength: 5000000
+      agility: 4000000
+      constitution: 5000000
+      intelligence: 4000000
+      max_hp: 500000000
+      max_qi: 200000000
+      critical_rate: 0.45
+    
+    level_growth:
+      strength: 500000
+      agility: 400000
+      constitution: 500000
+      intelligence: 400000
+      max_hp: 50000000
+      max_qi: 20000000
+    
+    breakthrough_requirements:
+      level: 10
+      items:
+        大罗金丹: 1
+        时空碎片: 10000
+      sect_contribution: 5000000000
+      tasks:
+        - "大罗劫"
+    
+    next_realm: "大罗金仙"
+
+  # -----------------
+
+  大罗金仙:
+    level: 110
+    name: "大罗金仙"
+    desc: "一切时空，永恒自在，超脱命运长河。三界六道，无人能制。"
+    
+    max_level: 999           # 最高境界，近乎无限等级
+    exp_curve:
+      base: 10000000000
+      multiplier: 1.2        # 成长放缓
+    
+    base_stats:
+      strength: 99999999
+      agility: 99999999
+      constitution: 99999999
+      intelligence: 99999999
+      max_hp: 999999999
+      max_qi: 999999999
+      critical_rate: 0.50
+    
+    level_growth:
+      strength: 1000000
+      agility: 1000000
+      constitution: 1000000
+      intelligence: 1000000
+      max_hp: 100000000
+      max_qi: 100000000
+    
+    # 最高境界，无需突破
+    breakthrough_requirements: null
+    next_realm: null

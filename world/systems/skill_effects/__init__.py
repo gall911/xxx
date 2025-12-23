@@ -30,12 +30,11 @@ def get_registered_effects():
     """获取已注册效果列表"""
     return list(EFFECT_REGISTRY.keys())
 
-# 导入所有效果模块
+# ========== 导入所有效果模块 ==========
 from . import base_effects
-from . import blood_effects
 from . import buff_effects
-from . import counter_effects
-
+from . import debuff_effects
+# 删除：blood_effects, counter_effects
 __all__ = [
     'register_effect',
     'apply_effect',

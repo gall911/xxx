@@ -1,7 +1,8 @@
 """
-战斗管理器 - 轮流回合制版本
-每个Tick只有一方攻击，攻击完切换回合
-支持：NPC死亡变尸体、自动重生
+战斗管理器 - 存档修复版
+修改点:
+1. 战斗结束时保存 HP/Qi 到 db
+2. 支持事件触发存档
 """
 from twisted.internet import reactor
 from evennia.utils import logger
@@ -44,7 +45,7 @@ class CombatManager:
         self.active_combats[combat_id] = {
             'attacker': attacker,
             'target': target,
-            'current_turn': 0,  # 0=attacker回合, 1=target回合
+            'current_turn': 0,
             'delayed_call': delayed_call
         }
         
@@ -56,7 +57,7 @@ class CombatManager:
         return True
     
     def _combat_tick(self, combat_id):
-        """战斗Tick（每个Tick只有一方攻击）"""
+        """战斗Tick"""
         combat_data = self.active_combats.get(combat_id)
         if not combat_data:
             return
@@ -99,34 +100,27 @@ class CombatManager:
         # 减少冷却
         self.combat_system._reduce_cooldowns(actor)
         
-        # ========== 新系统：从技能槽选择技能 ==========
-        active_skills = actor.get_active_skills()  # [(skill_key, level), ...]
+        # 选择技能
+        active_skills = actor.get_active_skills()
         
-        if not active_skills:
-            # 没有装备技能，使用普通攻击
+        available = []
+        for sk, lv in active_skills:
+            cooldown = actor.ndb.skill_cooldowns.get(sk, 0)
+            if cooldown <= 0:
+                available.append((sk, lv))
+        
+        if available:
+            skill_key, skill_level = self.combat_system._choose_skill_weighted(available)
+        else:
             skill_key = 'basic_attack'
             skill_level = actor.db.learned_skills.get('basic_attack', 1)
-        else:
-            # 从装备的技能中随机选择可用的（不在CD的）
-            available = []
-            for sk, lv in active_skills:
-                cooldown = actor.ndb.skill_cooldowns.get(sk, 0)
-                if cooldown <= 0:
-                    available.append((sk, lv))
-            
-            if available:
-                skill_key, skill_level = self.combat_system._choose_skill_weighted(available)
-            else:
-                # 所有技能都在CD，用普通攻击
-                skill_key = 'basic_attack'
-                skill_level = actor.db.learned_skills.get('basic_attack', 1)
         
         # 执行攻击
         self.combat_system.use_skill(
             actor,
             defender,
             skill_key,
-            skill_level=skill_level,  # ← 传递等级
+            skill_level=skill_level,
             callback=lambda result: self._on_turn_complete(combat_id, result)
         )
     
@@ -138,6 +132,11 @@ class CombatManager:
         
         attacker = combat_data['attacker']
         target = combat_data['target']
+        
+        # Buff 处理
+        from world.systems.buff_manager import BuffManager
+        BuffManager.tick_buffs(attacker, 'turn_end')
+        BuffManager.tick_buffs(target, 'turn_end')
         
         # 显示状态
         self._show_combat_status(attacker, target)
@@ -154,6 +153,10 @@ class CombatManager:
             self._end_combat(combat_id, target)
             return
         
+        # 减少Buff持续时间
+        BuffManager.reduce_duration(attacker)
+        BuffManager.reduce_duration(target)
+        
         # 检查最大回合数
         attacker.ndb.combat_round = getattr(attacker.ndb, 'combat_round', 0) + 1
         if attacker.ndb.combat_round >= self.combat_system.max_rounds:
@@ -162,7 +165,7 @@ class CombatManager:
             return
         
         # 切换回合
-        combat_data['current_turn'] = 1 - combat_data['current_turn']  # 0→1, 1→0
+        combat_data['current_turn'] = 1 - combat_data['current_turn']
         
         # 继续下一个Tick
         delayed_call = reactor.callLater(
@@ -182,7 +185,6 @@ class CombatManager:
         target_hp = getattr(target.ndb, 'hp', 0) or 0
         target_max_hp = getattr(target.ndb, 'max_hp', 1) or 1
         
-        # 使用中文名显示
         attacker_name = attacker.name or attacker.key
         target_name = target.name or target.key
         
@@ -210,7 +212,11 @@ class CombatManager:
         return False
     
     def _end_combat(self, combat_id, winner):
-        """结束战斗"""
+        """
+        结束战斗
+        
+        🔥 新增: 战斗结束时同步 ndb → db
+        """
         combat_data = self.active_combats.get(combat_id)
         if not combat_data:
             return
@@ -243,24 +249,57 @@ class CombatManager:
             attacker.msg("|y【战斗已结束】|n")
             target.msg("|y【战斗已结束】|n")
         
+        # 🔥 战斗结束: 同步 HP/Qi 到数据库
+        self._save_combat_data(attacker)
+        self._save_combat_data(target)
+        
+        # 🔥 检查是否需要触发存档
+        from world.systems.save_system import SaveSystem
+        if SaveSystem.should_save_on_event('combat_end'):
+            if hasattr(attacker, 'account'):  # 玩家角色
+                SaveSystem.save_character(attacker)
+            if hasattr(target, 'account'):
+                SaveSystem.save_character(target)
+        
         logger.log_info(f"[战斗] {attacker.key} vs {target.key} 结束")
+    
+    def _save_combat_data(self, character):
+        """
+        🔥 新增: 保存战斗数据到数据库
+        
+        只保存 HP/Qi,其他属性不动
+        注意: 不保存装备加成,直接存 ndb 的值
+        """
+        if not hasattr(character, 'attributes'):
+            return
+        
+        # 保存当前 HP/Qi (战斗后的实际值)
+        current_hp = getattr(character.ndb, 'hp', None)
+        current_qi = getattr(character.ndb, 'qi', None)
+        
+        if current_hp is not None:
+            character.attributes.add('hp', current_hp)
+        
+        if current_qi is not None:
+            character.attributes.add('qi', current_qi)
+        
+        # 🔥 重要: 战斗后血量可能变化,需要封顶检查
+        max_hp = getattr(character.ndb, 'max_hp', 100)
+        if current_hp and current_hp > max_hp:
+            character.attributes.add('hp', max_hp)
     
     def _turn_to_corpse(self, npc):
         """NPC变成尸体"""
-        # 1. 保存原始数据
         npc.db.original_name = npc.name
         npc.db.original_desc = npc.desc
         
-        # 2. 变成尸体
         npc.name = f"{npc.db.original_name}的尸体"
         npc.desc = f"{npc.db.original_desc}\n\n|r尸体已经冰冷，散发着淡淡的血腥味。|n"
         npc.db.is_corpse = True
         
-        # 3. 广播死亡消息
         if npc.location:
             npc.location.msg_contents(f"|r{npc.db.original_name}倒地身亡！|n")
         
-        # 4. 启动重生计时器
         respawn_time = npc.db.respawn_time or 300
         reactor.callLater(respawn_time, self._respawn_npc, npc)
         
@@ -268,22 +307,18 @@ class CombatManager:
     
     def _respawn_npc(self, npc):
         """NPC重生"""
-        # 1. 特效
         if npc.location:
             npc.location.msg_contents("|w一阵青烟散去...|n")
         
-        # 2. 恢复外观（db层）
         npc.name = npc.db.original_name
         npc.desc = npc.db.original_desc
         del npc.db.is_corpse
         del npc.db.original_name
         del npc.db.original_desc
         
-        # 3. 恢复战斗数据（ndb层）- 重新初始化
         if hasattr(npc, '_init_ndb_attributes'):
             npc._init_ndb_attributes()
         
-        # 4. 广播重生消息
         if npc.location:
             npc.location.msg_contents(f"|g{npc.name}重新出现了！|n")
         

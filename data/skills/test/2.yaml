@@ -1,94 +1,58 @@
-skills:
-  # ========== 主动技能：魂销百媚 ==========
-  soul_melting_allure:
-    # === 基础信息 ===
-    name: "|515魂销百媚|555" # 亮品红/紫
+phantom_killing_stab: # 技能英文key：幽兰夺命刺
+    name: "幽兰夺命刺"
     desc: |
-      |555西域魔教秘传的禁忌媚术，以燃烧自身情欲与神魂为代价，
-      对敌手施以毁灭性的情感诱惑。此术能扰乱对手的道心，
-      使其真气逆行，外伤未显，内腑已溃。|555
-      |550非心智坚定、道心圆满者，中此招后道途尽毁。|555
-    type: "active"                         # 技能类型：主动
+      西域魔宗专门用于暗杀的近身搏杀秘技。施术者以极快的身法围绕目标走位，
+      在【 target】周围形成无法捕捉的**魅影**。一击得手，毒香即刻入体，
+      破坏敌人心脉。此招迅捷凶残，只求一击致命。
     
-    # === 施法参数 ===
-    cast_time: 10                          # 施法时间（秒）- 时间更长，酝酿情感
-    cooldown: 1                            # 冷却时间（回合）
-    cost_qi: 50                            # 消耗灵力（更高）
-    
-    # === 命中相关 ===
-    accuracy: 0.9                         # 基础命中率（略低，因攻击神识难度大）
-    accuracy_scale:
-      #spirit: 0.003                        # 受精神/神识属性加成，每点精神+0.3%命中
- 
-    # === 反击相关 ===
-    counter_chance: 0.01                   # 极低反击率，此招极度危险
-    counter_weight: 5                      # 作为反击时的权重更高
-    
-    # === 技能效果 ===
-    effects:
-      - type: "damage"                     # 效果类型：伤害
-        value: 65                          # 基础伤害值（更高）
-        element: "blood"            # 伤害元素：神魂/内伤
-      
-      - type: "lifesteal"            # 效果类型：内伤debuff
-        ratio: 2                        # 效果类型：内伤debuff
-        #effect_id: "qi_shatter"            # 状态ID：真气瓦解
-        #duration: 2                        # 持续回合
-        #stat_debuff: "resistance"          # 降低目标抗性/防御
-        #value: 0.20                        # 降低20%防御和真气恢复
-      
-    # === (施法参数与效果参数省略，与上文一致) ===
-    
-    # === 战斗描述 (字数翻倍，情感与妖艳升级，加入着色) ===
-    battle_text:
-      # --- 施法阶段：情感铺垫，妖艳入骨 ---
+battle_text:
+      # --- 施法阶段：走位与贴近 (重点：速度、鬼魅、无法捕捉) ---
       cast:
-        - text: "|550{caster}身形定住，**眼角飞霞，泪痣轻颤**，仿佛一朵含苞欲放的毒莲！|555" # 亮黄/金 - 魅惑动作
-          delay_percent: 0
-        - text: "|550她**朱唇微启，吐出撩人心弦的软语**，双臂缓缓张开，像要拥抱{target}，周身气机却诡异至极！|555"
-          delay_percent: 25
-        - text: "|555{target}只觉心头仿佛被一双无形的手攥住，|515**道心摇曳欲坠**|555，脑海中浮现出前尘往事，万念俱灰！|555"
-          delay_percent: 50
-        - text: "|500一股**妖异至极的血色真气**自{caster}丹田升腾而起，化作九尾狐影，媚惑苍生！|555" # 亮红 - 杀机
-          delay_percent: 75
+        - text: "{caster}身形如同**一道鬼魅的幽烟**，瞬间消失在原地，无声无息！"
+          delay_percent: 0                 # 施法开始时显示
+        - text: "{target}只觉周围气流猛烈旋转，**眼前尽是{caster}摇曳的轻纱幻影**，心跳骤然加速！"
+          delay_percent: 30 # 走位开始
+        - text: "{caster}的**身影骤然凝实**，已鬼魅般贴近{target}的身侧，几乎是肌肤相贴！"
+          delay_percent: 50 # 完成贴身走位，准备出招
       
-      # --- 命中阶段：神魂冲击，真元溃散 ---
+      # --- 命中阶段：瞬杀与毒香 (重点：凶残、毒、亲密接触) ---
       hit:
-        - text: "|550{caster}**莲步急踏，贴身而至**，指尖轻抚{target}的衣衫！姿态极尽诱惑，却蕴含致命杀机！|555"
-          delay_percent: 80
-        - text: "|555她的一声|515**销魂低唤**|555，如天魔音灌入{target}耳中，神识瞬间被撕裂，护体真元开始溃散！|555"
-          delay_percent: 90
-        - text: "|500血色真气渗透{target}皮肤，直冲丹田气海！{target}闷哼一声，**内腑剧震，喷出一口黑血**！造成|500|h{damage}|n|500点内伤！|555" # 亮红+高亮 - 伤害结果
-          delay_percent: 100
+        - text: "{caster}手中一柄**银质匕首**闪烁寒光，带着一股**蚀骨的幽兰毒香**，迅猛地刺向{target}的要害！"
+          delay_percent: 60 # 匕首出招
+        - text: "匕首穿透护体灵气，在{target}的肋下/颈侧**留下致命的创口**，毒香入体，直奔心脉！"
+          delay_percent: 80 # 命中与毒素植入
+        - text: "{target}闷哼一声，只觉心脉剧痛！造成伤害{damage}，并**附带剧毒效果**！"
+          delay_percent: 100 # 命中结束，结算数值
       
-      # --- 闪避阶段：铁石心肠，避开情劫 ---
+      # --- 闪避阶段：险之又险 ---
       dodge:
-        - text: "|555{target}在千钧一发之际，**怒喝一声，咬破舌尖**，强行驱散脑中幻象！|555"
-          delay_percent: 70
-        - text: "|550{caster}的指尖堪堪擦过{target}的侧颈，媚术功亏一篑。{target}喘息未定，已知此劫凶险万分！|555"
-          delay_percent: 100
-    
-      # --- 暴击阶段：道途尽毁，万劫不复 ---
-      critical:
-        - text: "|515暴击！{caster}一招**‘回眸一笑百媚生’**，{target}道心彻底崩溃，瞬间陷入癫狂幻境！|555"
-          delay_percent: 80
-        - text: "|500妖异真气如潮水般涌入{target}气海，丹田剧痛，**真元直接被震碎大半**！|555"
-          delay_percent: 90
-        - text: "|500{target}全身经脉逆行，七窍流血，**修为恐就此停滞！**造成|500|h{damage}|n|500点毁灭性内伤！|555"
-          delay_percent: 100
-      
-      # --- 反击专用：玉石俱焚的瞬间爆发 ---
-      counter_cast:
-        - text: "|550{caster}受袭不退反进，借着冲击之力，**逆转真气，反手一击**直取{target}咽喉！|555"
-          delay_percent: 0
-      
-      counter_hit:
-        - text: "|515{caster}的指风带着蚀骨的媚气，击中{target}胸口！|555"
+        - text: "{target}在匕首临身瞬间，强行扭动腰部，**以毫厘之差避开致命一击**！"
           delay_percent: 60
-        - text: "|500{target}胸口一闷，强行咽下逆血！造成|500|h{damage}|n|500点内伤！|555"
+        - text: "幽兰毒香擦过{target}的皮肤，留下**一片冰冷的麻木**。{target}暗道：**好快的速度！**"
+          delay_percent: 100
+      
+      # --- 暴击阶段：一击毙命 (重点：不留余地) ---
+      critical:
+        - text: "暴击！{caster}**妖冶一笑**，匕首如同毒蛇吐信，精准地刺入{target}的**心窝要害**！"
+          delay_percent: 60
+        - text: "幽兰毒香瞬间爆发，{target}七窍流血，精血被匕首上的魔纹瞬间吸噬！造成伤害{damage}，恢复生命{heal}！"
+          delay_percent: 100
+      
+      # --- 反击专用（可选）：借力瞬杀 ---
+      counter_cast:
+        - text: "{caster}借{target}攻击的反震之力，身形如同**被拉伸的轻纱**，迅猛地反绕至{target}身后！"
+          delay_percent: 0
+        - text: "匕首在{target}身后悄然出鞘！"
+          delay_percent: 40
+      
+      counter_hit: 
+        - text: "匕首从背后划开{target}的**防备不及之处**，幽兰毒香瞬间蔓延！"
+          delay_percent: 60
+        - text: "造成伤害{damage}，并导致{target}**全身麻痹**！"
           delay_percent: 100
       
       counter_critical:
-        - text: "|500反击暴击！{caster}**媚笑不止，指甲深陷！**|555"
+        - text: "反击暴击！匕首撕裂{target}背部要害，**毒素直达脑髓**！"
           delay_percent: 60
-        - text: "|500媚气直接震伤{target}心脉，造成|500|h{damage}|n|500点恐怖内伤！{target}浑身抽搐不止！|555"
+        - text: "造成伤害{damage}，{target}**当场倒地，生机断绝！**"
+          delay_percent: 100

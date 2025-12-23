@@ -1,13 +1,13 @@
 """
 commands/default_cmdsets.py
-核心命令集配置文件 - 稳健防崩版
+核心命令集 - 显式加载版
 """
 from evennia import default_cmds
+from evennia.utils import logger
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
     """
-    所有玩家角色的基础命令集。
-    这里的东西，所有人出生就自带。
+    玩家角色基础命令集
     """
     key = "Character"
 
@@ -15,74 +15,88 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         """
         组装命令集
         """
-        # 1. 【核心保险】先加载官方基础命令 (n, s, look, get, inventory...)
-        # 只要这行在，基础功能就永远不会丢。
+        # 1. 基础命令 (look, get, inventory 等)
         super().at_cmdset_creation()
         
-        # 2. 【开发工具】加载全自动扫描雷达 (DevCmdSet)
-        # 使用 try-except 保护，万一开发文件报错，不影响玩家正常游戏
+        # ==========================================================
+        # 2. 加载自定义模块
+        # 我们不再用 try-pass 隐藏错误。
+        # 如果下面的 import 报错，说明你的代码写错了，请去修代码！
+        # ==========================================================
+
+        # --- 开发工具 ---
         try:
             from commands.dev.dev_cmdset import DevCmdSet
             self.add(DevCmdSet)
-        except Exception as e:
-            print(f"|r[警告] 开发命令集加载失败 (不影响基础游戏): {e}|n")
-
-        # 3. 【游戏功能】加载任务系统 (Quest)
-        try:
-            from commands.quest_commands import (
-                CmdQuest, CmdQuestList, CmdAbandon, 
-                CmdAcceptQuest, CmdCompleteQuest
-            )
-            self.add(CmdQuest())
-            self.add(CmdQuestList())
-            self.add(CmdAbandon())
-            self.add(CmdAcceptQuest())
-            self.add(CmdCompleteQuest())
         except ImportError:
-            # 如果你还没写好 quest_commands.py，这里会静默跳过，不会报错
-            pass
-        except Exception as e:
-            print(f"|r[警告] 任务命令加载失败: {e}|n")
+            # 只有开发工具允许缺失
+            logger.log_warn("未找到开发命令集 (commands.dev.dev_cmdset)，已跳过。")
 
-        # 4. 【游戏功能】加载 NPC 交互 (Talk)
+        # --- 物品与装备 (Inventory & Equipment) ---
+        # 🔥 新增：完整的物品+装备命令（不再使用 InventoryCmdSet）
         try:
-            from commands.npc_commands import CmdTalk, CmdNPCInfo
-            self.add(CmdTalk())
-            self.add(CmdNPCInfo())
-        except ImportError:
-            pass
-        except Exception as e:
-            print(f"|r[警告] NPC命令加载失败: {e}|n")
-
-        
+            from commands.inventory import CmdInventory, CmdUse, CmdDrop, CmdGive
+            from commands.equipment import CmdEquip, CmdUnequip, CmdEquipped, CmdEnhance, CmdRepair
+            from commands.craft import CmdCraft, CmdRecipes, CmdMerge
             
+            self.add(CmdInventory())
+            self.add(CmdUse())
+            self.add(CmdDrop())
+            self.add(CmdGive())
+            self.add(CmdEquip())
+            self.add(CmdUnequip())
+            self.add(CmdEquipped())
+            self.add(CmdEnhance())
+            self.add(CmdRepair())
+            self.add(CmdCraft())
+            self.add(CmdRecipes())
+            self.add(CmdMerge())
+        except ImportError as e:
+            logger.log_warn(f"未找到装备/背包命令: {e}")
+            # 如果新系统没有，回退到旧的
+            try:
+                from commands.inventory import InventoryCmdSet
+                self.add(InventoryCmdSet)
+            except:
+                pass
 
+        # --- 战斗系统 (Combat) ---
+        from commands.combat import CombatCmdSet
+        self.add(CombatCmdSet)
+
+        # --- 技能系统 (Skills) ---
+        from commands.skill_commands import SkillCmdSet
+        self.add(SkillCmdSet)
+
+        # --- 修炼系统 (Cultivation) ---
+        from commands.cultivation import CultivationCmdSet
+        self.add(CultivationCmdSet)
+
+        # --- NPC 交互 ---
+        from commands.npc_commands import CmdTalk, CmdNPCInfo
+        self.add(CmdTalk())
+        self.add(CmdNPCInfo())
+
+        # --- 任务系统 ---
+        # 🔥 修改这里：引入并添加任务命令集
+        # 注意：我们要引入的是 CmdSet，不是单个 Command，这样更整洁
+        try:
+            from commands.quest_commands import QuestCmdSet
+            self.add(QuestCmdSet)
+        except ImportError:
+            logger.log_warn("未找到任务命令集，已跳过。")
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
-    """
-    账号级别的命令 (OOC, 聊天频道等)
-    """
     key = "DefaultAccount"
-
     def at_cmdset_creation(self):
         super().at_cmdset_creation()
-
 
 class UnloggedinCmdSet(default_cmds.UnloggedinCmdSet):
-    """
-    登录前的命令 (create, connect)
-    """
     key = "DefaultUnloggedin"
-
     def at_cmdset_creation(self):
         super().at_cmdset_creation()
 
-
 class SessionCmdSet(default_cmds.SessionCmdSet):
-    """
-    Session 级别的命令 (通常为空)
-    """
     key = "DefaultSession"
-
     def at_cmdset_creation(self):
         super().at_cmdset_creation()

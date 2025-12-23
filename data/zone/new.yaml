@@ -1,0 +1,481 @@
+# ============================================================
+# data/zones/newbie_village/zone.yaml
+# 区域元数据配置
+# ============================================================
+zone:
+  key: "newbie_village"
+  name: "新手村"
+  desc: "一个宁静祥和的小村庄，是所有冒险者开始修仙之路的地方。"
+  
+  # 🔥 控制开关
+  enabled: true              # 是否启用该区域
+  auto_build: true           # 服务器启动时自动建造
+  
+  # 入口配置
+  entry_room: "room_village_center"
+  
+  # 等级范围
+  min_level: 1
+  max_level: 10
+  
+  # 推荐境界
+  recommended_realm: "练气期"
+  
+  # 区域标签
+  tags:
+    - newbie
+    - safe_zone
+    - tutorial
+
+---
+# ============================================================
+# data/zones/newbie_village/version.yaml
+# 版本控制
+# ============================================================
+version:
+  current: "1.0.0"
+  last_sync: "2024-12-10 12:00:00"
+  
+  changelog:
+    - version: "1.0.0"
+      date: "2024-12-10"
+      author: "GM"
+      changes:
+        - "初始版本"
+        - "包含村中心、药店、武器店、练功场"
+        - "包含村长、药师、铁匠、野狼"
+
+---
+# ============================================================
+# data/zones/newbie_village/rooms.yaml
+# 房间定义
+# ============================================================
+rooms:
+  # === 村中心 ===
+  room_village_center:
+    name: "村中心"
+    desc: |
+      这里是新手村的中心广场，青石板铺就的地面干净整洁。
+      广场中央有一口古井，几位村民正在井边闲聊。
+      北边是村长的住所，南边通向练功场。
+      东边是药店，西边是武器铺。
+    
+    exits:
+      north: room_elder_house
+      south: room_training_ground
+      east: room_medicine_shop
+      west: room_weapon_shop
+    
+    # 房间属性
+    properties:
+      safe_zone: true          # 安全区,不能战斗
+      respawn_point: true      # 玩家出生点
+  
+  # === 村长家 ===
+  room_elder_house:
+    name: "村长家"
+    desc: |
+      一间整洁的木屋，墙上挂着几幅山水画。
+      村长老张正坐在太师椅上，慈祥地看着来访者。
+      桌上摆着一壶清茶，散发着淡淡的香气。
+    
+    exits:
+      south: room_village_center
+    
+    properties:
+      safe_zone: true
+      quest_hub: true          # 任务中心
+  
+  # === 练功场 ===
+  room_training_ground:
+    name: "练功场"
+    desc: |
+      一片宽阔的空地，地面夯得结结实实。
+      几个木人桩立在场地边缘，上面留下了无数刀剑的痕迹。
+      这里是新手修炼武技的好地方。
+    
+    exits:
+      north: room_village_center
+      west: room_forest_entrance
+    
+    properties:
+      safe_zone: false
+      training_bonus: 1.2      # 修炼加成
+  
+  # === 药店 ===
+  room_medicine_shop:
+    name: "回春堂"
+    desc: |
+      药店内弥漫着草药的清香，墙上挂满了各种药材。
+      货架上摆放着各种丹药和草药，标注着清晰的价格。
+      药师正在柜台后忙碌着。
+    
+    exits:
+      west: room_village_center
+    
+    properties:
+      safe_zone: true
+      shop_type: "medicine"
+  
+  # === 武器铺 ===
+  room_weapon_shop:
+    name: "神兵阁"
+    desc: |
+      武器铺内陈列着各式各样的兵器，在火光的照耀下闪闪发光。
+      铁匠正在炉火前挥汗如雨，叮叮当当的打铁声不绝于耳。
+    
+    exits:
+      east: room_village_center
+    
+    properties:
+      safe_zone: true
+      shop_type: "weapon"
+  
+  # === 森林入口 ===
+  room_forest_entrance:
+    name: "村外小树林"
+    desc: |
+      村子外围的一片小树林，阳光透过树叶洒下斑驳的光影。
+      不时能听到远处传来的野兽嚎叫声。
+      这里是新手练级的好地方，但也要小心野狼的袭击。
+    
+    exits:
+      east: room_training_ground
+      south: room_forest_depth
+    
+    properties:
+      safe_zone: false
+      danger_level: 1
+  
+  # === 森林深处 ===
+  room_forest_depth:
+    name: "树林深处"
+    desc: |
+      树林越来越密，光线变得昏暗。
+      地上散落着野兽的脚印和撕碎的布条，
+      远处传来低沉的嚎叫声，让人不寒而栗。
+    
+    exits:
+      north: room_forest_entrance
+    
+    properties:
+      safe_zone: false
+      danger_level: 2
+      spawn_area: true         # 刷怪区
+
+---
+# ============================================================
+# data/zones/newbie_village/npcs.yaml
+# NPC定义
+# ============================================================
+npcs:
+  # === 村长 (任务NPC) ===
+  npc_village_elder:
+    name: "村长老张"
+    desc: "一位年过六旬的老者，满脸慈祥，精神矍铄。村民们都很尊敬他。"
+    
+    spawn_room: room_elder_house
+    respawn: false             # 重要NPC不重生
+    
+    # NPC属性
+    level: 30
+    realm: "金丹期"
+    
+    # 对话
+    greetings:
+      - "年轻人，欢迎来到新手村。"
+      - "想要踏上修仙之路，就从这里开始吧。"
+    
+    # 提供的任务
+    quests:
+      - "quest_first_step"
+      - "quest_wolf_hunt"
+    
+    # 交易
+    shop:
+      type: "quest_rewards"
+      items:
+        - "新手木剑"
+        - "布衣"
+        - "回灵丹"
+  
+  # === 药师 (商店NPC) ===
+  npc_medicine_master:
+    name: "药师李婆婆"
+    desc: "一位和蔼的老婆婆，精通草药炼丹之术，村里的丹药都是她炼制的。"
+    
+    spawn_room: room_medicine_shop
+    respawn: false
+    
+    level: 20
+    realm: "筑基期"
+    
+    greetings:
+      - "孩子，要买点丹药吗？"
+      - "修炼可不能缺了丹药啊。"
+    
+    # 商店配置
+    shop:
+      type: "medicine"
+      items:
+        回灵丹:
+          price: 10
+          stock: 99
+        疗伤药:
+          price: 20
+          stock: 99
+        聚气丹:
+          price: 50
+          stock: 50
+  
+  # === 铁匠 (商店NPC) ===
+  npc_blacksmith:
+    name: "铁匠王铁柱"
+    desc: "一位身材魁梧的中年汉子，浑身肌肉虬结，挥锤打铁的样子充满力量感。"
+    
+    spawn_room: room_weapon_shop
+    respawn: false
+    
+    level: 25
+    realm: "筑基期"
+    
+    greetings:
+      - "要买兵器吗？俺打的可都是好货！"
+      - "新手？先买把趁手的兵器吧。"
+    
+    shop:
+      type: "weapon"
+      items:
+        新手木剑:
+          price: 50
+          stock: 20
+        铁剑:
+          price: 200
+          stock: 10
+        精铁剑:
+          price: 500
+          stock: 5
+  
+  # === 野狼 (怪物) ===
+  npc_wolf_01:
+    name: "野狼"
+    desc: "一只眼神凶恶的灰狼，獠牙锋利，看起来很危险。"
+    
+    spawn_room: room_forest_entrance
+    respawn: true
+    respawn_time: 300          # 5分钟重生
+    
+    # 怪物属性
+    level: 3
+    realm: "练气期"
+    
+    stats:
+      hp: 150
+      max_hp: 150
+      qi: 50
+      max_qi: 50
+      strength: 15
+      agility: 20
+      constitution: 12
+      intelligence: 5
+    
+    # 掉落
+    loot:
+      - item: "狼皮"
+        chance: 0.8
+        amount: [1, 2]
+      - item: "狼牙"
+        chance: 0.3
+        amount: 1
+      - item: "铜钱"
+        chance: 1.0
+        amount: [5, 15]
+    
+    # 经验
+    exp_reward: 30
+  
+  # === 野狼头领 (精英怪) ===
+  npc_wolf_alpha:
+    name: "狼王"
+    desc: "一只体型巨大的白狼，毛色雪白，眼神凌厉。它是这片树林的霸主。"
+    
+    spawn_room: room_forest_depth
+    respawn: true
+    respawn_time: 1800         # 30分钟重生
+    
+    level: 8
+    realm: "练气期"
+    
+    stats:
+      hp: 500
+      max_hp: 500
+      qi: 100
+      max_qi: 100
+      strength: 30
+      agility: 35
+      constitution: 25
+      intelligence: 10
+    
+    # 技能
+    skills:
+      - "wolf_howl"            # 嚎叫(群体恐惧)
+      - "fierce_bite"          # 凶猛撕咬
+    
+    loot:
+      - item: "狼王皮"
+        chance: 1.0
+        amount: 1
+      - item: "狼王牙"
+        chance: 0.8
+        amount: 1
+      - item: "下品灵石"
+        chance: 0.3
+        amount: [1, 3]
+      - item: "铜钱"
+        chance: 1.0
+        amount: [50, 100]
+    
+    exp_reward: 150
+    
+    # Boss标记
+    is_boss: true
+    respawn_announce: true     # 重生时全服公告
+
+---
+# ============================================================
+# data/zones/newbie_village/quests.yaml
+# 任务定义
+# ============================================================
+quests:
+  # === 第一步 ===
+  quest_first_step:
+    key: "quest_first_step"
+    name: "踏上修仙路"
+    desc: |
+      村长老张希望你能熟悉一下村子的环境。
+      去拜访药师和铁匠，了解他们能提供什么帮助。
+    
+    # 任务类型
+    type: "tutorial"
+    
+    # 接取条件
+    requirements:
+      min_level: 1
+      max_level: 5
+    
+    # 任务目标
+    objectives:
+      - type: "visit"
+        target: "room_medicine_shop"
+        desc: "拜访药店"
+      - type: "visit"
+        target: "room_weapon_shop"
+        desc: "拜访武器铺"
+      - type: "talk"
+        target: "npc_medicine_master"
+        desc: "与药师对话"
+      - type: "talk"
+        target: "npc_blacksmith"
+        desc: "与铁匠对话"
+    
+    # 奖励
+    rewards:
+      exp: 100
+      items:
+        新手木剑: 1
+        布衣: 1
+        回灵丹: 5
+      gold: 50
+  
+  # === 狼患 ===
+  quest_wolf_hunt:
+    key: "quest_wolf_hunt"
+    name: "清除狼患"
+    desc: |
+      最近村外的树林里野狼越来越多，已经威胁到了村民的安全。
+      村长希望你能帮忙清理一些野狼。
+    
+    type: "kill"
+    
+    requirements:
+      min_level: 3
+      completed_quests:
+        - "quest_first_step"
+    
+    objectives:
+      - type: "kill"
+        target: "野狼"
+        count: 10
+        desc: "击败野狼 0/10"
+    
+    rewards:
+      exp: 500
+      items:
+        疗伤药: 10
+        铜钱: 100
+      gold: 200
+  
+  # === 狼王讨伐 ===
+  quest_alpha_hunt:
+    key: "quest_alpha_hunt"
+    name: "狼王讨伐"
+    desc: |
+      树林深处出现了一只强大的狼王，普通村民根本不是对手。
+      只有真正的修仙者才能战胜它！
+    
+    type: "boss"
+    
+    requirements:
+      min_level: 7
+      completed_quests:
+        - "quest_wolf_hunt"
+    
+    objectives:
+      - type: "kill"
+        target: "狼王"
+        count: 1
+        desc: "击败狼王"
+    
+    rewards:
+      exp: 1000
+      items:
+        精铁剑: 1
+        聚气丹: 5
+        下品灵石: 3
+      gold: 500
+      sect_contribution: 50
+
+---
+# ============================================================
+# data/zones/newbie_village/spawns.yaml
+# 刷怪点配置
+# ============================================================
+spawns:
+  # 森林入口刷怪点
+  spawn_forest_entrance:
+    room: room_forest_entrance
+    
+    # 刷新配置
+    spawn_interval: 60         # 检查间隔(秒)
+    max_count: 3               # 最大数量
+    
+    # 刷新的怪物
+    monsters:
+      - npc: "npc_wolf_01"
+        weight: 10             # 权重
+        level_range: [2, 4]    # 等级浮动
+  
+  # 森林深处刷怪点
+  spawn_forest_depth:
+    room: room_forest_depth
+    
+    spawn_interval: 120
+    max_count: 5
+    
+    monsters:
+      - npc: "npc_wolf_01"
+        weight: 8
+        level_range: [4, 6]
+      - npc: "npc_wolf_alpha"
+        weight: 1              # 低概率刷新狼王
+        level_range: [8, 10]

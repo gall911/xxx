@@ -1,0 +1,53 @@
+# ========================================
+# base/support.yaml - 辅助技能模板
+# ========================================
+  support_skill:
+    inherit: "_base"
+    type: "active"
+    name: "辅助技能"
+    desc: "提供增益或治疗"
+    
+    category: "support"
+    element: "spirit"
+    range: "ranged"
+    hit_type: "magical"
+    target_type: "single"
+    
+    level_formula:
+      accuracy:
+        base: 1.0
+        per_level: 0
+        max: 1.0
+      
+      cast_time:
+        base: 4.0
+        per_level: -0.015
+        min: 2.0
+      
+      cooldown:
+        base: 3
+        per_level: -0.012
+        min: 1
+      
+      cost_qi:
+        base: 20
+        per_level: 0.5
+        max: 130
+    
+    counter_weight: 1
+    
+    stat_scaling:
+      strength: 0.0
+      intelligence: 0.8
+      agility: 0.0
+    
+    battle_text:
+      cast:
+        - text: "{caster}施展辅助法术..."
+          delay_percent: 0
+      hit:
+        - text: "{target}获得增益效果！"
+          delay_percent: 70
+    
+    required_realm: "练气期"
+    required_level: 5

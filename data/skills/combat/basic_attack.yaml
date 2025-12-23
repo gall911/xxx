@@ -1,0 +1,50 @@
+# ========================================
+# combat目录 - 物理战技
+# ========================================
+
+# ========================================
+# combat/basic_attack.yaml
+# 普通攻击（必备技能）
+# ========================================
+skills:
+  basic_attack:
+    inherit: "physical_combat"
+    
+    name: "普通攻击"
+    desc: "最基础的物理攻击，无消耗无冷却"
+    
+    level_formula:
+      damage:
+        base: 20
+        grow: 0.025
+      
+      cooldown:
+        base: 0
+        per_level: 0
+        min: 0
+      
+      cost_qi:
+        base: 0
+        per_level: 0
+        max: 0
+    
+    stat_scaling:
+      strength: 1.5
+      agility: 0.3
+    
+    effects:
+      - type: damage
+        value: "{level_damage}"
+        element: physical
+    
+    battle_text:
+      cast: []
+      hit:
+        - text: "{caster}击中{target}！造成{damage}点伤害！"
+          delay_percent: 0
+      critical:
+        - text: "暴击！{caster}重拳命中！造成{damage}点伤害！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 1

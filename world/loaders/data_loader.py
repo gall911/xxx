@@ -165,54 +165,68 @@ def load_all_data():
     logger.log_info("开始加载游戏数据...")
     logger.log_info("=" * 60)
     
-    base_path = Path('data')
+    base_path = Path('world/data')  # 🔥 修正路径：通常是 world/data 而不是 data
+    if not base_path.exists():
+         # 如果你的数据确实在项目根目录的 data 文件夹，那就用 Path('data')
+         # 请确认你的目录结构是 mygame/data 还是 mygame/world/data
+         base_path = Path('data') 
     
     # 1. 加载境界配置
     realms_data = load_single_yaml(base_path / 'realms.yaml')
     GAME_DATA['realms'] = realms_data.get('realms', realms_data)
     logger.log_info(f"[数据] 境界: {len(GAME_DATA['realms'])} 个")
     
-    # 2. 加载物品（递归加载items/base/目录）
+    # 2. 加载装备槽位 (优先加载，可能别的系统要用)
+    slots_data = load_single_yaml(base_path / 'equip_slots.yaml')
+    GAME_DATA['equip_slots'] = slots_data.get('slots', {})
+    logger.log_info(f"[数据] 装备槽位: {len(GAME_DATA['equip_slots'])} 个")
+    
+    # 3. 加载所有物品（包含普通物品、装备、材料等）
+    # 🔥 核心修正：只加载一次，包含所有子目录
     GAME_DATA['items'] = load_yaml_files_in_dir(
-        base_path / 'items' / 'base', 
+        base_path / 'items',  # 扫描整个 items 目录，不只是 base
         'items'
     )
-    logger.log_info(f"[数据] 物品: {len(GAME_DATA['items'])} 个")
+    logger.log_info(f"[数据] 物品总数: {len(GAME_DATA['items'])} 个")
     
-    # 3. 加载词条库
+    # 4. 加载词条库
     affixes_data = load_single_yaml(base_path / 'items' / 'affixes.yaml')
     GAME_DATA['affixes'] = affixes_data.get('affixes', {})
     logger.log_info(f"[数据] 词条: {len(GAME_DATA['affixes'])} 个")
     
-    # 4. 加载合成配方
+    # 5. 加载合成配方
     recipes_data = load_single_yaml(base_path / 'items' / 'recipes.yaml')
     GAME_DATA['recipes'] = recipes_data.get('recipes', {})
     logger.log_info(f"[数据] 配方: {len(GAME_DATA['recipes'])} 个")
     
-    # 5. 加载技能（支持继承）
+    # 6. 加载技能（支持继承）
     GAME_DATA['skills'] = load_skills_with_inheritance(base_path / 'skills')
     logger.log_info(f"[数据] 技能: {len(GAME_DATA['skills'])} 个")
     
-    # 6. 加载NPC
+    # 7. 加载NPC
     GAME_DATA['npcs'] = load_yaml_files_in_dir(
         base_path / 'npcs', 
         'npcs'
     )
     logger.log_info(f"[数据] NPC: {len(GAME_DATA['npcs'])} 个")
     
-    # 7. 加载房间
+    # 8. 加载房间
     GAME_DATA['rooms'] = load_yaml_files_in_dir(
         base_path / 'rooms', 
         'rooms'
     )
     logger.log_info(f"[数据] 房间: {len(GAME_DATA['rooms'])} 个")
 
-    # 8. 加载任务
+    # 9. 加载任务
     GAME_DATA['quests'] = load_yaml_files_in_dir(
         base_path / 'quests',
         'quests'
     )
     logger.log_info(f"[数据] 任务: {len(GAME_DATA['quests'])} 个")
+    
+    logger.log_info("=" * 60)
+    logger.log_info("游戏数据加载完成！")
+    logger.log_info("=" * 60)
     
     
     logger.log_info("=" * 60)

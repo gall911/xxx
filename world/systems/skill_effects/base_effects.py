@@ -1,4 +1,5 @@
-"""基础技能效果 - 伤害、治疗等"""
+"""基础技能效果 - 伤害、治疗等
+/home/gg/xx/xxx/world/systems/skill_effects/base_effects.py"""
 import random
 from . import register_effect
 from world.loaders.game_data import get_config
@@ -13,6 +14,7 @@ def damage_effect(config, attacker, target, context):
         element: 元素类型（可选）
         scale_with: 属性缩放（'strength', 'intelligence'等）
         scale_ratio: 缩放系数（默认1.0）
+        damage_variance: 伤害浮动范围（可选，默认使用全局配置）
     """
     base_damage = config.get('value', 0)
     element = config.get('element', 'physical')
@@ -25,8 +27,8 @@ def damage_effect(config, attacker, target, context):
         attr_value = getattr(attacker.ndb, scale_attr, 0) or 0
         base_damage += attr_value * scale_ratio
     
-    # 伤害浮动
-    variance = get_config('combat.damage_variance', 0.1)
+    # 伤害浮动 - 优先使用技能配置的variance，其次使用全局配置
+    variance = config.get('damage_variance', get_config('combat.damage_variance', 0.1))
     damage = base_damage * random.uniform(1 - variance, 1 + variance)
     
     # 暴击倍率（从context获取）

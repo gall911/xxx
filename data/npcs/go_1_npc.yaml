@@ -1,5 +1,8 @@
+  #/home/gg/xx/xxx/data/npcs/go_1_npc.yaml
+
 npcs:
   # --- [功能性 NPC] ---
+
   sony_radio:
     prototype_key: "sony_radio"
     key: "sony_radio"
@@ -31,6 +34,8 @@ npcs:
     name: "|051琉璃·极光蛇|n"
     unique: false
     location: "sy_002" # 古道
+    skills:
+      - "fireball": 5   # 或者这样写，指定等级为 5
     desc: |
       一条完全由光纤和透明软管构成的蛇。
       它的体内流动着七彩的|201霓虹光液|n。

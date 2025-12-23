@@ -186,7 +186,14 @@ class CmdDebugData(Command):
         EvMore(self.caller, "\n".join(lines))
 
 class CmdQuickInit(Command):
-    """快速初始化对象属性（完整版）"""
+    """
+    快速初始化对象属性
+    
+    用法:
+      xx init [目标]
+      
+    使用新的属性管理系统,确保数据正确同步
+    """
     
     key = "xx init"
     aliases = ["xxi"]
@@ -201,24 +208,166 @@ class CmdQuickInit(Command):
             if not target:
                 return
         
-        # 强制初始化所有属性
-        target.ndb.hp = 100
-        target.ndb.max_hp = 100
-        target.ndb.qi = 50
-        target.ndb.max_qi = 50
-        target.ndb.strength = 10
-        target.ndb.agility = 10
-        target.ndb.intelligence = 10
-        target.ndb.level = 1
-        target.ndb.realm = '练气期'
-        target.ndb.skills = ['普通攻击']
-        target.ndb.passive_skills = []
-        target.ndb.dodge_rate = 0.1
+        from world.systems.attr_manager import AttrManager
+        from world.loaders.game_data import get_config
+        from world.const import At
         
-        self.caller.msg(f"|g已初始化 {target.key}！|n")
+        # 🔥 使用新系统初始化
+        self.caller.msg(f"|y正在初始化 {target.key}...|n")
+        
+        # 1. 初始化属性结构
+        AttrManager.init_attributes(target)
+        
+        # 2. 重置境界和等级
+        start_realm = get_config('player.starting_realm', '练气期')
+        target.db.realm = start_realm
+        target.db.level = 1
+        target.db.exp = 0
+        
+        # 3. 应用境界属性
+        AttrManager.apply_realm_stats(target)
+        AttrManager.apply_level_growth(target)
+        
+        # 4. 补满血蓝
+        max_hp = AttrManager.get_attr(target, At.MAX_HP)
+        max_qi = AttrManager.get_attr(target, At.MAX_QI)
+        AttrManager.set_attr(target, At.HP, max_hp)
+        AttrManager.set_attr(target, At.QI, max_qi)
+        
+        # 5. 初始化战斗相关 (ndb)
+        target.ndb.in_combat = False
+        target.ndb.combat_target = None
+        target.ndb.buffs = []
+        target.ndb.skill_cooldowns = {}
+        
+        # 6. 同步到内存
+        if hasattr(target, 'sync_stats_to_ndb'):
+            target.sync_stats_to_ndb()
+        
+        # 显示结果
+        self.caller.msg("|g初始化完成！|n")
+        self.caller.msg(f"境界: {target.db.realm}")
+        self.caller.msg(f"等级: {target.db.level}")
         self.caller.msg(f"HP: {target.ndb.hp}/{target.ndb.max_hp}")
-        self.caller.msg(f"QI: {target.ndb.qi}/{target.ndb.max_qi}")
-        self.caller.msg(f"技能: {target.ndb.skills}")
+        self.caller.msg(f"Qi: {target.ndb.qi}/{target.ndb.max_qi}")
+        self.caller.msg(f"臂力: {target.ndb.strength}")
+        self.caller.msg(f"身法: {target.ndb.agility}")
+
+
+class CmdSetLevel(Command):
+    """
+    设置等级 (测试用)
+    
+    用法:
+      xx level <等级>
+      
+    正确地设置等级,并重新计算属性
+    """
+    
+    key = "xx level"
+    aliases = ["xxl"]
+    locks = "cmd:perm(Builder)"
+    help_category = "开发"
+    
+    def func(self):
+        if not self.args:
+            self.caller.msg("用法: xx level <等级>")
+            return
+        
+        try:
+            level = int(self.args.strip())
+        except ValueError:
+            self.caller.msg("等级必须是整数")
+            return
+        
+        from world.loaders.game_data import get_data
+        from world.systems.attr_manager import AttrManager
+        
+        # 检查等级是否合法
+        realm_name = self.caller.db.realm
+        realm_data = get_data('realms', realm_name)
+        
+        if not realm_data:
+            self.caller.msg("境界数据错误")
+            return
+        
+        max_level = realm_data.get('max_level', 10)
+        
+        if level < 1 or level > max_level:
+            self.caller.msg(f"等级必须在 1-{max_level} 之间")
+            return
+        
+        # 设置等级
+        self.caller.db.level = level
+        
+        # 重新计算属性
+        AttrManager.apply_level_growth(self.caller)
+        
+        # 同步
+        if hasattr(self.caller, 'sync_stats_to_ndb'):
+            self.caller.sync_stats_to_ndb()
+        
+        self.caller.msg(f"|g等级已设置为 {level}|n")
+        self.caller.msg("属性已重新计算")
+
+
+class CmdSetRealm(Command):
+    """
+    设置境界 (测试用)
+    
+    用法:
+      xx realm <境界名>
+    """
+    
+    key = "xx realm"
+    aliases = ["xxre"]
+    locks = "cmd:perm(Builder)"
+    help_category = "开发"
+    
+    def func(self):
+        if not self.args:
+            # 显示可用境界列表
+            from world.loaders.game_data import GAME_DATA
+            realms = GAME_DATA.get('realms', {})
+            
+            self.caller.msg("|y可用境界:|n")
+            for realm_name in realms.keys():
+                self.caller.msg(f"  - {realm_name}")
+            return
+        
+        realm_name = self.args.strip()
+        
+        from world.loaders.game_data import get_data
+        from world.systems.attr_manager import AttrManager
+        
+        realm_data = get_data('realms', realm_name)
+        
+        if not realm_data:
+            self.caller.msg(f"境界不存在: {realm_name}")
+            return
+        
+        # 设置境界
+        self.caller.db.realm = realm_name
+        self.caller.db.level = 1
+        self.caller.db.exp = 0
+        
+        # 应用境界属性
+        AttrManager.apply_realm_stats(self.caller)
+        AttrManager.apply_level_growth(self.caller)
+        
+        # 补满血蓝
+        from world.const import At
+        max_hp = AttrManager.get_attr(self.caller, At.MAX_HP)
+        max_qi = AttrManager.get_attr(self.caller, At.MAX_QI)
+        AttrManager.set_attr(self.caller, At.HP, max_hp)
+        AttrManager.set_attr(self.caller, At.QI, max_qi)
+        
+        # 同步
+        if hasattr(self.caller, 'sync_stats_to_ndb'):
+            self.caller.sync_stats_to_ndb()
+        
+        self.caller.msg(f"|g境界已设置为 {realm_name}|n")
+        self.caller.msg("属性已重新计算")
 
 class CmdAddPassive(Command):
     """添加被动技能（补回来的）"""
@@ -279,3 +428,4 @@ class CmdCheckRoom(Command):
         self.caller.msg(f"ID: #{room.id}")
         self.caller.msg(f"Aliases: {room.aliases.all()}")
         self.caller.msg(f"Tags: {room.tags.all()}")
+        

@@ -1,42 +1,110 @@
-# data/items/affixes.yaml
+# ========================================
+# data/items/affixes.yaml - 词条配置
+# ========================================
 affixes:
+  # === 前缀词条（Prefix）===
   锋利:
-    id: "sharp"
-    type: "prefix"           # 前缀词条
+    id: sharp
+    type: prefix
     tier: 1
-    
     stats:
       attack: 5
-    
-    desc: "锋利的"
-  
-  吸血:
-    id: "lifesteal"
-    type: "suffix"           # 后缀词条
-    tier: 2
-    
-    effects:
-      - type: "lifesteal"
-        ratio: 0.1           # 10%吸血
-    
-    desc: "之吸血"
+    desc: 锋利的
   
   破甲:
-    id: "armor_break"
-    type: "prefix"
+    id: armor_break
+    type: prefix
     tier: 3
-    
     stats:
       armor_penetration: 20
-    
-    desc: "破甲的"
+    desc: 破甲的
   
   迅捷:
-    id: "swift"
-    type: "prefix"
+    id: swift
+    type: prefix
     tier: 2
-    
     stats:
       agility: 10
-    
-    desc: "迅捷的"
+    desc: 迅捷的
+  
+  坚固:
+    id: sturdy
+    type: prefix
+    tier: 2
+    stats:
+      durability: 20
+      defense: 10
+    desc: 坚固的
+  
+  灵巧:
+    id: dexterous
+    type: prefix
+    tier: 2
+    stats:
+      agility: 8
+      accuracy: 5
+    desc: 灵巧的
+  
+  巨力:
+    id: mighty
+    type: prefix
+    tier: 3
+    stats:
+      strength: 15
+      attack: 10
+    desc: 巨力的
+  
+  # === 后缀词条（Suffix）===
+  吸血:
+    id: lifesteal
+    type: suffix
+    tier: 2
+    effects:
+      - type: lifesteal
+        ratio: 0.1
+    desc: 之吸血
+  
+  暴击:
+    id: critical
+    type: suffix
+    tier: 3
+    stats:
+      critical_chance: 10
+      critical_damage: 30
+    desc: 之暴击
+  
+  守护:
+    id: guardian
+    type: suffix
+    tier: 2
+    stats:
+      defense: 15
+      max_hp: 50
+    desc: 之守护
+  
+  灵气:
+    id: spiritual
+    type: suffix
+    tier: 2
+    stats:
+      spirit: 12
+      max_qi: 30
+    desc: 之灵气
+  
+  疾风:
+    id: windswift
+    type: suffix
+    tier: 2
+    stats:
+      agility: 12
+      dodge: 5
+    desc: 之疾风
+  
+  火焰:
+    id: flame
+    type: suffix
+    tier: 3
+    effects:
+      - type: fire_damage
+        value: 20
+    desc: 之火焰

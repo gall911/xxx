@@ -1,6 +1,6 @@
 # commands/skill_commands.py
 """技能管理命令（独立文件）"""
-from evennia import Command, default_cmds
+from evennia import Command, default_cmds, CmdSet   
 from world.loaders.game_data import get_data, GAME_DATA
 from world.loaders.skill_loader import get_skill_at_level
 
@@ -118,8 +118,12 @@ class CmdLearnSkill(Command):
             self.caller.msg(f"|r找不到技能: {skill_key}|n")
             return
         
+        # ========== 修复：初始化learned_skills ==========
+        if not hasattr(self.caller.db, 'learned_skills') or self.caller.db.learned_skills is None:
+            self.caller.db.learned_skills = {}
+        
         # 检查是否已学会
-        if skill_key in (self.caller.db.learned_skills or {}):
+        if skill_key in self.caller.db.learned_skills:
             self.caller.msg(f"|y你已经学会了 {skill_data['name']}！|n")
             return
         
@@ -127,9 +131,6 @@ class CmdLearnSkill(Command):
         # TODO: 检查境界、等级、前置技能
         
         # 学习技能
-        if not hasattr(self.caller.db, 'learned_skills'):
-            self.caller.db.learned_skills = {}
-        
         self.caller.db.learned_skills[skill_key] = 1
         self.caller.msg(f"|g你学会了 {skill_data['name']} Lv1！|n")
 
@@ -286,14 +287,13 @@ class CmdEquipSkill(Command):
                 self.caller.msg(f"  {slot_name}: |r空|n")
 
 # 命令集
-class SkillCmdSet(default_cmds.CharacterCmdSet):
+class SkillCmdSet(CmdSet):  # ← 改成CmdSet
     """技能命令集"""
     
     key = "SkillCmdSet"
     
     def at_cmdset_creation(self):
-        super().at_cmdset_creation()
-        
+        """添加命令到命令集"""
         self.add(CmdSkills())
         self.add(CmdLearnSkill())
         self.add(CmdUpgradeSkill())

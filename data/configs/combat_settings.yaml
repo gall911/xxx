@@ -27,7 +27,7 @@ combat:
   # ========== 新增：反击系统配置 ==========
   counter:
     base_rate: 0.02               # 基础反击率2%
-    max_rate: 0.50                # 反击率上限50%
+    max_rate: 0.70                # 反击率上限50%
     level_diff_bonus: 0.01        # 等级差加成(目标等级-攻击者等级)*0.01
     agility_bonus: 0.001          # 敏捷加成(每点敏捷+0.1%反击率)
 #    counter_damage_multiplier: 0.5 # 反击伤害为普通伤害的50%

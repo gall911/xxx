@@ -1,0 +1,73 @@
+# data/attributes.yaml
+
+# === 基础属性 (Base Stats) ===
+strength:
+  name: "臂力"        # 这里可以随便改成 "力量", "天生神力", "劲力"
+  type: "int"
+  default: 0
+  category: "base"
+  desc: "影响物理攻击力，决定背包负重上限。"
+
+agility:
+  name: "身法"        # 原敏捷
+  type: "int"
+  default: 0
+  category: "base"
+  desc: "影响闪避率、出手速度（冷却缩减）。"
+
+intelligence:
+  name: "悟性"        # 原智力
+  type: "int"
+  default: 0
+  category: "base"
+  desc: "影响修炼速度、领悟功法的成功率。"
+
+constitution:
+  name: "根骨"        # 原体质
+  type: "int"
+  default: 0
+  category: "base"
+  desc: "决定HP上限成长、防御力基础。"
+
+luck:
+  name: "气运"        # 新增示例
+  type: "int"
+  default: 1
+  category: "hidden"
+  desc: "影响掉落率、奇遇触发概率（开发中）。"
+
+# === 资源池 (Gauges) ===
+hp:
+  name: "气血"
+  type: "gauge"       # gauge类型会自动生成 hp(当前) 和 max_hp(最大)
+  base: 0         # 初始值
+  desc: "生命值。归零则死亡。"
+
+qi:
+  name: "灵力"
+  type: "gauge"
+  base: 0
+  desc: "施放技能消耗。修炼可增加上限。"
+
+# === 进阶属性 (Advanced) ===
+sect_contribution:
+  name: "门派贡献"
+  type: "int"
+  default: 0
+  category: "social"
+  desc: "用于门派内晋升等级、兑换物品。"
+
+spirit_root:
+  name: "灵根"
+  type: "dict"        # 复杂结构
+  default: {}
+  category: "cultivation"
+  desc: "结构：{'type': '火', 'purity': 80}。决定可学习的功法属性。"
+
+# === 战斗属性 (Combat) ===
+critical_rate:
+  name: "暴击率"
+  type: "float"
+  default: 0.05
+  category: "combat"
+  desc: "攻击造成双倍伤害的概率 (0.05 = 5%)。"

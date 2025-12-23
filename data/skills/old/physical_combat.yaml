@@ -1,0 +1,70 @@
+# ========================================
+# data/skills/base/physical_combat.yaml
+# 物理系战技基础模板
+# ========================================
+physical_combat:
+  type: "active"
+  category: "combat"
+  element: "physical"
+  range: "melee"
+  hit_type: "physical"
+  target_type: "single"
+  
+  level_formula:
+    max_level: 200
+    
+    damage:
+      base: 20
+      grow: 0.025
+    
+    accuracy:
+      base: 0.9                            # 物理攻击命中更高
+      per_level: 0.0005
+      max: 0.98
+    
+    cast_time:
+      base: 0                              # 物理攻击瞬发
+      per_level: 0
+      min: 0
+    
+    cooldown:
+      base: 0
+      per_level: 0
+      min: 0
+    
+    cost_qi:
+      base: 0                              # 普通攻击不消耗
+      per_level: 0
+      max: 0
+    
+    counter_chance:
+      base: 0.03
+      per_level: 0.0003
+  
+  counter_weight: 1
+  
+  stat_scaling:
+    strength: 1.5
+    agility: 0.3
+  
+  battle_text:
+    cast: []
+    
+    hit:
+      - text: "{caster}挥舞武器！"
+        delay_percent: 0
+      - text: "击中{target}！造成伤害{damage}！"
+        delay_percent: 100
+    
+    dodge:
+      - text: "{caster}攻击落空！"
+        delay_percent: 100
+    
+    critical:
+      - text: "暴击！{caster}击中{target}要害！"
+        delay_percent: 0
+      - text: "造成伤害{damage}！"
+        delay_percent: 100
+  
+  required_realm: "练气期"
+  required_level: 1

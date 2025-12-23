@@ -45,3 +45,5 @@ AUTH_PASSWORD_VALIDATORS = []
 ######################################################################
 # 指定未登录时使用的指令集
 CMDSET_UNLOGGEDIN = "commands.menu_login.UnloggedinCmdSet"
+
+CMDSET_CHARACTER = "commands.default_cmdsets.CharacterCmdSet"

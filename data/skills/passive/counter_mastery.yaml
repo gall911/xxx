@@ -1,0 +1,38 @@
+# ========================================
+# data/skills/passive/counter_mastery.yaml
+# 反击心法 - 继承passive_skill
+# ========================================
+  counter_mastery:
+    inherit: "passive_skill"
+    
+    name: "反击心法"
+    desc: |
+      武林失传已久的反击秘法。
+      修炼此心法后，反击率+30%。
+    
+    effects:
+      - type: "stat_bonus"
+        stat: "counter_rate"
+        value: 0.30
+    
+    required_realm: "筑基期"
+    required_level: 20
+  
+  swift_steps:
+    inherit: "passive_skill"
+    
+    name: "闪电身法"
+    desc: |
+      轻功秘技，修炼后身轻如燕。
+      敏捷+20，闪避率+10%。
+    
+    effects:
+      - type: "stat_bonus"
+        stat: "agility"
+        value: 20
+      - type: "stat_bonus"
+        stat: "dodge_rate"
+        value: 0.10
+    
+    required_realm: "筑基期"
+    required_level: 15

@@ -1,0 +1,70 @@
+# ========================================
+# base/counter_mastery.yaml - 反击精通模板
+# ========================================
+skills:
+  counter_mastery:
+    inherit: "_base"
+    type: "passive"
+    
+    name: "反击精通"
+    desc: "提升反击概率和反击伤害的被动技能"
+    
+    category: "passive"
+    element: "physical"
+    
+    level_formula:
+      damage:
+        base: 15
+        grow: 0.02
+      
+      accuracy:
+        base: 0.9
+        per_level: 0.001
+        max: 0.99
+      
+      cast_time:
+        base: 0
+        per_level: 0
+        min: 0
+      
+      cooldown:
+        base: 0
+        per_level: 0
+        min: 0
+      
+      cost_qi:
+        base: 0
+        per_level: 0
+        max: 0
+      
+      counter_chance:
+        base: 0.1
+        per_level: 0.002
+        max: 0.5
+    
+    counter_weight: 5
+    
+    stat_scaling:
+      strength: 0.8
+      intelligence: 0.2
+      agility: 1.2
+    
+    effects:
+      - type: "counter_chance_boost"
+        value: 0.1
+        per_level: 0.002
+      - type: "counter_damage_boost"
+        value: 0.15
+        per_level: 0.01
+    
+    battle_text:
+      cast: []
+      hit:
+        - text: "{caster}抓住破绽反击！造成{damage}点伤害！"
+          delay_percent: 0
+      critical:
+        - text: "完美反击！{caster}造成{damage}点伤害！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 5

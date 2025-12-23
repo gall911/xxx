@@ -1,0 +1,63 @@
+# support/swift_step.yaml
+  swift_step:
+    inherit: "support_skill"
+    
+    name: "疾风步"
+    desc: "提升移动和攻击速度"
+    target_type: "self"
+    
+    level_formula:
+      speed_boost:
+        base: 12
+        per_level: 0.4
+        max: 35
+      
+      cost_qi:
+        base: 18
+        per_level: 0.4
+        max: 110
+    
+    effects:
+      - type: apply_speed_boost
+        value: "{level_speed_boost}"
+        duration: 4
+    
+    battle_text:
+      cast:
+        - text: "{caster}身形一闪，速度暴涨！"
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 8
+
+  # support/meditation.yaml
+  meditation:
+    inherit: "support_skill"
+    
+    name: "灵气吐纳"
+    desc: "吐纳天地灵气，持续恢复灵力"
+    target_type: "self"
+    
+    level_formula:
+      qi_regen:
+        base: 15
+        per_level: 0.5
+        max: 40
+      
+      cost_qi:
+        base: 10
+        per_level: 0.2
+        max: 60
+    
+    effects:
+      - type: apply_qi_regen
+        value: "{level_qi_regen}"
+        duration: 5
+    
+    battle_text:
+      cast:
+        - text: "{caster}盘膝吐纳..."
+          delay_percent: 0
+    
+    required_realm: "练气期"
+    required_level: 5

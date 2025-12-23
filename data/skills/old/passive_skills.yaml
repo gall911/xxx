@@ -1,0 +1,13 @@
+# ========================================
+# data/skills/base/passive_skills.yaml
+# 被动技能基础模板
+# ========================================
+passive_skill:
+  type: "passive"
+  category: "support"
+  
+  # 被动技能没有等级成长，学会即永久生效
+  effects: []                              # 子技能需要定义具体效果
+  
+  required_realm: "练气期"
+  required_level: 1
